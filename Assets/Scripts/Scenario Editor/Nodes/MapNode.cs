@@ -28,8 +28,14 @@ public class MapNode : Node
     protected override void Init()
     {
         base.Init();
+    }
 
-        map = new MapLayout(mapCSV);
+    private void OnValidate()
+    {
+        if (mapCSV != null)
+        {
+            map = new MapLayout(mapCSV);
+        }
     }
 
     // Return the correct value of an output port when requested
