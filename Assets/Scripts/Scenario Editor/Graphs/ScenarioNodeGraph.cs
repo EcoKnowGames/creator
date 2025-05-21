@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using XNode;
 
 [CreateAssetMenu]
-public class ScenarioNodeGraph : NodeGraph 
+public class ScenarioNodeGraph : NodeGraph
 {
     /*public override Node AddNode(Type type)
     {
