@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: Map
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -648, y: -8}
+  position: {x: -648, y: 24}
   ports:
     keys:
     - map
@@ -131,9 +131,9 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  mapCSV: {fileID: 4900000, guid: 7eb01f0b5ff58f24187e4ade4ef7299b, type: 3}
+  mapCSV: {fileID: 4900000, guid: e2ce4932a14fa1f409087c0a4217f512, type: 3}
   map:
-    fileName: Level 1
+    fileName: Level 2
     gridDef:
-      rows: 6
-      columns: 12
+      rows: 10
+      columns: 14
