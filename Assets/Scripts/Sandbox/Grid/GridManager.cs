@@ -80,7 +80,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 }
             }
 
-            Debug.Log($"Map {mapCSV.name} / Rows: {def.rows} Columns: {def.columns}");
+            Debug.Log($"Map: {mapCSV.name} / Rows: {def.rows} Columns: {def.columns}");
 
             return def;
         }
