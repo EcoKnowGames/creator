@@ -12,6 +12,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public CellEvent OnCellClicked;
     }
 
+    [System.Serializable]
     public class GridDef
     {
         public int rows;
@@ -48,6 +49,43 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int TotalCells => GetComponentsInChildren<Cell>().Length;
         public Vector2 GridSize => new Vector2(columns, rows);
         private Camera Camera => gridCamera == null ? Camera.main : gridCamera.Camera;
+
+
+        #region Static Helper Functions
+        public static GridDef LoadGridDef(TextAsset mapCSV)
+        {
+            GridDef def = new GridDef();
+
+            string rawCSV = mapCSV.text;
+            rawCSV = rawCSV.Trim(' ', '\n', '\r');
+
+            string[] IDs = rawCSV.Replace("\r", string.Empty).Replace("\n", ",").Split(',');
+
+            def.rows = rawCSV.Split('\n').Length;
+            def.columns = IDs.Length / def.rows;
+
+            def.tileIDs = new int[def.columns, def.rows];
+
+
+            int tileIndex = 0;
+            for (int y = 0; y < def.rows; y++)
+            {
+                for (int x = 0; x < def.columns; x++)
+                {
+                    int tileID = -1;
+                    int.TryParse(IDs[tileIndex], out tileID);
+
+                    def.tileIDs[x, y] = tileID;
+                    tileIndex++;
+                }
+            }
+
+            Debug.Log($"Map {mapCSV.name} / Rows: {def.rows} Columns: {def.columns}");
+
+            return def;
+        }
+        #endregion
+
 
         public void Start()
         {

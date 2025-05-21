@@ -58,14 +58,13 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 ScenarioNode scenario = _scenarioNodeGraph.GetScenarioNode();
                 Debug.Log($"Scenario Name is: {scenario.Name}");
-                Debug.Log($"Map Layout is: {scenario.GetMapLayout().fileName}");
+                Debug.Log($"Map Layout is: {scenario.GetMapLayout().fileName}");// / Width: {scenario.GetMapLayout().width} / Height: {scenario.GetMapLayout().height}");
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-
         }
     }
 }
