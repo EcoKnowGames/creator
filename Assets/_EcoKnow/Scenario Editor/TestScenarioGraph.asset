@@ -48,6 +48,11 @@ MonoBehaviour:
   stepsPerRound: 4
   actionsPerRound: 4
   startCurrency: 80
+  _map:
+    fileName: 
+    gridDef:
+      rows: 0
+      columns: 0
   _seed: 123456
 --- !u!114 &11400000
 MonoBehaviour:
@@ -127,3 +132,8 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   mapCSV: {fileID: 4900000, guid: 7eb01f0b5ff58f24187e4ade4ef7299b, type: 3}
+  map:
+    fileName: Level 1
+    gridDef:
+      rows: 6
+      columns: 12

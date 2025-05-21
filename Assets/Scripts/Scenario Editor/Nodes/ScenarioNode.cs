@@ -42,14 +42,7 @@ public class ScenarioNode : Node
     // Return the correct value of an output port when requested
     public override object GetValue(NodePort port)
     {
-        if (port.fieldName == "_map")
-        {
-            return new MapLayout("from scenario node");
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /*#region Scenario
@@ -62,7 +55,7 @@ public class ScenarioNode : Node
     #region Map
     public MapLayout GetMapLayout()
     {
-        return _map;
+        return (MapLayout)GetInputPort("_map").GetInputValue();
     }
     #endregion
 }

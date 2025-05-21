@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Glitchers.EcoKnow.Sandbox.Grid;
+using UnityEngine;
 using XNode;
 
 
@@ -7,10 +8,12 @@ public class MapLayout
 {
     //TODO
     public string fileName;
+    public GridDef gridDef;
 
-    public MapLayout(string name)
+    public MapLayout(TextAsset csv)
     {
-        fileName = name;
+        fileName = csv.name;
+        gridDef = GridManager.LoadGridDef(csv);
     }
 }
 
@@ -19,18 +22,27 @@ public class MapNode : Node
 {
     [SerializeField] private TextAsset mapCSV;
 
-    [Output] public MapLayout map;
+    [Output(ShowBackingValue.Always)] public MapLayout map;
 
     // Use this for initialization
     protected override void Init()
     {
         base.Init();
 
+        map = new MapLayout(mapCSV);
     }
 
     // Return the correct value of an output port when requested
     public override object GetValue(NodePort port)
     {
-        return new MapLayout("wilderness map layout"); // Replace this
+        if (port.fieldName == "map")
+        {
+            return map;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
+
