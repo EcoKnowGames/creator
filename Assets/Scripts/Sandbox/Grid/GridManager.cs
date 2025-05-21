@@ -186,9 +186,9 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             if ((cellList != null) && (cellList.Length > 0))
             {
                 //Search for our cell
-                if ((row >= 0) 
+                if ((row >= 0)
                     && (column >= 0)
-                    && (row < cellList.GetLength(0)) 
+                    && (row < cellList.GetLength(0))
                     && (column < cellList.GetLength(1)))
                 {
                     return cellList[row, column];

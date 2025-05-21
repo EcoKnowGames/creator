@@ -1,15 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Grid
 {
     public enum CameraMoveDir
-    { 
+    {
         UP,
         DOWN,
-        LEFT, 
+        LEFT,
         RIGHT
     }
 
@@ -40,7 +39,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         private const string LogChannel = "[GridCamera]";
 
-        [SerializeField] private List<float> zoomValues = new ();
+        [SerializeField] private List<float> zoomValues = new();
         private int _currentZoomIndex;
 
         public void Init(GridManager gridManager)
@@ -157,23 +156,23 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             switch (zoomDirection)
             {
                 case CameraZoom.INZOOM:
-                {
-                    if (_currentZoomIndex < zoomValues.Count - 1)
                     {
-                        _currentZoomIndex++;
-                        //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);
+                        if (_currentZoomIndex < zoomValues.Count - 1)
+                        {
+                            _currentZoomIndex++;
+                            //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case CameraZoom.OUTZOOM:
-                {
-                    if (_currentZoomIndex > 0) 
                     {
-                        _currentZoomIndex--;
-                        //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);;
+                        if (_currentZoomIndex > 0)
+                        {
+                            _currentZoomIndex--;
+                            //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);;
+                        }
+                        break;
                     }
-                    break;
-                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(zoomDirection), zoomDirection, null);
             }

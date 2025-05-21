@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using XNode;
 
 /*public class Scenario
@@ -19,38 +17,40 @@ using XNode;
 }*/
 
 
-public class ScenarioNode : Node 
+public class ScenarioNode : Node
 {
-	[SerializeField] protected string scenarioName;
-	[SerializeField] protected int rounds;
-	[SerializeField] protected int stepsPerRound;
-	[SerializeField] protected int actionsPerRound;
-	[SerializeField] protected int startCurrency;
+    [SerializeField] protected string scenarioName;
+    [SerializeField] protected int rounds;
+    [SerializeField] protected int stepsPerRound;
+    [SerializeField] protected int actionsPerRound;
+    [SerializeField] protected int startCurrency;
 
-	[Input(ShowBackingValue.Never)] [SerializeField] private Matrix _matrix;
-	[Input(ShowBackingValue.Never)] [SerializeField] private MapLayout _map;
+    [Input(ShowBackingValue.Never)] [SerializeField] private Matrix _matrix;
+    [Input(ShowBackingValue.Never)] [SerializeField] private MapLayout _map;
 
-	[SerializeField] private int _seed;
+    [SerializeField] private int _seed;
 
-	public string Name => scenarioName;
+    public string Name => scenarioName;
 
-	// Use this for initialization
-	protected override void Init() {
-		base.Init();
-		
-	}
+    // Use this for initialization
+    protected override void Init()
+    {
+        base.Init();
 
-	// Return the correct value of an output port when requested
-	public override object GetValue(NodePort port) {
-		if (port.fieldName == "_map")
-		{
-			return new MapLayout("from scenario node");
-		}
-		else
+    }
+
+    // Return the correct value of an output port when requested
+    public override object GetValue(NodePort port)
+    {
+        if (port.fieldName == "_map")
         {
-			return null;
+            return new MapLayout("from scenario node");
         }
-	}
+        else
+        {
+            return null;
+        }
+    }
 
     /*#region Scenario
 	public Scenario GetScenario()
@@ -60,9 +60,9 @@ public class ScenarioNode : Node
     #endregion*/
 
     #region Map
-	public MapLayout GetMapLayout()
+    public MapLayout GetMapLayout()
     {
-		return _map;
+        return _map;
     }
     #endregion
 }
