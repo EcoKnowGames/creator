@@ -1,0 +1,72 @@
+using UnityEngine;
+using Glitchers.EcoKnow.Sandbox.Grid;
+
+namespace Glitchers.EcoKnow.Sandbox
+{
+    public class SandboxManager : MonoBehaviour
+    {
+        #region Singleton
+        protected static SandboxManager instance;
+        public static SandboxManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = GetInstance();
+
+                    if (instance == null)
+                    {
+                        Debug.LogError("An instance of " + typeof(SandboxManager) +
+                            " is needed in the scene, but there is none.");
+                    }
+                }
+
+                return instance;
+            }
+        }
+
+        public static bool Exists
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        private static SandboxManager GetInstance()
+        {
+            if (instance == null)
+            {
+                return FindFirstObjectByType<SandboxManager>();
+            }
+            return instance;
+        }
+        #endregion
+
+        [Header("Scenario")]
+        [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
+
+        /*[Header("Gameplay")]
+        [SerializeField] private GridManager _gridManager;*/
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
+        {
+            //_gridManager.Init();
+
+            if (_scenarioNodeGraph != null)
+            {
+                ScenarioNode scenario = _scenarioNodeGraph.GetScenarioNode();
+                Debug.Log($"Scenario Name is: {scenario.Name}");
+                Debug.Log($"Map Layout is: {scenario.GetMapLayout().fileName}");
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
+}
