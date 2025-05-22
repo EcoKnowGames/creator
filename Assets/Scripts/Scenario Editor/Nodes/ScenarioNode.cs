@@ -27,8 +27,8 @@ public class ScenarioNode : Node
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
 
-    [Input(ShowBackingValue.Never)] [SerializeField] private Matrix _matrix;
-    [Input(ShowBackingValue.Never)] [SerializeField] private MapLayout _map;
+    [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private Matrix _matrix;
+    [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private MapLayout _map;
 
     [SerializeField] private int _seed;
 
@@ -46,13 +46,13 @@ public class ScenarioNode : Node
 
     private void OnValidate()
     {
-        Debug.Log("VALIDATING SCENARIO");
+
     }
 
     // Return the correct value of an output port when requested
     public override object GetValue(NodePort port)
     {
-        foreach(NodePort entity in _entityPorts)
+        foreach (NodePort entity in _entityPorts)
         {
             if (entity.fieldName == port.fieldName)
             {
@@ -72,13 +72,16 @@ public class ScenarioNode : Node
             Matrix matrix = (Matrix)GetInputPort("_matrix").GetInputValue();
             ClearEntityPorts();
 
-            //if (GetPort("EntityTest") == null)
+            if ((matrix != null) && (_entityPorts != null))
             {
-                foreach (string id in matrix.entityIDs)
+                //if (GetPort("EntityTest") == null)
                 {
-                    if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
+                    foreach (string id in matrix.entityIDs)
                     {
-                        _entityPorts.Add(AddDynamicOutput(typeof(Entity), fieldName: id));
+                        if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
+                        {
+                            _entityPorts.Add(AddDynamicOutput(typeof(Entity), fieldName: id, connectionType: ConnectionType.Override));
+                        }
                     }
                 }
             }
@@ -94,12 +97,15 @@ public class ScenarioNode : Node
 
     private void ClearEntityPorts()
     {
-        foreach (NodePort port in _entityPorts)
+        if ((_entityPorts != null) && (_entityPorts.Count > 0))
         {
-            RemoveDynamicPort(port);
-        }
+            foreach (NodePort port in _entityPorts)
+            {
+                RemoveDynamicPort(port);
+            }
 
-        _entityPorts.Clear();
+            _entityPorts.Clear();
+        }
     }
 
 

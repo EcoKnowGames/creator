@@ -10,7 +10,9 @@ public class Entity
 public class EntityNode : Node
 {
 
-    [Input(ShowBackingValue.Always)] [SerializeField] private string _id;
+    [Input(ShowBackingValue.Always, ConnectionType.Override)] [SerializeField] private string _id;
+
+    [SerializeField] private Sprite _icon;
 
     [SerializeField] private float _growthRate;
     [SerializeField] private float _movementRate;
@@ -27,5 +29,21 @@ public class EntityNode : Node
     public override object GetValue(NodePort port)
     {
         return null; // Replace this
+    }
+
+    public override void OnCreateConnection(NodePort from, NodePort to)
+    {
+        base.OnCreateConnection(from, to);
+
+        _id = GetInputPort("_id").GetInputValue().ToString();
+
+        //if (to)
+    }
+
+    public override void OnRemoveConnection(NodePort port)
+    {
+        base.OnRemoveConnection(port);
+
+        _id = string.Empty;
     }
 }
