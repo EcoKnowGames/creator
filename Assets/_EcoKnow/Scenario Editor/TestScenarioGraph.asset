@@ -13,30 +13,16 @@ MonoBehaviour:
   m_Name: Scenario
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -344, y: -136}
+  position: {x: -328, y: -136}
   ports:
     keys:
-    - _matrix
     - _map
+    - _matrix
     - id
-    - Rock
-    - Horse
     - House
-    - Cat
-    - Dog
+    - Fox
+    - Hare
     values:
-    - _fieldName: _matrix
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: Matrix, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections:
-      - fieldName: matrix
-        node: {fileID: 49053916092123579}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
     - _fieldName: _map
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: MapLayout, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -46,28 +32,22 @@ MonoBehaviour:
         node: {fileID: 4220380142789208255}
         reroutePoints: []
       _direction: 0
-      _connectionType: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _matrix
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Matrix, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: matrix
+        node: {fileID: 49053916092123579}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: id
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: Rock
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: Horse
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
@@ -80,27 +60,36 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -2726126907051347721}
+        reroutePoints: []
       _direction: 1
-      _connectionType: 0
+      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Cat
+    - _fieldName: Fox
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
       _direction: 1
-      _connectionType: 0
+      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Dog
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
       _direction: 1
-      _connectionType: 0
+      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
   scenarioName: Wilderness Test
@@ -116,6 +105,40 @@ MonoBehaviour:
       rows: 0
       columns: 0
   _seed: 123456
+--- !u!114 &-2726126907051347721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa161f2523bfe2e4eb6437c04cbff777, type: 3}
+  m_Name: Entity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 72, y: 168}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: -2726126907051347721}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: House
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: House
+  _icon: {fileID: 0}
+  _growthRate: 0
+  _movementRate: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +156,8 @@ MonoBehaviour:
   - {fileID: 49053916092123579}
   - {fileID: 4220380142789208255}
   - {fileID: 4452621898610726545}
+  - {fileID: 8368680822340120736}
+  - {fileID: -2726126907051347721}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,13 +188,11 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  matricesCSV: {fileID: 4900000, guid: 595b9cc7f5042f34cab0ba0292e9dc73, type: 3}
+  matricesCSV: {fileID: 4900000, guid: ba536ef5de4111d48ab3d34ca9c37723, type: 3}
   matrix:
     entityIDs:
-    - Dog
-    - Cat
-    - Rock
-    - Horse
+    - Hare
+    - Fox
     - House
 --- !u!114 &4220380142789208255
 MonoBehaviour:
@@ -220,7 +243,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 56, y: -56}
+  position: {x: 72, y: -120}
   ports:
     keys:
     - _id
@@ -229,11 +252,49 @@ MonoBehaviour:
       _node: {fileID: 4452621898610726545}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: Hare
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
       _direction: 0
-      _connectionType: 0
+      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  _id: 
+  _id: Hare
+  _icon: {fileID: 0}
+  _growthRate: 0
+  _movementRate: 0
+--- !u!114 &8368680822340120736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa161f2523bfe2e4eb6437c04cbff777, type: 3}
+  m_Name: Entity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 72, y: 24}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: 8368680822340120736}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Fox
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: Fox
+  _icon: {fileID: 0}
   _growthRate: 0
   _movementRate: 0
