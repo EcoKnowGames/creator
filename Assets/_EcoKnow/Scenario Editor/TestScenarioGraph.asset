@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: Scenario
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -408, y: -136}
+  position: {x: -344, y: -136}
   ports:
     keys:
     - _matrix
     - _map
+    - id
+    - Rock
+    - Horse
+    - House
+    - Cat
+    - Dog
     values:
     - _fieldName: _matrix
       _node: {fileID: -5440223889025535490}
@@ -43,6 +49,60 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: id
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Rock
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Horse
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: House
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Cat
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Dog
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
   scenarioName: Wilderness Test
   rounds: 5
   stepsPerRound: 4
@@ -72,6 +132,7 @@ MonoBehaviour:
   - {fileID: -5440223889025535490}
   - {fileID: 49053916092123579}
   - {fileID: 4220380142789208255}
+  - {fileID: 4452621898610726545}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +146,7 @@ MonoBehaviour:
   m_Name: Matrix
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -648, y: -184}
+  position: {x: -600, y: -216}
   ports:
     keys:
     - matrix
@@ -102,11 +163,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  matricesCSV: {fileID: 4900000, guid: ba536ef5de4111d48ab3d34ca9c37723, type: 3}
+  matricesCSV: {fileID: 4900000, guid: 595b9cc7f5042f34cab0ba0292e9dc73, type: 3}
   matrix:
     entityIDs:
-    - Hare
-    - Fox
+    - Dog
+    - Cat
+    - Rock
+    - Horse
     - House
 --- !u!114 &4220380142789208255
 MonoBehaviour:
@@ -121,7 +184,7 @@ MonoBehaviour:
   m_Name: Map
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -648, y: 104}
+  position: {x: -600, y: 72}
   ports:
     keys:
     - map
@@ -144,3 +207,33 @@ MonoBehaviour:
     gridDef:
       rows: 6
       columns: 12
+--- !u!114 &4452621898610726545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa161f2523bfe2e4eb6437c04cbff777, type: 3}
+  m_Name: Entity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 56, y: -56}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: 4452621898610726545}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: 
+  _growthRate: 0
+  _movementRate: 0

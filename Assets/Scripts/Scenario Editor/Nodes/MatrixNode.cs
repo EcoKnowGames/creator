@@ -1,11 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using XNode;
 
-[System.Serializable]
-public class Entity
-{
-    public string id;
-}
 
 [System.Serializable]
 public class Matrix
@@ -18,28 +14,22 @@ public class Matrix
         string rawCSV = matrixCSV.text;
         rawCSV = rawCSV.Trim(' ', '\n', '\r');
 
-        string[] IDs = rawCSV.Replace("\r", string.Empty).Replace("\n", ",").Split(',');
+        string[] values = rawCSV.Replace("\r", string.Empty).Replace("\n", ",").Split(',');
 
         int rows = rawCSV.Split('\n').Length;
-        int columns = IDs.Length / rows;
+        int columns = values.Length / rows;
 
         entityMatrix = new string[columns, rows];
         entityIDs = new string[columns];
+        Array.Copy(values, entityIDs, columns);
 
-        int tileIndex = 0;
-        int entityIndex = 0;
+        int index = 0;
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
             {
-                entityMatrix[x, y] = IDs[tileIndex];
-                tileIndex++;
-
-                if (y == 0)
-                {
-                    entityIDs[x] = IDs[entityIndex];
-                    entityIndex++;
-                }
+                entityMatrix[x, y] = values[index];
+                index++;
             }
         }
 
@@ -68,6 +58,14 @@ public class MatrixNode : Node
         if (matricesCSV != null)
         {
             matrix = new Matrix(matricesCSV);
+
+            if (GetOutputPort("matrix").IsConnected)
+            {
+                if (GetOutputPort("matrix").Connection.node is ScenarioNode scenario)
+                {
+                    scenario.ProcessMatrix();
+                }
+            }
         }
     }
 
@@ -82,5 +80,22 @@ public class MatrixNode : Node
         {
             return null;
         }
+    }
+
+    public override void OnCreateConnection(NodePort from, NodePort to)
+    {
+        base.OnCreateConnection(from, to);
+
+        if (to.node is ScenarioNode scenario)
+        {
+            scenario.ProcessMatrix();
+        }
+    }
+
+    public override void OnRemoveConnection(NodePort port)
+    {
+        base.OnRemoveConnection(port);
+
+        Debug.Log(port.node.GetType());
     }
 }
