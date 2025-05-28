@@ -1,3 +1,4 @@
+using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
 
@@ -48,6 +49,7 @@ namespace Glitchers.EcoKnow.Sandbox
         [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
 
         [Header("Gameplay")]
+        [SerializeField] private EntityManager _entityManager;
         [SerializeField] private GridManager _gridManager;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -61,10 +63,15 @@ namespace Glitchers.EcoKnow.Sandbox
                 Debug.Log($"Scenario Name is: {scenario.Name}");
                 Debug.Log($"Map Layout is: {scenario.GetMapLayout().fileName}");
 
+                if (_scenarioNodeGraph.HasEntityNodes())
+                {
+                    _entityManager.RegisterEntities(_scenarioNodeGraph.nodes.OfType<EntityNode>().Select(x => x.GetEntity()).ToList());
+                }
 
                 GridDef gridDef = scenario.GetMapLayout().gridDef;
                 _gridManager?.EnableGrid();
                 _gridManager?.SetupGrid(gridDef);
+                _gridManager?.AddEntities(_entityManager.AllEntities);
             }
         }
 
