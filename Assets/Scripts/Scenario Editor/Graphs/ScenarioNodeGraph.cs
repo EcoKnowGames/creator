@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using XNode;
 
 [CreateAssetMenu]
@@ -30,6 +31,11 @@ public class ScenarioNodeGraph : NodeGraph
         }
 
         return null;
+    }
+
+    public bool HasEntityNodes()
+    {
+        return nodes.FirstOrDefault(x => x.GetType() == typeof(EntityNode)) != null;
     }
 
     /*public Scenario GetScenario()

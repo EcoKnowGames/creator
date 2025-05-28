@@ -5,6 +5,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
     public class Cell : MonoBehaviour
     {
         [SerializeField] protected GameObject highlightObject;
+        [SerializeField] protected TMPro.TMP_Text entityListText; //TODO(caspar) -> Entity management in its own component?
 
         private int _row;
         private int _column;
@@ -25,6 +26,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             this.gameObject.name = $"Cell {_column}_{_row}";
 
+            entityListText.text = string.Empty;
+
             ShowHighlight(false);
         }
 
@@ -42,13 +45,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
-        #region Tiles
-        /*public bool TryPerformAction(TileAction inAction)
-        {
-            return false;
-        }*/
-        #endregion
-
         #region Highlight
 
         public void ShowHighlight(bool visible)
@@ -63,11 +59,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         void OnMouseEnter()
         {
             _mouseOver = true;
+            ShowHighlight(true);
         }
 
         void OnMouseExit()
         {
             _mouseOver = false;
+            ShowHighlight(false);
         }
 
         private void OnMouseDown()
@@ -77,6 +75,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         private void OnMouseUp()
         {
         }
-        #endregion;
+        #endregion
+
+        #region Entities
+        public void AddEntity(string id)
+        {
+            entityListText.text += id + " :100\n";
+        }
+        #endregion
     }
 }

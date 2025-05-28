@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -268,6 +269,26 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
+        #region Entities
+        public void AddEntities(List<Entity> entityList)
+        {
+            if ((entityList == null) || (entityList.Count <= 0))
+            {
+                return;
+            }
+
+            foreach (Cell cell in cellList)
+            {
+                if (cell != null)
+                {
+                    foreach (Entity entity in entityList)
+                    {
+                        cell.AddEntity(entity.ID);
+                    }
+                }
+            }
+        }
+        #endregion
 
         #region UI
         /*public void RegisterUIEvents(RoundViewController inRoundsVC)

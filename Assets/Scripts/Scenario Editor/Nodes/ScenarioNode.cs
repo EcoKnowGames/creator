@@ -119,13 +119,6 @@ public class ScenarioNode : Node
         }
     }
 
-    /*#region Scenario
-	public Scenario GetScenario()
-    {
-		return new Scenario(this);
-    }
-    #endregion*/
-
     #region Map
     public MapLayout GetMapLayout()
     {
