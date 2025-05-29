@@ -7,7 +7,7 @@ using XNode;
 public class Matrix
 {
     public string[] entityIDs;
-    public string[,] entityMatrix;
+    public float[,] entityMatrix;
 
     public Matrix(TextAsset matrixCSV)
     {
@@ -19,16 +19,24 @@ public class Matrix
         int rows = rawCSV.Split('\n').Length;
         int columns = values.Length / rows;
 
-        entityMatrix = new string[columns, rows];
+        if (columns != (rows - 1))
+        {
+            //Error
+            Debug.LogError($"Error reading matrix CSV [{matrixCSV.name}]! Row and Column count do not match.");
+        }
+
+        entityMatrix = new float[columns, rows - 1];
         entityIDs = new string[columns];
         Array.Copy(values, entityIDs, columns);
 
-        int index = 0;
-        for (int y = 0; y < rows; y++)
+        int index = columns;
+        for (int y = 1; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
             {
-                entityMatrix[x, y] = values[index];
+                float value = 0f;
+                float.TryParse(values[index], out value);
+                entityMatrix[x, y - 1] = value;
                 index++;
             }
         }

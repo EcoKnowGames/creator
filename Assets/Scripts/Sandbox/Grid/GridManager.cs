@@ -288,6 +288,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 }
             }
         }
+
+        public void AdvanceRound()
+        {
+            foreach (Cell cell in cellList)
+            {
+                if (cell != null)
+                {
+                    cell.CalculateNewEntityCount();
+                }
+            }
+        }
         #endregion
 
         #region UI

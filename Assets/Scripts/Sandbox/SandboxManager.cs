@@ -50,6 +50,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         [Header("Gameplay")]
         [SerializeField] private EntityManager _entityManager;
+        public EntityManager EntityManager => _entityManager;
         [SerializeField] private GridManager _gridManager;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -59,16 +60,22 @@ namespace Glitchers.EcoKnow.Sandbox
 
             if (_scenarioNodeGraph != null)
             {
-                ScenarioNode scenario = _scenarioNodeGraph.GetScenarioNode();
-                Debug.Log($"Scenario Name is: {scenario.Name}");
-                Debug.Log($"Map Layout is: {scenario.GetMapLayout().fileName}");
+                ScenarioNode scenarioNode = _scenarioNodeGraph.GetScenarioNode();
+                Debug.Log($"Scenario Name is: {scenarioNode.Name}");
+                Debug.Log($"Map Layout is: {scenarioNode.GetMapLayout().fileName}");
+
+                MatrixNode matrixNode = _scenarioNodeGraph.GetMatrixNode();
+                if (matrixNode != null)
+                {
+                    _entityManager.RegisterAlphaMatrix(matrixNode.matrix);
+                }
 
                 if (_scenarioNodeGraph.HasEntityNodes())
                 {
                     _entityManager.RegisterEntities(_scenarioNodeGraph.nodes.OfType<EntityNode>().Select(x => x.GetEntity()).ToList());
                 }
 
-                GridDef gridDef = scenario.GetMapLayout().gridDef;
+                GridDef gridDef = scenarioNode.GetMapLayout().gridDef;
                 _gridManager?.EnableGrid();
                 _gridManager?.SetupGrid(gridDef);
                 _gridManager?.AddEntities(_entityManager.AllEntities);
@@ -78,6 +85,19 @@ namespace Glitchers.EcoKnow.Sandbox
         // Update is called once per frame
         void Update()
         {
+        }
+
+        public void OnAdvanceMathsPressed()
+        {
+            CalculateMaths();
+        }
+
+        private void CalculateMaths()
+        {
+            if (_gridManager != null)
+            {
+                _gridManager.AdvanceRound();
+            }
         }
     }
 }
