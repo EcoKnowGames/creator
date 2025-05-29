@@ -189,7 +189,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             //Update entity numbers
             for(int b = 0; b < NNrAN.Length; b++)
             {
-                _activeEntities[b].Population = Mathf.CeilToInt(NNrAN[b]);
+                _activeEntities[b].Population = Mathf.FloorToInt(NNrAN[b]);
             }
 
             UpdateDebugText();
