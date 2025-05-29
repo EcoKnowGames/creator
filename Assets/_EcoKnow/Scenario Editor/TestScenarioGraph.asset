@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 72, y: 168}
+  position: {x: 72, y: 120}
   ports:
     keys:
     - _id
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 72, y: -120}
+  position: {x: 72, y: -168}
   ports:
     keys:
     - _id
@@ -262,8 +262,8 @@ MonoBehaviour:
       _dynamic: 0
   _id: Hare
   _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  _growthRate: 0
-  _movementRate: 0
+  _growthRate: 1.4
+  _movementRate: 0.3
 --- !u!114 &8368680822340120736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 72, y: 24}
+  position: {x: 72, y: -24}
   ports:
     keys:
     - _id
@@ -297,4 +297,4 @@ MonoBehaviour:
   _id: Fox
   _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   _growthRate: 0
-  _movementRate: 0
+  _movementRate: 0.2

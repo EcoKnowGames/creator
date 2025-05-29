@@ -22,15 +22,12 @@ public class ScenarioNodeGraph : NodeGraph
     //TODO(caspar): A GetScenario with Scenario class makes more sense here
     public ScenarioNode GetScenarioNode()
     {
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            if (nodes[i] is ScenarioNode)
-            {
-                return nodes[i] as ScenarioNode;
-            }
-        }
+        return nodes.OfType<ScenarioNode>().FirstOrDefault();
+    }
 
-        return null;
+    public MatrixNode GetMatrixNode()
+    {
+        return nodes.OfType<MatrixNode>().FirstOrDefault();
     }
 
     public bool HasEntityNodes()
