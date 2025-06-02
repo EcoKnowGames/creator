@@ -4,12 +4,15 @@ using XNode;
 
 public class EntityNode : Node
 {
-    [Input(ShowBackingValue.Always, ConnectionType.Override)] [SerializeField] private string _id;
+    [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private string _id;
+    public string ID => _id;
 
     [SerializeField] private Sprite _icon;
 
     [SerializeField] private float _growthRate;
     [SerializeField] private float _movementRate;
+    [SerializeField] private float _extinction;
+    [SerializeField] private float _abundance;
 
     // Use this for initialization
     protected override void Init()

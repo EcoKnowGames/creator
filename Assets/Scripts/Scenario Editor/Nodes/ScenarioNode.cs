@@ -80,7 +80,7 @@ public class ScenarioNode : Node
                     {
                         if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
                         {
-                            _entityPorts.Add(AddDynamicOutput(typeof(Entity), fieldName: id, connectionType: ConnectionType.Override));
+                            _entityPorts.Add(AddDynamicOutput(typeof(string), fieldName: id, connectionType: ConnectionType.Override));
                         }
                     }
                 }
