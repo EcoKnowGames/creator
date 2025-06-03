@@ -31,6 +31,7 @@ public class ScenarioNode : Node
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private MapLayout _map;
 
     [SerializeField] private int _seed;
+    public int Seed => _seed;
 
     private List<NodePort> _entityPorts;
     public List<NodePort> EntityPorts => _entityPorts;
