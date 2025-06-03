@@ -64,6 +64,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 Debug.Log($"Scenario Name is: {scenarioNode.Name}");
                 Debug.Log($"Map Layout is: {scenarioNode.GetMapLayout().fileName}");
 
+                //Setup Random
+                Random.InitState(scenarioNode.Seed);
+
+                //Setup entities
                 MatrixNode matrixNode = _scenarioNodeGraph.GetMatrixNode();
                 if (matrixNode != null)
                 {
@@ -75,10 +79,12 @@ namespace Glitchers.EcoKnow.Sandbox
                     _entityManager.RegisterEntities(_scenarioNodeGraph.nodes.OfType<EntityNode>().Select(x => x.GetEntity()).ToList());
                 }
 
+                //Setup grid
                 GridDef gridDef = scenarioNode.GetMapLayout().gridDef;
                 _gridManager?.EnableGrid();
                 _gridManager?.SetupGrid(gridDef);
-                _gridManager?.AddEntities(_entityManager.AllEntities);
+
+                _entityManager.AddEntitiesToGrid(_gridManager);
             }
         }
 
@@ -94,10 +100,9 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void CalculateMaths()
         {
-            if (_gridManager != null)
-            {
-                _gridManager.AdvanceRound();
-            }
+            _entityManager?.CalculateNewEntityCount();
+            _entityManager?.CalculateMovement();
+            _gridManager?.UpdateAllCells();
         }
     }
 }

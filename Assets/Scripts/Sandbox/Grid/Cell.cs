@@ -24,8 +24,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
     {
         [SerializeField] protected GameObject highlightObject;
 
-        [SerializeField] protected TMPro.TMP_Text entityListText; //TODO(caspar) -> Entity management in its own component?
-        [SerializeField] List<CellEntity> _activeEntities;
+        [SerializeField] protected TMPro.TMP_Text entityListText;
 
         private int _row;
         private int _column;
@@ -47,7 +46,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             this.gameObject.name = $"Cell {_column}_{_row}";
 
             entityListText.text = string.Empty;
-            _activeEntities = new List<CellEntity>();
 
             ShowHighlight(false);
         }
@@ -99,23 +97,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
-        public void AddEntity(string id)
+        public void UpdateEntityCount()
         {
-            //NOTE(caspar): Every cell will have one of every entity, but some might have a value of zero
+            List<CellEntity> entities = SandboxManager.Instance?.EntityManager?.GetEntitiesForCell(Column, Row);
 
-            if (_activeEntities != null)
-            {
-                CellEntity entity = _activeEntities.FirstOrDefault(x => x.ID.Equals(id));
-                if (entity == null)
-                {
-                    _activeEntities.Add(new CellEntity(id, 100));
-                }
-            }
-
-            UpdateDebugText();
+            UpdateDebugText(entities);
         }
 
-        private void UpdateDebugText()
+        private void UpdateDebugText(List<CellEntity> entityList)
         {
             if (entityListText == null)
             {
@@ -124,75 +113,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             entityListText.text = string.Empty;
 
-            if (_activeEntities != null)
+            if (entityList != null)
             {
-                foreach(CellEntity entity in _activeEntities)
+                foreach(CellEntity entity in entityList)
                 {
                     entityListText.text += entity.ID + ": " + entity.Population + "\n";
                 }
             }
-        }
-
-        public void CalculateNewEntityCount()
-        {
-            //r - growth rates
-            //N - 1D matrix of current entity counts
-            //A - matrix of all entities and how they relate to each other (passed in via Matrix Node)
-            //Nsq = N + N.(r + AN)
-
-            if ((_activeEntities == null) || (_activeEntities.Count <= 0))
-            {
-                Debug.LogError($"{LogChannel} No entities found for Cell [{this.Row} , {this.Column}]. Aborting calculations...");
-                return;
-            }
-
-            int entityCount = SandboxManager.Instance.EntityManager.AllEntities.Count;
-            if (_activeEntities.Count != entityCount)
-            {
-                Debug.LogError($"{LogChannel} Entity count [{_activeEntities.Count}] for Cell [{this.Row} , {this.Column}] does not match the Simulation Entity count [{entityCount}]! Aborting calculations...");
-                return;
-            }
-
-            float[,] A = SandboxManager.Instance.EntityManager.AlphaMatrix;
-            if ((A.GetLongLength(0) != entityCount) || (A.GetLongLength(1) != entityCount))
-            {
-                Debug.LogError($"{LogChannel} Entity count [{_activeEntities.Count}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
-                return;
-            }
-
-            float[] r = SandboxManager.Instance.EntityManager.AllEntities.Select(x => x.GrowthRate).ToArray();
-            float[] N = _activeEntities.Select(x => (float)x.Population).ToArray();
-
-            //AN
-            float[] AN = new float[entityCount];
-            for (int y = 0; y < A.GetLongLength(1); y++)
-            {
-                float result = 0f;
-                for (int x = 0; x < A.GetLongLength(0); x++)
-                {
-                    result += A[x, y] * N[x];
-                    //Debug.Log(A[x, y]);
-                }
-
-                AN[y] = result;
-            }
-
-            //N + N.(r + AN)
-            float[] NNrAN = new float[entityCount];
-            for (int a = 0; a < N.Length; a++)
-            {
-                NNrAN[a] = N[a] + (N[a] * (r[a] + AN[a]));
-
-                Debug.Log(NNrAN[a]);
-            }
-
-            //Update entity numbers
-            for(int b = 0; b < NNrAN.Length; b++)
-            {
-                _activeEntities[b].Population = Mathf.FloorToInt(NNrAN[b]);
-            }
-
-            UpdateDebugText();
         }
         #endregion
     }

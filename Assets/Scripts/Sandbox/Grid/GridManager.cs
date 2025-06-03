@@ -270,32 +270,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
-        public void AddEntities(List<Entity> entityList)
+        public void UpdateAllCells()
         {
-            if ((entityList == null) || (entityList.Count <= 0))
-            {
-                return;
-            }
-
-            foreach (Cell cell in cellList)
+            foreach(Cell cell in cellList)
             {
                 if (cell != null)
                 {
-                    foreach (Entity entity in entityList)
-                    {
-                        cell.AddEntity(entity.ID);
-                    }
-                }
-            }
-        }
-
-        public void AdvanceRound()
-        {
-            foreach (Cell cell in cellList)
-            {
-                if (cell != null)
-                {
-                    cell.CalculateNewEntityCount();
+                    cell.UpdateEntityCount();
                 }
             }
         }
