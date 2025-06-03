@@ -22,9 +22,8 @@ namespace Glitchers.EcoKnow.Sandbox
         //private float[,] _alphaMatrix;
         private Matrix _entityMatrix;
         public float[,] AlphaMatrix => _entityMatrix.entityMatrix;
-        private List<Entity> _entityTypeList;
-        //private Dictionary<string, Entity> _entityDictionary;
-        public List<Entity> AllEntityTypes => _entityTypeList; //_entityDictionary == null ? null : _entityDictionary.Select(x => x.Value).ToList();
+        private Entity[] _entityTypeList;
+        public int EntityTypeCount => _entityTypeList.Length;
 
 
         //Cell lookup table?
@@ -46,16 +45,7 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             //Make sure the order we register matches the order from the alpha matrix. This will be important for maths later
-            entityRecords = entityRecords.OrderBy(x => Array.IndexOf(_entityMatrix.entityIDs, x.ID)).ToList();
-
-            _entityTypeList = entityRecords;
-
-            //_entityDictionary = new Dictionary<string, Entity>();
-
-            /*foreach (Entity record in entityRecords)
-            {
-                _entityDictionary.Add(record.ID, record);
-            }*/
+            _entityTypeList = entityRecords.OrderBy(x => Array.IndexOf(_entityMatrix.entityIDs, x.ID)).ToArray();
         }
 
         public void AddEntitiesToGrid(GridManager gridManager)
@@ -66,19 +56,16 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             Vector2 gridSize = gridManager.GridSize;
-            _entityLookupTable = new int[(int)gridSize.x, (int)gridSize.y, _entityTypeList.Count];
+            _entityLookupTable = new int[(int)gridSize.x, (int)gridSize.y, EntityTypeCount];
 
             //Add arbritrary amount of entities to each cell for now
             for (int row = 0; row < gridSize.y; row++)
             {
                 for (int column = 0; column < gridSize.x; column++)
                 {
-                    if (gridManager.FindCellAtPosition(column, row) != null)
+                    for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        for (int i = 0; i < _entityTypeList.Count; i++)
-                        {
-                            _entityLookupTable[column, row, i] = 100;
-                        }
+                        _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? 100 : -1;
                     }
                 }
             }
@@ -90,7 +77,7 @@ namespace Glitchers.EcoKnow.Sandbox
         {
             List<CellEntity> entityCounts = new List<CellEntity>();
 
-            for (int i = 0; i < _entityTypeList.Count; i++)
+            for (int i = 0; i < EntityTypeCount; i++)
             {
                 string id = _entityTypeList[i].ID;
                 int population = _entityLookupTable[column, row, i];
@@ -102,10 +89,41 @@ namespace Glitchers.EcoKnow.Sandbox
         }
 
 
-        //TODO(caspar): Cleanup to ensure IDs match and are in the right order when retrieving/setting the population at the end
+        private int GetValidNeighbourCount(int column, int row, int entity)
+        {
+            int neighbours = 0;
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    if (x != 0 || y != 0)
+                    {
+                        int xPos = column + x;
+                        int yPos = row + y;
+
+                        if (xPos >= 0 &&
+                            xPos < _entityLookupTable.GetLongLength(0) &&
+                            yPos >= 0 &&
+                            yPos < _entityLookupTable.GetLongLength(1))
+                        {
+                            //Populations less than 0 are invalid cells
+                            int population = _entityLookupTable[xPos, yPos, entity];
+                            if (population >= 0)
+                            {
+                                neighbours += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return neighbours;
+        }
+
+        #region Population and Movement Maths
         public void CalculateNewEntityCount()
         {
-            for(int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
+            for (int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
             {
                 for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
                 {
@@ -117,25 +135,24 @@ namespace Glitchers.EcoKnow.Sandbox
                         return;
                     }
 
-                    int entityCount = AllEntityTypes.Count;
-                    if (entityList.Count != entityCount)
+                    if (entityList.Count != EntityTypeCount)
                     {
-                        Debug.LogError($"{LogChannel} Entity count [{entityList.Count}] for Cell [{row} , {column}] does not match the Simulation Entity count [{entityCount}]! Aborting calculations...");
+                        Debug.LogError($"{LogChannel} Entity count [{entityList.Count}] for Cell [{row} , {column}] does not match the Simulation Entity count [{EntityTypeCount}]! Aborting calculations...");
                         return;
                     }
 
                     float[,] A = AlphaMatrix;
-                    if ((A.GetLongLength(0) != entityCount) || (A.GetLongLength(1) != entityCount))
+                    if ((A.GetLongLength(0) != EntityTypeCount) || (A.GetLongLength(1) != EntityTypeCount))
                     {
                         Debug.LogError($"{LogChannel} Entity count [{entityList.Count}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
                         return;
                     }
 
-                    float[] r = AllEntityTypes.Select(x => x.GrowthRate).ToArray();
+                    float[] r = _entityTypeList.Select(x => x.GrowthRate).ToArray();
                     float[] N = entityList.Select(x => (float)x.Population).ToArray();
 
                     //AN
-                    float[] AN = new float[entityCount];
+                    float[] AN = new float[EntityTypeCount];
                     for (int yy = 0; yy < A.GetLongLength(1); yy++)
                     {
                         float result = 0f;
@@ -149,7 +166,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     }
 
                     //N + N.(r + AN)
-                    float[] NNrAN = new float[entityCount];
+                    float[] NNrAN = new float[EntityTypeCount];
                     for (int a = 0; a < N.Length; a++)
                     {
                         NNrAN[a] = N[a] + (N[a] * (r[a] + AN[a]));
@@ -168,36 +185,71 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void CalculateMovement()
         {
-
-            //Calculate movementdata for all entities/cells
-
-            //entityMovementData.Add(cell.CalculateMovementData());
-
-            //NOW - Apply the entityMovementData numbers to our cells
-
-
             //We want to calculate the entity count change in each cell, THEN apply that difference to the entire grid
-            //We will need to store:
-            // X pos
-            // Y pos
-            // List of CellEntity (contains id and population change)
 
-
-
-
-            //Cell[,] movementMatrix
-
-            //And now we do our movement logic
-            //We loop through entities rather than cells because if an entity moves to a new cell, it would be re-processed when that cell calculates movement
-            /*List<Cell> flattenedCellList = cellList.Cast<Cell>().Where(x => x != null).ToList();
-            List<CellEntity> allEntities = new List<CellEntity>();
-            flattenedCellList.ForEach(x => allEntities.AddRange(x.ActiveEntities));
-
-            foreach(CellEntity cellEntity in allEntities)
+            //Perform this per-entity, following the maths provided
+            for (int i = 0; i < EntityTypeCount; i++)
             {
-                //Logic
-            }*/
-        }
+                Entity entity = _entityTypeList[i];
 
+                if (entity.MovementRate > 0f)
+                {
+                    int[,,] movementTable = new int[_entityLookupTable.GetLongLength(0), _entityLookupTable.GetLongLength(1), _entityLookupTable.GetLongLength(2)];
+
+                    //Move our requested entity in each cell
+                    for (int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
+                    {
+                        for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
+                        {
+                            int currentPopulation = _entityLookupTable[column, row, i];
+                            int neighbouringCellCount = GetValidNeighbourCount(column, row, i);
+
+                            //TODO(caspar): Binomial?
+                            //get number of entities to move
+                            int entitiesToMove = 0;
+                            for (int j = 0; j < currentPopulation; j++)
+                            {
+                                entitiesToMove += UnityEngine.Random.Range(0f, 1f) <= entity.MovementRate ? 1 : 0;
+                            }
+
+                            //divide moving entities by the number of valid neighbours
+                            int entitiesMovingPerCell = Mathf.FloorToInt((float)entitiesToMove / (float)neighbouringCellCount);
+
+                            //Add to neighbouring cells and remove from current cell respectively
+                            for (int x = -1; x < 2; x++)
+                            {
+                                for (int y = -1; y < 2; y++)
+                                {
+                                    int xPos = column + x;
+                                    int yPos = row + y;
+
+                                    if (x == 0 && y == 0)
+                                    {
+                                        movementTable[xPos, yPos, i] -= (entitiesMovingPerCell * neighbouringCellCount);
+                                    }
+                                    else if (xPos >= 0 &&
+                                            xPos < _entityLookupTable.GetLongLength(0) &&
+                                            yPos >= 0 &&
+                                            yPos < _entityLookupTable.GetLongLength(1))
+                                    {
+                                        movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //Apply the movementTable numbers to our actual cells
+                    for (int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
+                    {
+                        for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
+                        {
+                            _entityLookupTable[column, row, i] = Mathf.Max(_entityLookupTable[column, row, i] + movementTable[column, row, i], 0);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
