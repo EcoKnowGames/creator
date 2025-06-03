@@ -62,6 +62,30 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             return null;
         }
+
+        public List<Cell> GetAllNeighbouringCells()
+        {
+            List<Cell> neighbours = new List<Cell>();
+            GridManager gridManager = GetComponentInParent<GridManager>();
+            {
+                if (gridManager != null)
+                {
+                    for (int x = -1; x < 2; x++)
+                    {
+                        for (int y = -1; y < 2; y++)
+                        {
+                            Cell cell = gridManager.FindCellAtPosition(_column + x, _row + y);
+                            if (cell != null)
+                            {
+                                neighbours.Add(cell);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return neighbours;
+        }
         #endregion
 
         #region Highlight
