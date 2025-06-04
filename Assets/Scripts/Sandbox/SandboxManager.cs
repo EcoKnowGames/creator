@@ -1,5 +1,6 @@
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
+using Glitchers.EcoKnow.Sandbox.UI;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
@@ -52,12 +53,14 @@ namespace Glitchers.EcoKnow.Sandbox
         [SerializeField] private EntityManager _entityManager;
         public EntityManager EntityManager => _entityManager;
         [SerializeField] private GridManager _gridManager;
+        public GridManager GridManager => _gridManager;
+
+        [Header("UI")]
+        [SerializeField] private SandboxUI _sandboxUI;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            _gridManager.Init();
-
             if (_scenarioNodeGraph != null)
             {
                 ScenarioNode scenarioNode = _scenarioNodeGraph.GetScenarioNode();
@@ -66,6 +69,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 //Setup Random
                 Random.InitState(scenarioNode.Seed);
+
+                _gridManager?.Init();
 
                 //Setup entities
                 MatrixNode matrixNode = _scenarioNodeGraph.GetMatrixNode();
@@ -85,12 +90,16 @@ namespace Glitchers.EcoKnow.Sandbox
                 _gridManager?.SetupGrid(gridDef);
 
                 _entityManager.AddEntitiesToGrid(_gridManager);
+
+                //Set up all of our UI
+                _sandboxUI?.Init();
             }
         }
 
         // Update is called once per frame
         void Update()
         {
+            _gridManager?.HandleInput();
         }
 
         public void OnAdvanceMathsPressed()
