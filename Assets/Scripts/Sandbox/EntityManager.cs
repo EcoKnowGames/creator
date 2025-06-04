@@ -176,7 +176,6 @@ namespace Glitchers.EcoKnow.Sandbox
                     //Update entity numbers
                     for (int b = 0; b < NNrAN.Length; b++)
                     {
-                        //entityList[b].Population =
                         _entityLookupTable[column, row, b] = Mathf.FloorToInt(NNrAN[b]);
                     }
                 }
