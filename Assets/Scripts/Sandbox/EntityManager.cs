@@ -17,6 +17,17 @@ namespace Glitchers.EcoKnow.Sandbox
         float[,] EntityAlphas 
         );*/
 
+    public delegate void EntityEvent(int column, int row, int id);
+
+    public class EntityEvents
+    {
+        public EntityEvent OnEntityHarvested;
+        public EntityEvent OnEntityIntroduced;
+    }
+
+
+    //Note(caspar) -> This class stores and handles manipulation of the Entity data
+    //Data can be requested or modified here
     public class EntityManager : MonoBehaviour
     {
         //private float[,] _alphaMatrix;
@@ -30,8 +41,11 @@ namespace Glitchers.EcoKnow.Sandbox
         //X, Y, entityIndex
         private int[,,] _entityLookupTable;
 
+        public EntityEvents entityEvents = new EntityEvents();
+
         private const string LogChannel = "[EntityManager]";
 
+        #region Setup
         public void RegisterAlphaMatrix(Matrix matrix)
         {
             _entityMatrix = matrix;
@@ -72,53 +86,87 @@ namespace Glitchers.EcoKnow.Sandbox
 
             gridManager.UpdateAllCells();
         }
+        #endregion
 
-        public List<CellEntity> GetEntitiesForCell(int column, int row)
+        public CellEntity[] GetEntitiesForCell(int column, int row)
         {
-            List<CellEntity> entityCounts = new List<CellEntity>();
+            CellEntity[] entityCounts = new CellEntity[EntityTypeCount];
 
             for (int i = 0; i < EntityTypeCount; i++)
             {
                 string id = _entityTypeList[i].ID;
                 int population = _entityLookupTable[column, row, i];
 
-                entityCounts.Add(new CellEntity(id, population));
+                entityCounts[i] = new CellEntity(id, population);
             }
 
             return entityCounts;
         }
 
-
-        private int GetValidNeighbourCount(int column, int row, int entity)
+        #region Data Manipulation
+        public bool TryHarvestEntityFromCell(int column, int row, int index, int count)
         {
-            int neighbours = 0;
-            for (int x = -1; x < 2; x++)
+            if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
             {
-                for (int y = -1; y < 2; y++)
-                {
-                    if (x != 0 || y != 0)
-                    {
-                        int xPos = column + x;
-                        int yPos = row + y;
-
-                        if (xPos >= 0 &&
-                            xPos < _entityLookupTable.GetLongLength(0) &&
-                            yPos >= 0 &&
-                            yPos < _entityLookupTable.GetLongLength(1))
-                        {
-                            //Populations less than 0 are invalid cells
-                            int population = _entityLookupTable[xPos, yPos, entity];
-                            if (population >= 0)
-                            {
-                                neighbours += 1;
-                            }
-                        }
-                    }
-                }
+                Debug.LogError($"{LogChannel} Failed to harvest entity from Cell [{column}, {row}], location out of bounds!");
+                return false;
             }
 
-            return neighbours;
+            if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
+            {
+                int currentPopulation = _entityLookupTable[column, row, index];
+                int newPopulation = Mathf.Max(currentPopulation - count, 0);
+
+                //TODO(caspar): We cannot harvest more than we have in the cell, so what sort of user feedback should we get if we try to harvest too much?
+
+                int difference = newPopulation - currentPopulation;
+
+                Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
+
+                _entityLookupTable[column, row, index] = newPopulation;
+                entityEvents?.OnEntityHarvested?.Invoke(column, row, index);
+
+                return true;
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Failed to harvest entity from Cell [{column}, {row}]. Entity index {index} is invalid!");
+            }
+
+            return false;
         }
+
+        public bool TryIntroduceEntityToCell(int column, int row, int index, int count)
+        {
+            if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
+            {
+                Debug.LogError($"{LogChannel} Failed to introduce entity to Cell [{column}, {row}], location out of bounds!");
+                return false;
+            }
+
+            if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
+            {
+                int currentPopulation = _entityLookupTable[column, row, index];
+                int newPopulation = currentPopulation + count;
+
+                int difference = newPopulation - currentPopulation;
+
+                Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
+
+                _entityLookupTable[column, row, index] = newPopulation;
+                entityEvents?.OnEntityIntroduced?.Invoke(column, row, index);
+
+                return true;
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Failed to introduce entity to Cell [{column}, {row}]. Entity index {index} is invalid!");
+            }
+
+            return false;
+        }
+        #endregion
+
 
         #region Population and Movement Maths
         public void CalculateNewEntityCount()
@@ -127,24 +175,24 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
                 {
-                    List<CellEntity> entityList = GetEntitiesForCell(column, row);
+                    CellEntity[] entityList = GetEntitiesForCell(column, row);
 
-                    if ((entityList == null) || (entityList.Count <= 0))
+                    if ((entityList == null) || (entityList.Length <= 0))
                     {
                         Debug.LogError($"{LogChannel} No entities found for Cell [{row} , {column}]. Aborting calculations...");
                         return;
                     }
 
-                    if (entityList.Count != EntityTypeCount)
+                    if (entityList.Length != EntityTypeCount)
                     {
-                        Debug.LogError($"{LogChannel} Entity count [{entityList.Count}] for Cell [{row} , {column}] does not match the Simulation Entity count [{EntityTypeCount}]! Aborting calculations...");
+                        Debug.LogError($"{LogChannel} Entity count [{entityList.Length}] for Cell [{row} , {column}] does not match the Simulation Entity count [{EntityTypeCount}]! Aborting calculations...");
                         return;
                     }
 
                     float[,] A = AlphaMatrix;
                     if ((A.GetLongLength(0) != EntityTypeCount) || (A.GetLongLength(1) != EntityTypeCount))
                     {
-                        Debug.LogError($"{LogChannel} Entity count [{entityList.Count}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
+                        Debug.LogError($"{LogChannel} Entity count [{entityList.Length}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
                         return;
                     }
 
@@ -248,6 +296,37 @@ namespace Glitchers.EcoKnow.Sandbox
                     }
                 }
             }
+        }
+
+        private int GetValidNeighbourCount(int column, int row, int entity)
+        {
+            int neighbours = 0;
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    if (x != 0 || y != 0)
+                    {
+                        int xPos = column + x;
+                        int yPos = row + y;
+
+                        if (xPos >= 0 &&
+                            xPos < _entityLookupTable.GetLongLength(0) &&
+                            yPos >= 0 &&
+                            yPos < _entityLookupTable.GetLongLength(1))
+                        {
+                            //Populations less than 0 are invalid cells
+                            int population = _entityLookupTable[xPos, yPos, entity];
+                            if (population >= 0)
+                            {
+                                neighbours += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return neighbours;
         }
         #endregion
     }
