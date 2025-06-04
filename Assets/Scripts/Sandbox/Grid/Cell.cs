@@ -109,12 +109,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #region Entities
         public void UpdateEntityCount()
         {
-            List<CellEntity> entities = SandboxManager.Instance?.EntityManager?.GetEntitiesForCell(Column, Row);
-
+            CellEntity[] entities = SandboxManager.Instance?.EntityManager?.GetEntitiesForCell(Column, Row);
             UpdateDebugText(entities);
         }
 
-        private void UpdateDebugText(List<CellEntity> entityList)
+        private void UpdateDebugText(CellEntity[] entityList)
         {
             if (entityListText == null)
             {
