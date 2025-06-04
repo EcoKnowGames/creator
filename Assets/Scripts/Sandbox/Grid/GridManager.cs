@@ -7,7 +7,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 {
     public delegate void CellEvent(Cell inCell);
 
-
     public class GridEvents
     {
         public CellEvent OnCellClicked;
@@ -40,7 +39,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         [Header("Prefabs")]
         [SerializeField] protected GameObject cellPrefab;
 
-        public GridEvents gridEvents;
+        public GridEvents gridEvents = new GridEvents();
 
         private Cell[,] cellList;
 
@@ -50,6 +49,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int TotalCells => GetComponentsInChildren<Cell>().Length;
         public Vector2 GridSize => new Vector2(columns, rows);
         private Camera Camera => gridCamera == null ? Camera.main : gridCamera.Camera;
+
+        private const string LogChannel = "[GridManager]";
 
 
         #region Static Helper Functions
@@ -95,7 +96,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         public void Init()
         {
-            gridEvents = new GridEvents();
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced += OnEntityUpdated;
+            }
         }
 
         public void SetupGrid(GridDef gridDef)
@@ -270,6 +275,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
+        public void OnEntityUpdated(int column, int row, int id)
+        {
+            if (column < 0 || row < 0 || column >= columns || row >= rows)
+            {
+                Debug.LogError($"{LogChannel} Failed to update entities in Cell [{column}, {row}], location out of bounds!");
+                return;
+            }
+
+            cellList[column, row].UpdateEntityCount();
+        }
+
         public void UpdateAllCells()
         {
             foreach(Cell cell in cellList)
