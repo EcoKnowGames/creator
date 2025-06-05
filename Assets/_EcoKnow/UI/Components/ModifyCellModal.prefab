@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 8540983824264018033}
   - component: {fileID: 7037265760472097015}
   m_Layer: 5
-  m_Name: HarvestModal
+  m_Name: ModifyCellModal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -494,11 +494,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cc19c2c4a5ade4b9c3b78fd19ac026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _title: {fileID: 3125082587184143469}
   _inputField: {fileID: 5215382476635356401}
   _selectedID: {fileID: 4123436376137978312}
   _selectedPopulation: {fileID: 8422062948060693148}
   _entityButtonContainer: {fileID: 7603347911262836963}
   _entityButtonPrefab: {fileID: 5815046230277944520, guid: cc2dc9133db15e34e94923f51d182cc2, type: 3}
+  _confirmButton: {fileID: 8218015211915189771}
 --- !u!1 &2090981589045261376
 GameObject:
   m_ObjectHideFlags: 0
