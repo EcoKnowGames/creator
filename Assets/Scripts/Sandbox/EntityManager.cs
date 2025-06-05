@@ -104,7 +104,7 @@ namespace Glitchers.EcoKnow.Sandbox
         }
 
         #region Data Manipulation
-        public bool TryHarvestEntityFromCell(int column, int row, int index, int count)
+        public bool TryHarvestEntityFromCell(int column, int row, int index, int amount)
         {
             if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
             {
@@ -115,7 +115,7 @@ namespace Glitchers.EcoKnow.Sandbox
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
                 int currentPopulation = _entityLookupTable[column, row, index];
-                int newPopulation = Mathf.Max(currentPopulation - count, 0);
+                int newPopulation = Mathf.Max(currentPopulation - amount, 0);
 
                 //TODO(caspar): We cannot harvest more than we have in the cell, so what sort of user feedback should we get if we try to harvest too much?
 
@@ -136,7 +136,7 @@ namespace Glitchers.EcoKnow.Sandbox
             return false;
         }
 
-        public bool TryIntroduceEntityToCell(int column, int row, int index, int count)
+        public bool TryIntroduceEntityToCell(int column, int row, int index, int amount)
         {
             if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
             {
@@ -147,7 +147,7 @@ namespace Glitchers.EcoKnow.Sandbox
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
                 int currentPopulation = _entityLookupTable[column, row, index];
-                int newPopulation = currentPopulation + count;
+                int newPopulation = currentPopulation + amount;
 
                 int difference = newPopulation - currentPopulation;
 
