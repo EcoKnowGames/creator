@@ -107,9 +107,19 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
+        public CellEntity[] GetCellEntities()
+        {
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                return SandboxManager.Instance?.EntityManager?.GetEntitiesForCell(Column, Row);
+            }
+
+            return null;
+        }
+
         public void UpdateEntityCount()
         {
-            CellEntity[] entities = SandboxManager.Instance?.EntityManager?.GetEntitiesForCell(Column, Row);
+            CellEntity[] entities = GetCellEntities();
             UpdateDebugText(entities);
         }
 
