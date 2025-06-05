@@ -6,9 +6,10 @@ using Glitchers.EcoKnow.Sandbox.Grid;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-    public class HarvestModal : MonoBehaviour
+    public class ModifyCellModal : MonoBehaviour
     {
         [Header("Text")]
+        [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private TMP_Text _selectedID;
         [SerializeField] private TMP_Text _selectedPopulation;
@@ -17,13 +18,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Transform _entityButtonContainer;
         [SerializeField] private Button _entityButtonPrefab;
 
+        [Header("Buttons")]
+        [SerializeField] private Button _confirmButton;
+
         Action<int, int> onConfirmPressed;
 
         private int _selectedEntity = 0;
 
-        public void ShowModal(CellEntity[] entities, Action<int, int> onConfirm)
+        public void ShowModal(string title, CellEntity[] entities, Action<int, int> onConfirm)
         {
-            this.gameObject.SetActive(true);
+            SetTitle(title);
+
             onConfirmPressed = onConfirm;
             PopulateEntityOptions(entities);
 
@@ -31,6 +36,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 _inputField.text = "1";
             }
+
+            this.gameObject.SetActive(true);
         }
 
         public void HideModal()
@@ -41,15 +48,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Callbacks
         public void OnConfirmPressed()
         {
-            int harvestAmount = 1;
+            int modifyAmount = 1;
 
             if (_inputField != null)
             {
-                int.TryParse(_inputField.text, out harvestAmount);
+                int.TryParse(_inputField.text, out modifyAmount);
             }
 
             //Send data to the PlayerToolbar?
-            onConfirmPressed?.Invoke(_selectedEntity, harvestAmount);
+            onConfirmPressed?.Invoke(_selectedEntity, modifyAmount);
         }
 
         public void OnCancelPressed()
@@ -58,6 +65,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         }
         #endregion
 
+        #region UI
+        private void SetTitle(string title)
+        {
+            if (_title != null)
+            {
+                _title.text = title;
+            }
+
+            if (_confirmButton != null)
+            {
+                TMP_Text buttonText = _confirmButton.GetComponentInChildren<TMP_Text>();
+                if (buttonText != null)
+                {
+                    buttonText.text = title;
+                }
+            }
+        }
         private void PopulateEntityOptions(CellEntity[] entities)
         {
             _selectedEntity = 0;
@@ -98,5 +122,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
             }
         }
+        #endregion
     }
 }
