@@ -1,6 +1,8 @@
+using System;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -11,9 +13,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("UI Elements")]
         [SerializeField] private TMP_Text _activeModeText;
+        [SerializeField] private TMP_Text _actionsRemainingText;
         [SerializeField] private ModifyCellModal _modifyCellModal;
 
+        [Header("Buttons")]
+        [SerializeField] private Button _harvestButton;
+        [SerializeField] private Button _introduceButton;
+
         private Cell _selectedCell = null;
+
+        private const string LogChannel = "[Toolbar]";
 
         public void Init()
         {
@@ -44,12 +53,26 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnHarvestPressed()
         {
-            SetCurrentAction(PlayerAction.HARVEST);
+            if (CanPerformAction())
+            {
+                SetCurrentAction(PlayerAction.HARVEST);
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Cannot select action, no action points remaining!");
+            }
         }
 
         public void OnIntroducePressed()
         {
-            SetCurrentAction(PlayerAction.INTRODUCE);
+            if (CanPerformAction())
+            { 
+                SetCurrentAction(PlayerAction.INTRODUCE);
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Cannot select action, no action points remaining!");
+            }
         }
 
         #region Actions
@@ -76,6 +99,52 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _activeModeText.text = _currentAction.ToString();
             }
         }
+
+        private bool CanPerformAction()
+        {
+            PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                return inventory.GetAmountHeld(PlayerInventory.ActionID) > 0;
+            }
+
+            return false;
+        }
+
+        private void OnActionSuccess()
+        {
+            int actionsRemaining = 0;
+
+            //TODO(caspar): OnActionSuccess?
+            //TODO(caspar): When do we send the data to the command/event recording layer?
+            if (SandboxManager.Instance.PlayerInventory != null)
+            {
+                actionsRemaining = SandboxManager.Instance.PlayerInventory.RemoveItem(PlayerInventory.ActionID, 1);
+            }
+
+            UpdateActionsRemaining(actionsRemaining);
+        }
+
+        public void UpdateActionsRemaining(int actions)
+        {
+            if (_actionsRemainingText != null)
+            {
+                _actionsRemainingText.text = string.Format($"Actions Left: {actions}");
+            }
+
+
+            //Set out buttons active or not
+            bool hasActions = actions > 0;
+            if (_harvestButton != null)
+            {
+                _harvestButton.interactable = hasActions;
+            }
+
+            if (_introduceButton != null)
+            {
+                _introduceButton.interactable = hasActions;
+            }
+        }
         #endregion
 
         #region Harvest
@@ -96,6 +165,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 if (success)
                 {
                     SetCurrentAction(PlayerAction.NONE);
+                    OnActionSuccess();
                 }
             }
         }
@@ -119,6 +189,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 if (success)
                 {
                     SetCurrentAction(PlayerAction.NONE);
+                    OnActionSuccess();
                 }
             }
         }
