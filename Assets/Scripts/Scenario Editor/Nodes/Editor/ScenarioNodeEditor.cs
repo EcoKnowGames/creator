@@ -19,7 +19,6 @@ public class ScenarioNodeEditor : NodeEditor
 
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("scenarioName"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("rounds"));
-        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("stepsPerRound"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("actionsPerRound"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("startCurrency"));
 
