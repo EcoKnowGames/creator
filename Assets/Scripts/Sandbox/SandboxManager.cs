@@ -55,10 +55,20 @@ namespace Glitchers.EcoKnow.Sandbox
         [SerializeField] private GridManager _gridManager;
         public GridManager GridManager => _gridManager;
 
+        [SerializeField] private PlayerInventory _playerInventory;
+        public PlayerInventory PlayerInventory => _playerInventory;
+
         [Header("UI")]
         [SerializeField] private SandboxUI _sandboxUI;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+        //TODO(caspar): Should rounds and steps be handled in another location?
+        private int _maxRounds = 1;
+        private int _currentRound = -1;
+
+        private int _maxActionsPerRound = 1;
+
+
         void Start()
         {
             if (_scenarioNodeGraph != null)
@@ -70,6 +80,11 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Setup Random
                 Random.InitState(scenarioNode.Seed);
 
+                //Setup rounds
+                _maxRounds = scenarioNode.TotalRounds;
+                _maxActionsPerRound = scenarioNode.ActionsPerRound;
+
+                //Init grid
                 _gridManager?.Init();
 
                 //Setup entities
@@ -94,17 +109,21 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Set up all of our UI
                 _sandboxUI?.Init();
             }
+
+            StartNewRound();
         }
 
-        // Update is called once per frame
+
         void Update()
         {
             _gridManager?.HandleInput();
         }
 
-        public void OnAdvanceMathsPressed()
+        #region Rounds and Steps
+        public void OnAdvanceRoundPressed()
         {
             CalculateMaths();
+            StartNewRound();
         }
 
         private void CalculateMaths()
@@ -113,5 +132,24 @@ namespace Glitchers.EcoKnow.Sandbox
             _entityManager?.CalculateMovement();
             _gridManager?.UpdateAllCells();
         }
+
+        public void StartNewRound()
+        {
+            _currentRound += 1;
+
+            //Update actions
+            int actionsHeld = 0;
+            if (_playerInventory != null)
+            {
+                actionsHeld = _playerInventory.GetAmountHeld(PlayerInventory.ActionID);
+                int actionsToAdd = _maxActionsPerRound - actionsHeld;
+                actionsHeld = _playerInventory.AddItem(PlayerInventory.ActionID, actionsToAdd);
+            }
+
+            //Update UI
+            _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
+        }
+
+        #endregion
     }
 }
