@@ -7,7 +7,6 @@ using XNode;
 {
 	public string name { get; }
 	public int rounds { get; }
-	public int stepsPerRound { get; }
 	public int actionsPerRound { get; }
 	public int startCurrency { get; }
 
@@ -23,7 +22,6 @@ public class ScenarioNode : Node
 {
     [SerializeField] protected string scenarioName;
     [SerializeField] protected int rounds;
-    [SerializeField] protected int stepsPerRound;
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
 
@@ -37,6 +35,8 @@ public class ScenarioNode : Node
     public List<NodePort> EntityPorts => _entityPorts;
 
     public string Name => scenarioName;
+    public int TotalRounds => rounds;
+    public int ActionsPerRound => actionsPerRound;
 
     // Use this for initialization
     protected override void Init()

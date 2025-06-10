@@ -115,10 +115,14 @@ namespace Glitchers.EcoKnow.Sandbox
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
                 int currentPopulation = _entityLookupTable[column, row, index];
-                int newPopulation = Mathf.Max(currentPopulation - amount, 0);
+                if (currentPopulation == 0) //Fail interaction if we have nothing to harvest
+                {
+                    return false;
+                }
 
                 //TODO(caspar): We cannot harvest more than we have in the cell, so what sort of user feedback should we get if we try to harvest too much?
 
+                int newPopulation = Mathf.Max(currentPopulation - amount, 0);
                 int difference = newPopulation - currentPopulation;
 
                 Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
@@ -146,6 +150,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
+                //TODO(caspar): CanSpendAmount/CanFullfilPurchase (check inventory for required items and amounts)
+
                 int currentPopulation = _entityLookupTable[column, row, index];
                 int newPopulation = currentPopulation + amount;
 
