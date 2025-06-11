@@ -88,6 +88,18 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
+        #region Entity Data
+        public Entity GetEntityType(int index)
+        {
+            if (index >= _entityTypeList.Count() || index < 0)
+            {
+                Debug.LogError($"{LogChannel} Failed to find Entity Type with index [{index}], index is invalid!");
+                return null;
+            }
+
+            return _entityTypeList[index];
+        }
+
         public CellEntity[] GetEntitiesForCell(int column, int row)
         {
             CellEntity[] entityCounts = new CellEntity[EntityTypeCount];
@@ -102,6 +114,28 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return entityCounts;
         }
+
+        public int GetTotalPopulationOfEntityType(int index)
+        {
+            if (index >= _entityLookupTable.GetLongLength(2) || index < 0)
+            {
+                Debug.LogError($"{LogChannel} Failed to find total population of Entity with index [{index}], index is invalid!");
+                return 0;
+            }
+
+            //Find total
+            int totalPopulation = 0;
+            for (int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
+            {
+                for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
+                {
+                    totalPopulation += _entityLookupTable[column, row, index];
+                }
+            }
+
+           return totalPopulation;
+        }
+        #endregion
 
         #region Data Manipulation
         public bool TryHarvestEntityFromCell(int column, int row, int index, int amount)

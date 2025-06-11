@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
 
@@ -27,6 +28,9 @@ public class ScenarioNode : Node
 
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private Matrix _matrix;
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private MapLayout _map;
+
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private string _winConditions;
+
 
     [SerializeField] private int _seed;
     public int Seed => _seed;
@@ -117,6 +121,7 @@ public class ScenarioNode : Node
         if (port == GetInputPort("_matrix"))
         {
             ClearEntityPorts();
+            //this.
         }
     }
 

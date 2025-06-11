@@ -19,13 +19,14 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - Hare
+    - House
     - Fox
     - Dog
-    - House
+    - Hare
     - Horse
     - Rock
     - Cat
+    - _winConditions
     values:
     - _fieldName: _map
       _node: {fileID: -5440223889025535490}
@@ -60,13 +61,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -93,13 +94,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -132,9 +133,23 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
+    - _fieldName: _winConditions
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: -1515369370903765867}
+        reroutePoints: []
+      - fieldName: _id
+        node: {fileID: -1152431932792402805}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   scenarioName: Wilderness Test
   rounds: 5
-  stepsPerRound: 4
   actionsPerRound: 4
   startCurrency: 80
   _matrix:
@@ -144,6 +159,7 @@ MonoBehaviour:
     gridDef:
       rows: 0
       columns: 0
+  _winConditions: 
   _seed: 123456
 --- !u!114 &-2726126907051347721
 MonoBehaviour:
@@ -181,6 +197,78 @@ MonoBehaviour:
   _movementRate: 0
   _extinction: 0
   _abundance: 0
+--- !u!114 &-1515369370903765867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59344cbbaa1632c4a980da480283e290, type: 3}
+  m_Name: Win Condition
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -744, y: 120}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: -1515369370903765867}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _winConditions
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: 
+  title: Fox Population
+  description: Keep Fox Population above 4000 for 3 rounds!
+  minValue: 4000
+  maxValue: -1
+  requiredRounds: 3
+--- !u!114 &-1152431932792402805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59344cbbaa1632c4a980da480283e290, type: 3}
+  m_Name: Win Condition
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -520, y: 216}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: -1152431932792402805}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _winConditions
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: 
+  title: Hare Population
+  description: Keep Hares within the range of 10000-20000
+  minValue: 10000
+  maxValue: 20000
+  requiredRounds: -1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +288,8 @@ MonoBehaviour:
   - {fileID: 4452621898610726545}
   - {fileID: 8368680822340120736}
   - {fileID: -2726126907051347721}
+  - {fileID: -1515369370903765867}
+  - {fileID: -1152431932792402805}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +303,7 @@ MonoBehaviour:
   m_Name: Matrix
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -600, y: -216}
+  position: {x: -648, y: -312}
   ports:
     keys:
     - matrix
@@ -249,7 +339,7 @@ MonoBehaviour:
   m_Name: Map
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -600, y: 72}
+  position: {x: -648, y: -88}
   ports:
     keys:
     - map
