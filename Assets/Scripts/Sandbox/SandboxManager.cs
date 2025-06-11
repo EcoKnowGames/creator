@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
@@ -62,11 +63,13 @@ namespace Glitchers.EcoKnow.Sandbox
         [SerializeField] private SandboxUI _sandboxUI;
 
 
-        //TODO(caspar): Should rounds and steps be handled in another location?
+        //TODO(caspar): Should rounds and win conditions be handled in another location?
         private int _maxRounds = 1;
         private int _currentRound = -1;
 
         private int _maxActionsPerRound = 1;
+
+        private List<WinCondition> _winConditions;
 
 
         void Start()
@@ -83,6 +86,8 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Setup rounds
                 _maxRounds = scenarioNode.TotalRounds;
                 _maxActionsPerRound = scenarioNode.ActionsPerRound;
+
+                InitWinConditions(_scenarioNodeGraph.GetWinConditionList());
 
                 //Init grid
                 _gridManager?.Init();
@@ -135,6 +140,20 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void StartNewRound()
         {
+            //Check win conditions first
+            int totalWinConditionsCompleted = 0;
+            foreach (WinCondition winCondition in _winConditions)
+            {
+                winCondition.OnNewRound();
+                totalWinConditionsCompleted += winCondition.Completed == true? 1 : 0;
+            }
+
+            if (totalWinConditionsCompleted >= _winConditions.Count)
+            {
+                //TODO(caspar): Win game!
+                Debug.Log("WIN THE GAME!");
+            }
+
             _currentRound += 1;
 
             //Update actions
@@ -149,7 +168,21 @@ namespace Glitchers.EcoKnow.Sandbox
             //Update UI
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
         }
+        #endregion
 
+        #region WinConditions
+        private void InitWinConditions(List<WinConditionRecord> winConditions)
+        {
+            _winConditions = new List<WinCondition>();
+
+            foreach(WinConditionRecord record in winConditions)
+            {
+                WinCondition condition = new WinCondition();
+                condition.Init(record);
+
+                _winConditions.Add(condition);
+            }
+        }
         #endregion
     }
 }

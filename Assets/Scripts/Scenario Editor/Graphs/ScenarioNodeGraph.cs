@@ -40,4 +40,14 @@ public class ScenarioNodeGraph : NodeGraph
     {
         return nodes.OfType<EntityNode>().Where(x => x.IsConnected()).Select(x => x.GetEntity()).ToList();
     }
+
+    public bool HasConnectedWinConditions()
+    {
+        return nodes.OfType<WinConditionNode>().Where(x => x.IsConnected()).ToList().Count > 0;
+    }
+
+    public List<WinConditionRecord> GetWinConditionList()
+    {
+        return nodes.OfType<WinConditionNode>().Where(x => x.IsConnected()).Select(x => x.GetWinCondition()).ToList();
+    }
 }

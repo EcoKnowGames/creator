@@ -9,7 +9,11 @@ namespace Glitchers.EcoKnow.Sandbox
     public record Entity(
         string ID,
         float GrowthRate,
-        float MovementRate
+        float MovementRate,
+
+        float VulnerableThreshold,
+        float AbundanceThreshold
+
         );
 
     /*public record Matrix(

@@ -34,12 +34,19 @@ public class WinConditionNodeEditor : NodeEditor
         if ((_winConditionNode.AvailableEntities != null) && (_winConditionNode.AvailableEntities.Count > 0))
         {
             entityIndex = EditorGUILayout.Popup("Entity", entityIndex, _winConditionNode.AvailableEntities.Select(x => x.ID).ToArray());
+            _winConditionNode.EntityIndex = entityIndex;
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Population Range", EditorStyles.miniBoldLabel);
 
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("minValue"));
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("maxValue"));
+            if (!_winConditionNode.IsPopulationRangeValid())
+            {
+                EditorGUILayout.HelpBox("Error: Minimum population range is greater than the maximum population range. If you do not neet an upper limit, set it to zero or below.", MessageType.Error);
+                EditorGUILayout.Space();
+            }
+
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("lowerLimit"));
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("upperLimit"));
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Rounds", EditorStyles.miniBoldLabel);

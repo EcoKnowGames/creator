@@ -12,7 +12,7 @@ public class EntityNode : Node
 
     [SerializeField] private float _growthRate;
     [SerializeField] private float _movementRate;
-    [SerializeField] private float _extinction;
+    [SerializeField] private float _vulnerable;
     [SerializeField] private float _abundance;
 
     // Use this for initialization
@@ -29,7 +29,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _growthRate, _movementRate);
+        return new Entity(_id, _growthRate, _movementRate, _vulnerable, _abundance);
     }
 
     public bool IsConnected()
