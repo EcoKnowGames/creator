@@ -3,6 +3,16 @@ using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
 
+public record WinConditionRecord
+(
+    string Title,
+    string Description,
+    int EntityIndex,
+    float LowerLimit,
+    float UpperLimit,
+    int RequiredRounds
+);
+
 public class WinConditionNode : Node
 {
     [Output(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private string _id;
@@ -12,8 +22,21 @@ public class WinConditionNode : Node
     [SerializeField, Multiline]
     protected string description;
 
-    [SerializeField] protected float minValue;
-    [SerializeField] protected float maxValue;
+    protected int entityIndex = 0;
+    public int EntityIndex
+    {
+        get
+        {
+            return entityIndex;
+        }
+        set
+        {
+            entityIndex = value;
+        }
+    }
+
+    [SerializeField] protected float lowerLimit;
+    [SerializeField] protected float upperLimit;
 
     [SerializeField] protected int requiredRounds = 1; //consistency across rounds
 
@@ -63,5 +86,34 @@ public class WinConditionNode : Node
         }
 
         return null;
+    }
+
+    public WinConditionRecord GetWinCondition()
+    {
+        return new WinConditionRecord(title, description, entityIndex, lowerLimit, upperLimit, requiredRounds);
+    }
+
+    public bool IsConnected()
+    {
+        NodePort port = GetOutputPort("_id");
+        if ((port != null) && (port.IsConnected))
+        {
+            if (port.Connection.node is ScenarioNode scenario)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsPopulationRangeValid()
+    {
+        if ((upperLimit > 0) && (upperLimit < lowerLimit))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
