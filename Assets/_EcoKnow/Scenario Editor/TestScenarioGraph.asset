@@ -19,10 +19,10 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - House
+    - Hare
     - Fox
     - Dog
-    - Hare
+    - House
     - Horse
     - Rock
     - Cat
@@ -61,13 +61,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -94,13 +94,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -110,7 +110,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -195,7 +198,7 @@ MonoBehaviour:
   _icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   _growthRate: 0
   _movementRate: 0
-  _extinction: 0
+  _vulnerable: 0
   _abundance: 0
 --- !u!114 &-1515369370903765867
 MonoBehaviour:
@@ -210,7 +213,7 @@ MonoBehaviour:
   m_Name: Win Condition
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -744, y: 120}
+  position: {x: -744, y: 184}
   ports:
     keys:
     - _id
@@ -230,8 +233,8 @@ MonoBehaviour:
   _id: 
   title: Fox Population
   description: Keep Fox Population above 4000 for 3 rounds!
-  minValue: 4000
-  maxValue: -1
+  lowerLimit: 4000
+  upperLimit: 0
   requiredRounds: 3
 --- !u!114 &-1152431932792402805
 MonoBehaviour:
@@ -246,7 +249,7 @@ MonoBehaviour:
   m_Name: Win Condition
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -520, y: 216}
+  position: {x: -520, y: 376}
   ports:
     keys:
     - _id
@@ -266,8 +269,8 @@ MonoBehaviour:
   _id: 
   title: Hare Population
   description: Keep Hares within the range of 10000-20000
-  minValue: 10000
-  maxValue: 20000
+  lowerLimit: 10000
+  upperLimit: 50000
   requiredRounds: -1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -396,7 +399,7 @@ MonoBehaviour:
   _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   _growthRate: 1.4
   _movementRate: 0.3
-  _extinction: 0
+  _vulnerable: 0
   _abundance: 0
 --- !u!114 &8368680822340120736
 MonoBehaviour:
@@ -432,5 +435,5 @@ MonoBehaviour:
   _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   _growthRate: 0
   _movementRate: 0.2
-  _extinction: 0
+  _vulnerable: 0
   _abundance: 0

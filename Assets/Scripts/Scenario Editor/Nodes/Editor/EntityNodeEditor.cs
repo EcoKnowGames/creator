@@ -113,7 +113,7 @@ public class EntityNodeEditor : NodeEditor
             // Warnings
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Warning Ranges", EditorStyles.centeredGreyMiniLabel);
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_extinction"));
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_vulnerable"));
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_abundance"));
         }
 
