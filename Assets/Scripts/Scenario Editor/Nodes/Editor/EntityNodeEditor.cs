@@ -1,9 +1,5 @@
-using System;
-using System.Drawing;
 using UnityEditor;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.UIElements;
 using XNodeEditor;
 
 [CustomNodeEditor(typeof(EntityNode))]
@@ -17,7 +13,7 @@ public class EntityNodeEditor : NodeEditor
     private bool showMore = false;
     private float growthRate = 0.0f;
 
-    
+
 
     private Sprite entityIcon;
 

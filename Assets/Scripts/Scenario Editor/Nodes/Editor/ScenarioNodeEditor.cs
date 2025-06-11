@@ -30,6 +30,8 @@ public class ScenarioNodeEditor : NodeEditor
 
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_map"));
 
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_winConditions"));
+
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_seed"));
 
 
