@@ -32,6 +32,20 @@ public class EntityNode : Node
         return new Entity(_id, _growthRate, _movementRate);
     }
 
+    public bool IsConnected()
+    {
+        NodePort port = GetInputPort("_id");
+        if ((port != null) && (port.IsConnected))
+        {
+            if (port.Connection.node is ScenarioNode scenario)
+            {
+                return true;
+            }    
+        }
+
+        return false;
+    }
+
     public override void OnCreateConnection(NodePort from, NodePort to)
     {
         base.OnCreateConnection(from, to);

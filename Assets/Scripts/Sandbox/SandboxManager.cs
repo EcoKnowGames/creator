@@ -94,9 +94,9 @@ namespace Glitchers.EcoKnow.Sandbox
                     _entityManager.RegisterAlphaMatrix(matrixNode.matrix);
                 }
 
-                if (_scenarioNodeGraph.HasEntityNodes())
+                if (_scenarioNodeGraph.HasConnectedEntityNodes())
                 {
-                    _entityManager.RegisterEntities(_scenarioNodeGraph.nodes.OfType<EntityNode>().Select(x => x.GetEntity()).ToList());
+                    _entityManager.RegisterEntities(_scenarioNodeGraph.GetEntityList());
                 }
 
                 //Setup grid

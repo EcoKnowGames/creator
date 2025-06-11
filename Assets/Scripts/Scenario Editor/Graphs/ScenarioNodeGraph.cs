@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
 
 [CreateAssetMenu]
 public class ScenarioNodeGraph : NodeGraph
 {
-    /*public override Node AddNode(Type type)
+    public override Node AddNode(Type type)
     {
         if (type == typeof(ScenarioNode))
         {
@@ -17,9 +20,8 @@ public class ScenarioNodeGraph : NodeGraph
         }
 
         return base.AddNode(type);
-    }*/
+    }
 
-    //TODO(caspar): A GetScenario with Scenario class makes more sense here
     public ScenarioNode GetScenarioNode()
     {
         return nodes.OfType<ScenarioNode>().FirstOrDefault();
@@ -29,20 +31,13 @@ public class ScenarioNodeGraph : NodeGraph
     {
         return nodes.OfType<MatrixNode>().FirstOrDefault();
     }
-
-    public bool HasEntityNodes()
+    public bool HasConnectedEntityNodes()
     {
-        return nodes.FirstOrDefault(x => x.GetType() == typeof(EntityNode)) != null;
+        return nodes.OfType<EntityNode>().Where(x => x.IsConnected()).ToList().Count > 0;
     }
 
-    /*public Scenario GetScenario()
+    public List<Entity> GetEntityList()
     {
-        ScenarioNode node = GetScenarioNode();
-        if (node != null)
-        {
-            return node.GetScenario();
-        }
-
-        return null;
-    }	*/
+        return nodes.OfType<EntityNode>().Where(x => x.IsConnected()).Select(x => x.GetEntity()).ToList();
+    }
 }
