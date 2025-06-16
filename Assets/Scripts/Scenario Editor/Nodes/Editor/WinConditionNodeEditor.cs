@@ -8,7 +8,6 @@ using XNodeEditor;
 public class WinConditionNodeEditor : NodeEditor
 {
     private WinConditionNode _winConditionNode;
-    public int entityIndex = 0;
 
     public override void OnBodyGUI()
     {
@@ -31,6 +30,7 @@ public class WinConditionNodeEditor : NodeEditor
         EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
 
         //Entity list
+        int entityIndex = _winConditionNode.EntityIndex;
         if ((_winConditionNode.AvailableEntities != null) && (_winConditionNode.AvailableEntities.Count > 0))
         {
             entityIndex = EditorGUILayout.Popup("Entity", entityIndex, _winConditionNode.AvailableEntities.Select(x => x.ID).ToArray());
