@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    class WinCondition
+    public class WinCondition
     {
-        protected string title;
-        protected string description;
+        public string title { get; protected set; }
+        public string description { get; protected set; }
 
         protected int entityIndex;
 
         protected float lowerLimit;
         protected float upperLimit;
 
-        protected int requiredRounds = 1; //consecutive successes across rounds
+        public int requiredRounds { get; protected set; }
         private int _consecutiveSuccesses = 0;
+        public int ConsecutiveSuccesses => _consecutiveSuccesses;
 
         private bool _completed;
         public bool Completed => _completed;
@@ -33,7 +34,7 @@ namespace Glitchers.EcoKnow.Sandbox
             lowerLimit = record.LowerLimit;
             upperLimit = record.UpperLimit;
 
-            requiredRounds = record.RequiredRounds;
+            requiredRounds = record.RequiredRounds <= 0 ? 1 : record.RequiredRounds;
         }
 
         public void OnNewRound()
