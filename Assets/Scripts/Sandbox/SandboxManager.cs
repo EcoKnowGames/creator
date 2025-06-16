@@ -69,10 +69,21 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private int _maxActionsPerRound = 1;
 
+        public enum Result { WIN, LOSE };
         private List<WinCondition> _winConditions;
 
 
         void Start()
+        {
+            StartNewGame();
+        }
+
+        void Update()
+        {
+            _gridManager?.HandleInput();
+        }
+
+        public void StartNewGame()
         {
             if (_scenarioNodeGraph != null)
             {
@@ -84,6 +95,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 Random.InitState(scenarioNode.Seed);
 
                 //Setup rounds
+                _currentRound = -1;
                 _maxRounds = scenarioNode.TotalRounds;
                 _maxActionsPerRound = scenarioNode.ActionsPerRound;
 
@@ -118,17 +130,11 @@ namespace Glitchers.EcoKnow.Sandbox
             StartNewRound();
         }
 
-
-        void Update()
-        {
-            _gridManager?.HandleInput();
-        }
-
         #region Rounds and Steps
         public void OnAdvanceRoundPressed()
         {
             CalculateMaths();
-            StartNewRound();
+            OnRoundEnded();
         }
 
         private void CalculateMaths()
@@ -138,22 +144,23 @@ namespace Glitchers.EcoKnow.Sandbox
             _gridManager?.UpdateAllCells();
         }
 
+        private void OnRoundEnded()
+        {
+            bool playerWins = AreWinConditionsMet();
+            bool finalRound = _currentRound >= _maxRounds - 1;
+
+            if (finalRound)
+            {
+                _sandboxUI?.OnGameEnded(playerWins == true ? Result.WIN : Result.LOSE);
+            }
+            else
+            {
+                StartNewRound();
+            }
+        }
+
         public void StartNewRound()
         {
-            //Check win conditions first
-            int totalWinConditionsCompleted = 0;
-            foreach (WinCondition winCondition in _winConditions)
-            {
-                winCondition.OnNewRound();
-                totalWinConditionsCompleted += winCondition.Completed == true? 1 : 0;
-            }
-
-            if (totalWinConditionsCompleted >= _winConditions.Count)
-            {
-                //TODO(caspar): Win game!
-                Debug.Log("WIN THE GAME!");
-            }
-
             _currentRound += 1;
 
             //Update actions
@@ -171,6 +178,27 @@ namespace Glitchers.EcoKnow.Sandbox
         #endregion
 
         #region WinConditions
+        private bool AreWinConditionsMet()
+        {
+            //Check win conditions first
+            int totalWinConditionsCompleted = 0;
+            foreach (WinCondition winCondition in _winConditions)
+            {
+                winCondition.OnNewRound();
+                totalWinConditionsCompleted += winCondition.Completed == true ? 1 : 0;
+            }
+
+            Debug.Log($"Win Conditions Met: {totalWinConditionsCompleted}");
+
+            if (totalWinConditionsCompleted >= _winConditions.Count)
+            {
+                Debug.Log("WIN THE GAME!");
+                return true;
+            }
+
+            return false;
+        }
+
         private void InitWinConditions(List<WinConditionRecord> winConditions)
         {
             _winConditions = new List<WinCondition>();
