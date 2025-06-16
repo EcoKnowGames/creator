@@ -71,8 +71,9 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public enum Result { WIN, LOSE };
         private List<WinCondition> _winConditions;
+        public List<WinCondition> WinConditions => _winConditions;
 
-
+        #region Lifecycle
         void Start()
         {
             StartNewGame();
@@ -129,6 +130,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
             StartNewRound();
         }
+        #endregion
 
         #region Rounds and Steps
         public void OnAdvanceRoundPressed()
