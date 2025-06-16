@@ -18,11 +18,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnDestroy()
         {
-            if (SandboxManager.Instance.EntityManager != null)
-            {
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested -= OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced -= OnEntityUpdated;
-            }
+            //if (SandboxManager.Instance.EntityManager != null)
+            //{
+                //SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested -= OnEntityUpdated;
+                //SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced -= OnEntityUpdated;
+            //}
         }
 
         public void UpdatePopulations()
