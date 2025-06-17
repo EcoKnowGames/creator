@@ -117,6 +117,11 @@ namespace Glitchers.EcoKnow.Sandbox
                     _entityManager.RegisterEntities(_scenarioNodeGraph.GetEntityList());
                 }
 
+                if (_scenarioNodeGraph.HasConnectedItemNodes())
+                {
+                    _playerInventory.RegisterItemDefinitions(_scenarioNodeGraph.GetItemList());
+                }
+
                 //Setup grid
                 GridDef gridDef = scenarioNode.GetMapLayout().gridDef;
                 _gridManager?.EnableGrid();

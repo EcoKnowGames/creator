@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using XNode;
 using XNodeEditor;
 
 [CustomNodeEditor(typeof(EntityNode))]
@@ -7,16 +8,10 @@ public class EntityNodeEditor : NodeEditor
 {
     private EntityNode _entityNode;
 
-    private bool allowHarvesting = false;
-    private bool allowIntroduction = false;
     private bool autoPlaced = false;
     private bool showMore = false;
-    private float growthRate = 0.0f;
-
-
 
     private Sprite entityIcon;
-
 
     public override void OnBodyGUI()
     {
@@ -93,21 +88,21 @@ public class EntityNodeEditor : NodeEditor
             // Placement & Harvesting Options
             EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
             autoPlaced = EditorGUILayout.Toggle("Auto Place?", autoPlaced);
-            allowHarvesting = EditorGUILayout.Toggle("Harvestable?", allowHarvesting);
 
-            if (allowHarvesting)
+            _entityNode.Harvestable = EditorGUILayout.Toggle("Harvestable?", _entityNode.Harvestable);
+            if (_entityNode.Harvestable)
             {
-                EditorGUILayout.LabelField("Showing Inventory Connections");
+                NodePort inputPort = _entityNode.GetInputPort("_harvestQuantity");
+                NodeEditorGUILayout.PortField(inputPort);
                 EditorGUILayout.Space();
             }
 
             // Introduction Options
-            allowIntroduction = EditorGUILayout.Toggle("Introducable?", allowIntroduction);
-
-            if (allowIntroduction)
+            _entityNode.Introducable = EditorGUILayout.Toggle("Introducable?", _entityNode.Introducable);
+            if (_entityNode.Introducable)
             {
-                EditorGUILayout.LabelField("Showing Introduction Connections");
-                EditorGUILayout.Space();
+                NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
+                NodeEditorGUILayout.PortField(inputPort); EditorGUILayout.Space();
             }
 
             // Warnings
