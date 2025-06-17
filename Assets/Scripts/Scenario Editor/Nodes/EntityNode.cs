@@ -17,11 +17,11 @@ public class EntityNode : Node
 
     private bool _harvestable;
     public bool Harvestable { get { return _harvestable; } set { _harvestable = value; } }
-    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private ItemQuantity _harvestQuantity;
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _harvestQuantity;
 
     private bool _introducable;
     public bool Introducable { get { return _introducable; } set { _introducable = value; } }
-    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private ItemQuantity _introduceQuantity;
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _introduceQuantity;
 
     // Use this for initialization
     protected override void Init()

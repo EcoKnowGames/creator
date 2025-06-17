@@ -19,10 +19,10 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - House
+    - Hare
     - Fox
     - Dog
-    - Hare
+    - House
     - Horse
     - Rock
     - Cat
@@ -62,13 +62,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -95,13 +95,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -252,7 +252,7 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _introduceQuantity
       _node: {fileID: -2726126907051347721}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections: []
       _direction: 0
@@ -261,7 +261,7 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _harvestQuantity
       _node: {fileID: -2726126907051347721}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections: []
       _direction: 0
@@ -326,21 +326,21 @@ MonoBehaviour:
   position: {x: 328, y: -408}
   ports:
     keys:
-    - _itemQuantity
+    - _quantity
     values:
-    - _fieldName: _itemQuantity
+    - _fieldName: _quantity
       _node: {fileID: -1218585377830705567}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: _introduceQuantity
+      - fieldName: _harvestQuantity
         node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  _quantity: 3
+  _value: 1
 --- !u!114 &-1152431932792402805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,11 +456,11 @@ MonoBehaviour:
   position: {x: 328, y: -552}
   ports:
     keys:
-    - _itemQuantity
+    - _quantity
     values:
-    - _fieldName: _itemQuantity
+    - _fieldName: _quantity
       _node: {fileID: 1576632361664831712}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: _harvestQuantity
@@ -470,7 +470,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  _quantity: 1
+  _value: 4
 --- !u!114 &1651366151217186011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,11 +521,11 @@ MonoBehaviour:
   position: {x: 328, y: -264}
   ports:
     keys:
-    - _itemQuantity
+    - _quantity
     values:
-    - _fieldName: _itemQuantity
+    - _fieldName: _quantity
       _node: {fileID: 1926212568143286280}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: _introduceQuantity
@@ -535,7 +535,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  _quantity: 100
+  _value: 100
 --- !u!114 &4220380142789208255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,13 +606,10 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _introduceQuantity
       _node: {fileID: 4452621898610726545}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: _itemQuantity
-        node: {fileID: -1218585377830705567}
-        reroutePoints: []
-      - fieldName: _itemQuantity
+      - fieldName: _quantity
         node: {fileID: 1926212568143286280}
         reroutePoints: []
       _direction: 0
@@ -621,11 +618,14 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _harvestQuantity
       _node: {fileID: 4452621898610726545}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: _itemQuantity
+      - fieldName: _quantity
         node: {fileID: 1576632361664831712}
+        reroutePoints: []
+      - fieldName: _quantity
+        node: {fileID: -1218585377830705567}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -671,7 +671,7 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _introduceQuantity
       _node: {fileID: 8368680822340120736}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections: []
       _direction: 0
@@ -680,7 +680,7 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: _harvestQuantity
       _node: {fileID: 8368680822340120736}
-      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections: []
       _direction: 0
