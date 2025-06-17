@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
+    public record Item(
+        string ID,
+        Sprite Icon,
+        int Value,
+        bool CanSell
+    );
+
     public class InventoryItem
     {
         private string _id;
@@ -22,11 +29,17 @@ namespace Glitchers.EcoKnow.Sandbox
 
     public class PlayerInventory : MonoBehaviour
     {
+        private List<Item> _itemDefs = new List<Item>();
         private List<InventoryItem> _inventory = new List<InventoryItem>();
 
-
+        public const string CurrencyID = "currency"; //This currency is constant between all games and not dictated by a node
         public const string ActionID = "action"; //This currency is constant between all games and not dictated by a node
         private const string LogChannel = "[PlayerInventory]";
+
+        public void RegisterItemDefinitions(List<Item> items)
+        {
+            _itemDefs = items;
+        }
 
         public int AddItem(string id, int amount)
         {

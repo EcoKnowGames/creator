@@ -41,6 +41,16 @@ public class ScenarioNodeGraph : NodeGraph
         return nodes.OfType<EntityNode>().Where(x => x.IsConnected()).Select(x => x.GetEntity()).ToList();
     }
 
+    public bool HasConnectedItemNodes()
+    {
+        return nodes.OfType<ItemNode>().Where(x => x.IsConnected()).ToList().Count > 0;
+    }
+
+    public List<Item> GetItemList()
+    {
+        return nodes.OfType<ItemNode>().Where(x => x.IsConnected()).Select(x => x.GetItem()).OrderBy(x => x.ID).ToList();
+    }
+
     public bool HasConnectedWinConditions()
     {
         return nodes.OfType<WinConditionNode>().Where(x => x.IsConnected()).ToList().Count > 0;
