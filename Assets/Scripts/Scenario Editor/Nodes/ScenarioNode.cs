@@ -31,11 +31,31 @@ public class ScenarioNode : Node
 
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private string _winConditions;
 
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private string _items;
+
+    public List<Item> ItemDefs
+    {
+        get
+        {
+            //Return valid item list from graph
+            //This ensures that the item list is always in the "correct" order
+            //The Graph will always keep an internal consistent index of Nodes based on the order they were added to the graph
+            //Whereas if we base the ItemDef indices on a locally stored list, the indexes could change if connections are broken and re-added
+            //This would disrupt any previously set-up nodes that reference item indices
+            if (graph is ScenarioNodeGraph scenarioGraph)
+            {
+                return scenarioGraph.GetItemList();
+            }
+
+            return null;
+        }
+    }
+
 
     [SerializeField] private int _seed;
     public int Seed => _seed;
 
-    private List<NodePort> _entityPorts;
+    private List<NodePort> _entityPorts = new List<NodePort>();
     public List<NodePort> EntityPorts => _entityPorts;
 
     public string Name => scenarioName;
@@ -46,7 +66,6 @@ public class ScenarioNode : Node
     protected override void Init()
     {
         base.Init();
-        _entityPorts = new List<NodePort>();
     }
 
     private void OnValidate()
@@ -70,8 +89,6 @@ public class ScenarioNode : Node
 
     public void ProcessMatrix()
     {
-        //TODO(caspar): Tidy this whole thing up
-
         if (GetInputPort("_matrix").IsConnected)
         {
             Matrix matrix = (Matrix)GetInputPort("_matrix").GetInputValue();
@@ -79,24 +96,18 @@ public class ScenarioNode : Node
 
             if ((matrix != null) && (_entityPorts != null))
             {
-                //if (GetPort("EntityTest") == null)
+                foreach (string id in matrix.entityIDs)
                 {
-                    foreach (string id in matrix.entityIDs)
+                    if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
                     {
-                        if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
-                        {
-                            _entityPorts.Add(AddDynamicOutput(typeof(string), fieldName: id, connectionType: ConnectionType.Override));
-                        }
+                        _entityPorts.Add(AddDynamicOutput(typeof(string), fieldName: id, connectionType: ConnectionType.Override));
                     }
                 }
             }
         }
         else
         {
-            //if (GetPort("EntityTest") != null)
-            {
-                ClearEntityPorts();
-            }
+            ClearEntityPorts();
         }
     }
 
@@ -113,7 +124,6 @@ public class ScenarioNode : Node
         }
     }
 
-
     public override void OnRemoveConnection(NodePort port)
     {
         base.OnRemoveConnection(port);
@@ -121,7 +131,6 @@ public class ScenarioNode : Node
         if (port == GetInputPort("_matrix"))
         {
             ClearEntityPorts();
-            //this.
         }
     }
 

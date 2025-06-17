@@ -19,14 +19,15 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - Hare
+    - House
     - Fox
     - Dog
-    - House
+    - Hare
     - Horse
     - Rock
     - Cat
     - _winConditions
+    - _items
     values:
     - _fieldName: _map
       _node: {fileID: -5440223889025535490}
@@ -61,13 +62,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -94,13 +95,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -151,6 +152,24 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: _items
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: -2973959806790394706}
+        reroutePoints: []
+      - fieldName: _id
+        node: {fileID: 1651366151217186011}
+        reroutePoints: []
+      - fieldName: _id
+        node: {fileID: 9215620791800968014}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   scenarioName: Wilderness Test
   rounds: 8
   actionsPerRound: 4
@@ -163,7 +182,42 @@ MonoBehaviour:
       rows: 0
       columns: 0
   _winConditions: 
+  _items: 
   _seed: 123456
+--- !u!114 &-2973959806790394706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f41e8257804a074ebde5eb71ebbcaec, type: 3}
+  m_Name: Item
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -648, y: 280}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: -2973959806790394706}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _items
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: Wood
+  _icon: {fileID: 0}
+  _value: 60
+  _canSell: 1
 --- !u!114 &-2726126907051347721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,10 +231,12 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 488, y: -120}
+  position: {x: 632, y: 376}
   ports:
     keys:
     - _id
+    - _introduceQuantity
+    - _harvestQuantity
     values:
     - _fieldName: _id
       _node: {fileID: -2726126907051347721}
@@ -192,6 +248,24 @@ MonoBehaviour:
         reroutePoints: []
       _direction: 0
       _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _introduceQuantity
+      _node: {fileID: -2726126907051347721}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _harvestQuantity
+      _node: {fileID: -2726126907051347721}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   _id: House
@@ -213,7 +287,7 @@ MonoBehaviour:
   m_Name: Win Condition
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -744, y: 184}
+  position: {x: -872, y: -88}
   ports:
     keys:
     - _id
@@ -236,6 +310,37 @@ MonoBehaviour:
   lowerLimit: 4000
   upperLimit: 0
   requiredRounds: 3
+--- !u!114 &-1218585377830705567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a6c58dd9e1faa48bd3b9efa622c3df, type: 3}
+  m_Name: Item Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 328, y: -408}
+  ports:
+    keys:
+    - _itemQuantity
+    values:
+    - _fieldName: _itemQuantity
+      _node: {fileID: -1218585377830705567}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _quantity: 3
 --- !u!114 &-1152431932792402805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +354,7 @@ MonoBehaviour:
   m_Name: Win Condition
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -520, y: 376}
+  position: {x: -648, y: -88}
   ports:
     keys:
     - _id
@@ -293,6 +398,12 @@ MonoBehaviour:
   - {fileID: -2726126907051347721}
   - {fileID: -1515369370903765867}
   - {fileID: -1152431932792402805}
+  - {fileID: -2973959806790394706}
+  - {fileID: 9215620791800968014}
+  - {fileID: 1651366151217186011}
+  - {fileID: 1576632361664831712}
+  - {fileID: -1218585377830705567}
+  - {fileID: 1926212568143286280}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +440,102 @@ MonoBehaviour:
     - Hare
     - Fox
     - House
+--- !u!114 &1576632361664831712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a6c58dd9e1faa48bd3b9efa622c3df, type: 3}
+  m_Name: Item Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 328, y: -552}
+  ports:
+    keys:
+    - _itemQuantity
+    values:
+    - _fieldName: _itemQuantity
+      _node: {fileID: 1576632361664831712}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _harvestQuantity
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _quantity: 1
+--- !u!114 &1651366151217186011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f41e8257804a074ebde5eb71ebbcaec, type: 3}
+  m_Name: Item
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -648, y: 440}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: 1651366151217186011}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _items
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: Meat
+  _icon: {fileID: 0}
+  _value: 5
+  _canSell: 1
+--- !u!114 &1926212568143286280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe31df47d61ed9439ed1b31bcaa520a, type: 3}
+  m_Name: Currency Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 328, y: -264}
+  ports:
+    keys:
+    - _itemQuantity
+    values:
+    - _fieldName: _itemQuantity
+      _node: {fileID: 1926212568143286280}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _quantity: 100
 --- !u!114 &4220380142789208255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,7 +549,7 @@ MonoBehaviour:
   m_Name: Map
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -648, y: -88}
+  position: {x: -648, y: 648}
   ports:
     keys:
     - map
@@ -378,10 +585,12 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 40, y: -120}
+  position: {x: 632, y: -648}
   ports:
     keys:
     - _id
+    - _introduceQuantity
+    - _harvestQuantity
     values:
     - _fieldName: _id
       _node: {fileID: 4452621898610726545}
@@ -393,6 +602,33 @@ MonoBehaviour:
         reroutePoints: []
       _direction: 0
       _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _introduceQuantity
+      _node: {fileID: 4452621898610726545}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _itemQuantity
+        node: {fileID: -1218585377830705567}
+        reroutePoints: []
+      - fieldName: _itemQuantity
+        node: {fileID: 1926212568143286280}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _harvestQuantity
+      _node: {fileID: 4452621898610726545}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _itemQuantity
+        node: {fileID: 1576632361664831712}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   _id: Hare
@@ -414,10 +650,12 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 264, y: -120}
+  position: {x: 632, y: -104}
   ports:
     keys:
     - _id
+    - _introduceQuantity
+    - _harvestQuantity
     values:
     - _fieldName: _id
       _node: {fileID: 8368680822340120736}
@@ -431,9 +669,61 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: _introduceQuantity
+      _node: {fileID: 8368680822340120736}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: _harvestQuantity
+      _node: {fileID: 8368680822340120736}
+      _typeQualifiedName: ItemQuantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   _id: Fox
   _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   _growthRate: 0
   _movementRate: 0.2
   _vulnerable: 0
   _abundance: 0
+--- !u!114 &9215620791800968014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f41e8257804a074ebde5eb71ebbcaec, type: 3}
+  m_Name: Item
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -872, y: 280}
+  ports:
+    keys:
+    - _id
+    values:
+    - _fieldName: _id
+      _node: {fileID: 9215620791800968014}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _items
+        node: {fileID: -5440223889025535490}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _id: Rabbit Foot
+  _icon: {fileID: 0}
+  _value: 10
+  _canSell: 1

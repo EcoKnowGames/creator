@@ -15,6 +15,14 @@ public class EntityNode : Node
     [SerializeField] private float _vulnerable;
     [SerializeField] private float _abundance;
 
+    private bool _harvestable;
+    public bool Harvestable { get { return _harvestable; } set { _harvestable = value; } }
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private ItemQuantity _harvestQuantity;
+
+    private bool _introducable;
+    public bool Introducable { get { return _introducable; } set { _introducable = value; } }
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private ItemQuantity _introduceQuantity;
+
     // Use this for initialization
     protected override void Init()
     {
