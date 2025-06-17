@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using XNode;
 using XNodeEditor;
 
@@ -16,8 +17,8 @@ public class ItemQuantityNodeEditor : NodeEditor
         // Update serialized object's representation
         serializedObject.Update();
 
-        NodePort outputPort = _itemQuantityNode.GetOutputPort("_itemQuantity");
-        NodeEditorGUILayout.PortField(outputPort);
+        NodePort outputPort = _itemQuantityNode.GetOutputPort("_quantity");
+        NodeEditorGUILayout.PortField(new GUIContent("Quantity"), outputPort);
 
         EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
 
@@ -28,7 +29,7 @@ public class ItemQuantityNodeEditor : NodeEditor
             entityIndex = EditorGUILayout.Popup("Item", entityIndex, _itemQuantityNode.AvailableItems.Select(x => x.ID).ToArray());
             _itemQuantityNode.ItemIndex = entityIndex;
 
-            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_quantity"));
+            NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_value"), new GUIContent("Quantity"));
         }
         else
         {
