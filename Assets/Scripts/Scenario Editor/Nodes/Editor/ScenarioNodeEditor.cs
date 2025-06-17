@@ -1,4 +1,7 @@
+using System.Linq;
+using Glitchers.EcoKnow.Sandbox;
 using UnityEditor;
+using UnityEngine;
 using XNode;
 using XNodeEditor;
 
@@ -17,24 +20,60 @@ public class ScenarioNodeEditor : NodeEditor
 
         EditorGUIUtility.labelWidth = 125.0f;
 
+        EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("scenarioName"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("rounds"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("actionsPerRound"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("startCurrency"));
 
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Entities", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_matrix"));
         foreach (NodePort port in _scenarioNode.EntityPorts)
         {
             NodeEditorGUILayout.PortField(port);
         }
 
-        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_map"));
-
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Win Conditions", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_winConditions"));
 
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Inventory Items", EditorStyles.centeredGreyMiniLabel);
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_items"));
+        if (_scenarioNode.ItemDefs != null)
+        {
+            GUIStyle itemStyle = new GUIStyle();
+            itemStyle.richText = true;
+            itemStyle.fontStyle = FontStyle.Bold;
+            itemStyle.fontSize = 10;
+
+            foreach (Item item in _scenarioNode.ItemDefs)
+            {
+                bool itemIdInvalid = item.ID == string.Empty;
+                bool itemIdDuplicated = itemIdInvalid ? false : _scenarioNode.ItemDefs.Where(x => x.ID.Equals(item.ID)).Count() > 1;
+
+                string displayName = string.Format($"<color=green>- {item.ID}</color>");
+                if (itemIdInvalid)
+                {
+                    displayName = "<color=yellow>- Invalid Item - ID Missing!</color>";
+                }
+                else if (itemIdDuplicated)
+                {
+                    displayName = string.Format($"<color=yellow>- Invalid Item - ID [{item.ID}] is Duplicated!</color>");
+                }
+
+                EditorGUILayout.LabelField(displayName, itemStyle);
+            }
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Map", EditorStyles.centeredGreyMiniLabel);
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_map"));
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Seed", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_seed"));
-
-
 
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();
