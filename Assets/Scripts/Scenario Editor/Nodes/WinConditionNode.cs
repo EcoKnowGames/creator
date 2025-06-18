@@ -22,7 +22,7 @@ public class WinConditionNode : Node
     [SerializeField, Multiline]
     protected string description;
 
-    protected int entityIndex = 0;
+    [SerializeField, HideInInspector] protected int entityIndex;
     public int EntityIndex
     {
         get

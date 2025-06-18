@@ -7,7 +7,7 @@ using XNode;
 
 public class ItemQuantityNode : BaseQuantityNode
 {
-    protected int itemIndex = 0;
+    [SerializeField, HideInInspector] protected int itemIndex;
     public int ItemIndex
     {
         get
@@ -55,7 +55,7 @@ public class ItemQuantityNode : BaseQuantityNode
 
     protected override Quantity GetQuantity()
     {
-        if ((AvailableItems != null) && (ItemIndex > 0) && (itemIndex < AvailableItems.Count))
+        if ((AvailableItems != null) && (ItemIndex >= 0) && (itemIndex < AvailableItems.Count))
         {
             return new Quantity(AvailableItems[itemIndex].ID, Value);
         }
