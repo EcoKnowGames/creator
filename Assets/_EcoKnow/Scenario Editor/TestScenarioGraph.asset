@@ -173,7 +173,7 @@ MonoBehaviour:
   scenarioName: Wilderness Test
   rounds: 8
   actionsPerRound: 4
-  startCurrency: 80
+  startCurrency: 800
   _matrix:
     entityIDs: []
   _map:
@@ -307,6 +307,7 @@ MonoBehaviour:
   _id: 
   title: Fox Population
   description: Keep Fox Population above 4000 for 3 rounds!
+  entityIndex: 1
   lowerLimit: 4000
   upperLimit: 0
   requiredRounds: 3
@@ -323,7 +324,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -408}
+  position: {x: 328, y: -488}
   ports:
     keys:
     - _quantity
@@ -341,6 +342,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
+  itemIndex: 0
 --- !u!114 &-1152431932792402805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,6 +376,7 @@ MonoBehaviour:
   _id: 
   title: Hare Population
   description: Keep Hares within the range of 10000-20000
+  entityIndex: 0
   lowerLimit: 10000
   upperLimit: 50000
   requiredRounds: -1
@@ -404,6 +407,7 @@ MonoBehaviour:
   - {fileID: 1576632361664831712}
   - {fileID: -1218585377830705567}
   - {fileID: 1926212568143286280}
+  - {fileID: 8305353051423345535}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +457,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -552}
+  position: {x: 328, y: -632}
   ports:
     keys:
     - _quantity
@@ -471,6 +475,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 4
+  itemIndex: 1
 --- !u!114 &1651366151217186011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,7 +523,7 @@ MonoBehaviour:
   m_Name: Currency Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -264}
+  position: {x: 328, y: -344}
   ports:
     keys:
     - _quantity
@@ -535,7 +540,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  _value: 100
+  _value: 50
 --- !u!114 &4220380142789208255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,6 +617,9 @@ MonoBehaviour:
       - fieldName: _quantity
         node: {fileID: 1926212568143286280}
         reroutePoints: []
+      - fieldName: _quantity
+        node: {fileID: 8305353051423345535}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -637,6 +645,38 @@ MonoBehaviour:
   _movementRate: 0.3
   _vulnerable: 0
   _abundance: 0
+--- !u!114 &8305353051423345535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a6c58dd9e1faa48bd3b9efa622c3df, type: 3}
+  m_Name: Item Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 328, y: -248}
+  ports:
+    keys:
+    - _quantity
+    values:
+    - _fieldName: _quantity
+      _node: {fileID: 8305353051423345535}
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _value: 1
+  itemIndex: 1
 --- !u!114 &8368680822340120736
 MonoBehaviour:
   m_ObjectHideFlags: 0
