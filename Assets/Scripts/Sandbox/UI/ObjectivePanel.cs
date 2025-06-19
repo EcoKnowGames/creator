@@ -12,8 +12,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (SandboxManager.Instance.EntityManager != null)
             {
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested += OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityUpdated;
             }
         }
 
@@ -21,8 +21,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             //if (SandboxManager.Instance.EntityManager != null)
             //{
-                //SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested -= OnEntityUpdated;
-                //SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced -= OnEntityUpdated;
+                //SandboxManager.Instance.EntityManager.OnEntityHarvested -= OnEntityUpdated;
+                //SandboxManager.Instance.EntityManager.OnEntityIntroduced -= OnEntityUpdated;
             //}
         }
 
