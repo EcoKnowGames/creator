@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
+    public enum PlayerAction { NONE, INTRODUCE, HARVEST };
+
     public class PlayerToolbar : MonoBehaviour
     {
-        public enum PlayerAction { NONE, INTRODUCE, HARVEST };
         private PlayerAction _currentAction = PlayerAction.NONE;
 
         [Header("UI Elements")]
@@ -150,7 +151,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Harvest
         private void ShowHarvestModal(CellEntity[] cellEntities)
         {
-            _modifyCellModal?.ShowModal("Harvest", cellEntities, OnHarvestConfirmed);
+            _modifyCellModal?.ShowModal(PlayerAction.HARVEST, cellEntities, OnHarvestConfirmed);
         }
 
         protected void OnHarvestConfirmed(int index, int amount)
@@ -174,7 +175,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Introduce
         private void ShowIntroduceModal(CellEntity[] cellEntities)
         {
-            _modifyCellModal?.ShowModal("Introduce", cellEntities, OnIntroduceConfirmed);
+            _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, cellEntities, OnIntroduceConfirmed);
         }
 
         protected void OnIntroduceConfirmed(int index, int amount)
