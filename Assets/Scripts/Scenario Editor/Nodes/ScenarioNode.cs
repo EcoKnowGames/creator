@@ -4,20 +4,6 @@ using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
 
-/*public class Scenario
-{
-	public string name { get; }
-	public int rounds { get; }
-	public int actionsPerRound { get; }
-	public int startCurrency { get; }
-
-	public Scenario(ScenarioNode node)
-	{
-		name = node.Name;
-		rounds = node.rounds;
-	}
-}*/
-
 [NodeWidth(300)]
 public class ScenarioNode : Node
 {
@@ -61,6 +47,8 @@ public class ScenarioNode : Node
     public string Name => scenarioName;
     public int TotalRounds => rounds;
     public int ActionsPerRound => actionsPerRound;
+
+    public int StartCurrency => startCurrency;
 
     // Use this for initialization
     protected override void Init()
