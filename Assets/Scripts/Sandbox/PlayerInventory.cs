@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,30 +12,20 @@ namespace Glitchers.EcoKnow.Sandbox
         bool CanSell
     );
 
-    public class InventoryItem
-    {
-        private string _id;
-        private int _amountHeld;
-
-        public string ID => _id;
-        public int AmountHeld { get {return _amountHeld;} set {_amountHeld = value;}}
-
-
-        public InventoryItem(string id, int amount)
-        {
-            _id = id;
-            _amountHeld = amount;
-        }
-    }
-
     public class PlayerInventory : MonoBehaviour
     {
         private List<Item> _itemDefs = new List<Item>();
-        private List<InventoryItem> _inventory = new List<InventoryItem>();
+        private Dictionary<string, int> _inventory = new Dictionary<string, int>();
 
         public const string CurrencyID = "currency"; //This currency is constant between all games and not dictated by a node
         public const string ActionID = "action"; //This currency is constant between all games and not dictated by a node
         private const string LogChannel = "[PlayerInventory]";
+
+        public void Init()
+        {
+            _itemDefs.Clear();
+            _inventory.Clear();
+        }
 
         public void RegisterItemDefinitions(List<Item> items)
         {
@@ -52,15 +43,15 @@ namespace Glitchers.EcoKnow.Sandbox
 
             int amountHeld = 0;
 
-            InventoryItem item = _inventory.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
-            if (item != null)
+            bool foundItem = _inventory.TryGetValue(id, out amountHeld);
+            if (foundItem)
             {
-                item.AmountHeld += amount;
-                amountHeld = item.AmountHeld;
+                _inventory[id] += amount;
+                amountHeld = _inventory[id];
             }
             else
             {
-                _inventory.Add(new InventoryItem(id.ToLower(), amount));
+                _inventory.Add(id, amount);
                 amountHeld = amount;
             }
 
@@ -79,18 +70,18 @@ namespace Glitchers.EcoKnow.Sandbox
 
             int amountHeld = 0;
 
-            InventoryItem item = _inventory.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
-            if (item != null)
+            bool foundItem = _inventory.TryGetValue(id, out amountHeld);
+            if (foundItem)
             {
-                item.AmountHeld -= amount;
-                if (item.AmountHeld <= 0)
+                _inventory[id] -= amount;
+                if (_inventory[id] <= 0)
                 {
-                    _inventory.Remove(item);
+                    _inventory.Remove(id);
                     amountHeld = 0;
                 }
                 else
                 {
-                    amountHeld = item.AmountHeld;
+                    amountHeld = _inventory[id];
                 }
             }
             else
@@ -112,13 +103,31 @@ namespace Glitchers.EcoKnow.Sandbox
                 return 0;
             }
 
-            InventoryItem item = _inventory.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
-            if (item != null)
+            int amountHeld = 0;
+            bool foundItem = _inventory.TryGetValue(id, out amountHeld);
+            if (foundItem)
             {
-                return item.AmountHeld;
+                return amountHeld;
             }
 
             return 0;
+        }
+
+        public List<Tuple<Item, int>> GetItemInventory()
+        {
+            List<Tuple<Item, int>> items = new List<Tuple<Item, int>>();
+
+            //As we are searching ItemDefs we will only fetch items defined by the Item Nodes and not actions or currency
+            foreach(KeyValuePair<string, int> item in _inventory)
+            {
+                Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(item.Key, System.StringComparison.OrdinalIgnoreCase));
+                if (def != null)
+                {
+                    items.Add(new Tuple<Item, int>(def, item.Value));
+                }
+            }
+
+            return items;
         }
         #endregion
 
