@@ -13,6 +13,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private TMP_Text _selectedID;
         [SerializeField] private TMP_Text _selectedPopulation;
+        [SerializeField] private TMP_Text _inventoryChange;
 
         [Header("Entity")]
         [SerializeField] private Transform _entityButtonContainer;
@@ -24,18 +25,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         Action<int, int> onConfirmPressed;
 
         private int _selectedEntity = 0;
+        private PlayerAction _actionType;
 
-        public void ShowModal(string title, CellEntity[] entities, Action<int, int> onConfirm)
+        public void ShowModal(PlayerAction action, CellEntity[] entities, Action<int, int> onConfirm)
         {
-            SetTitle(title);
-
-            onConfirmPressed = onConfirm;
-            PopulateEntityOptions(entities);
+            SetTitle(action.ToString());
+            _actionType = action;
 
             if (_inputField != null)
             {
                 _inputField.text = "1";
             }
+
+            onConfirmPressed = onConfirm;
+            PopulateEntityOptions(entities);
 
             this.gameObject.SetActive(true);
         }
@@ -62,6 +65,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void OnCancelPressed()
         {
             HideModal();
+        }
+
+        public void OnInputModified()
+        {
+            UpdateInventoryChange(_selectedEntity);
         }
         #endregion
 
@@ -93,8 +101,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _selectedID.text = string.Format($"Selected: {entities[_selectedEntity].ID}");
             _selectedPopulation.text = string.Format($"Current Population: {entities[_selectedEntity].Population}");
+            UpdateInventoryChange(_selectedEntity);
 
-            foreach(Transform child in _entityButtonContainer)
+            foreach (Transform child in _entityButtonContainer)
             {
                 Destroy(child.gameObject);
             }
@@ -114,12 +123,71 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     _selectedEntity = entityIndex;
                     _selectedID.text = string.Format($"Selected: {entities[entityIndex].ID}");
                     _selectedPopulation.text = string.Format($"Current Population: {entities[entityIndex].Population}");
+                    UpdateInventoryChange(entityIndex);
                 } );
             }
 
             if (this.GetComponent<RectTransform>() != null)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
+            }
+        }
+
+        private void UpdateInventoryChange(int entityIndex)
+        {
+            if ((_inventoryChange == null) || (SandboxManager.Instance.EntityManager == null))
+            {
+                return;
+            }
+
+            int modifyAmount = 0;
+            if (_inputField != null)
+            {
+                int.TryParse(_inputField.text, out modifyAmount);
+            }
+
+            string inventoryList = string.Empty;
+            string inventoryPrefix = string.Empty;
+            
+            //Figure out cost
+            bool canPerformAction = true;
+            Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(entityIndex);
+            if (entityType != null)
+            {
+                Quantity[] requirements = _actionType == PlayerAction.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
+                if (requirements != null)
+                {
+                    foreach (Quantity quantity in requirements)
+                    {
+                        bool hasRequirement = _actionType == PlayerAction.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, modifyAmount) : true;
+                        string ownedAmount = SandboxManager.Instance.PlayerInventory.GetAmountHeld(quantity.ID).ToString();
+                        string changeAmount = _actionType == PlayerAction.INTRODUCE ? string.Format($"Required {quantity.Value * modifyAmount}") : string.Format($"{quantity.Value * modifyAmount}");
+                        inventoryList += string.Format($"<color={(hasRequirement ? "black" : "red")}>{quantity.ID}: {changeAmount} (Owned {ownedAmount})</color>\n");
+
+                        if (!hasRequirement)
+                        {
+                            canPerformAction = false;
+                        }
+                    }
+                }
+            }
+
+            //Sort out prefix now we know what the cost is
+            if (canPerformAction)
+            {
+                inventoryPrefix = _actionType == PlayerAction.HARVEST ? "You will gain:\n" : "You will spend:\n";
+            }
+            else
+            {
+                inventoryPrefix = "You cannot afford this action:\n";
+            }
+
+
+            _inventoryChange.text = inventoryPrefix + inventoryList;
+
+            if (_inventoryChange.GetComponent<RectTransform>() != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_inventoryChange.GetComponent<RectTransform>());
             }
         }
         #endregion
