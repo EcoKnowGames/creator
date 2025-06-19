@@ -98,8 +98,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         {
             if (SandboxManager.Instance.EntityManager != null)
             {
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityHarvested += OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.entityEvents.OnEntityIntroduced += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityUpdated;
             }
         }
 
