@@ -6,15 +6,22 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    public record Entity(
+    public record Entity
+        (
         string ID,
         float GrowthRate,
         float MovementRate,
 
         float VulnerableThreshold,
-        float AbundanceThreshold
+        float AbundanceThreshold,
 
+        bool CanHarvest,
+        bool CanIntroduce,
+
+        Quantity[] HarvestQuantities,
+        Quantity[] IntroduceQuantities
         );
+
 
     /*public record Matrix(
         string[] EntityIDs,
@@ -137,7 +144,29 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
             }
 
-           return totalPopulation;
+            return totalPopulation;
+        }
+
+        public Quantity[] GetHarvestRewards(int index)
+        {
+            Entity type = GetEntityType(index);
+            if (type != null)
+            {
+                return type.HarvestQuantities;
+            }
+
+            return null;
+        }
+
+        public Quantity[] GetIntroduceCosts(int index)
+        {
+            Entity type = GetEntityType(index);
+            if (type != null)
+            {
+                return type.IntroduceQuantities;
+            }
+
+            return null;
         }
         #endregion
 
@@ -152,6 +181,15 @@ namespace Glitchers.EcoKnow.Sandbox
 
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
+                //Check our type first
+                Entity type = _entityTypeList[index];
+                if (type == null || !type.CanHarvest)
+                {
+                    Debug.LogError($"{LogChannel} Failed to harvest entity from Cell [{column}, {row}]. Entity index {index} cannot be harvested!");
+                    return false;
+                }
+
+                //Check population
                 int currentPopulation = _entityLookupTable[column, row, index];
                 if (currentPopulation == 0) //Fail interaction if we have nothing to harvest
                 {
@@ -167,6 +205,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 _entityLookupTable[column, row, index] = newPopulation;
                 entityEvents?.OnEntityHarvested?.Invoke(column, row, index);
+
+                SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
 
                 return true;
             }
@@ -188,7 +228,20 @@ namespace Glitchers.EcoKnow.Sandbox
 
             if (index >= 0 && index < _entityLookupTable.GetLongLength(2))
             {
-                //TODO(caspar): CanSpendAmount/CanFullfilPurchase (check inventory for required items and amounts)
+                //Check our type first
+                Entity type = _entityTypeList[index];
+                if (type == null || !type.CanIntroduce)
+                {
+                    Debug.LogError($"{LogChannel} Failed to introduce entity to Cell [{column}, {row}]. Entity index {index} cannot be introduced!");
+                    return false;
+                }
+
+                bool hasRequiredQuantities = SandboxManager.Instance.PlayerInventory.HasQuantities(type.IntroduceQuantities, amount);
+                if (!hasRequiredQuantities)
+                {
+                    Debug.LogError($"{LogChannel} Failed to introduce entity to Cell [{column}, {row}]. Player does not have the required resources to introduce Entity of type {index}");
+                    return false;
+                }
 
                 int currentPopulation = _entityLookupTable[column, row, index];
                 int newPopulation = currentPopulation + amount;
@@ -199,6 +252,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 _entityLookupTable[column, row, index] = newPopulation;
                 entityEvents?.OnEntityIntroduced?.Invoke(column, row, index);
+
+                SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
 
                 return true;
             }

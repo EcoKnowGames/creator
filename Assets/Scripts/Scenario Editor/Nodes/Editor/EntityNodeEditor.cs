@@ -89,8 +89,8 @@ public class EntityNodeEditor : NodeEditor
             EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
             autoPlaced = EditorGUILayout.Toggle("Auto Place?", autoPlaced);
 
-            _entityNode.Harvestable = EditorGUILayout.Toggle("Harvestable?", _entityNode.Harvestable);
-            if (_entityNode.Harvestable)
+            _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
+            if (_entityNode.CanHarvest)
             {
                 NodePort inputPort = _entityNode.GetInputPort("_harvestQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
@@ -98,11 +98,12 @@ public class EntityNodeEditor : NodeEditor
             }
 
             // Introduction Options
-            _entityNode.Introducable = EditorGUILayout.Toggle("Introducable?", _entityNode.Introducable);
-            if (_entityNode.Introducable)
+            _entityNode.CanIntroduce = EditorGUILayout.Toggle("Can Introduce?", _entityNode.CanIntroduce);
+            if (_entityNode.CanIntroduce)
             {
                 NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
-                NodeEditorGUILayout.PortField(inputPort); EditorGUILayout.Space();
+                NodeEditorGUILayout.PortField(inputPort);
+                EditorGUILayout.Space();
             }
 
             // Warnings
@@ -110,6 +111,23 @@ public class EntityNodeEditor : NodeEditor
             EditorGUILayout.LabelField("Warning Ranges", EditorStyles.centeredGreyMiniLabel);
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_vulnerable"));
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_abundance"));
+        }
+        else
+        {
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Ports", EditorStyles.centeredGreyMiniLabel);
+
+            if (_entityNode.CanHarvest)
+            {
+                NodePort inputPort = _entityNode.GetInputPort("_harvestQuantity");
+                NodeEditorGUILayout.PortField(inputPort);
+            }
+
+            if (_entityNode.CanIntroduce)
+            {
+                NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
+                NodeEditorGUILayout.PortField(inputPort);
+            }
         }
 
         // Apply changes

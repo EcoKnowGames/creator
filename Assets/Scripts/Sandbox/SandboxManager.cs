@@ -105,6 +105,9 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Init grid
                 _gridManager?.Init();
 
+                //Init inventory
+                _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenarioNode.StartCurrency);
+
                 //Setup entities
                 MatrixNode matrixNode = _scenarioNodeGraph.GetMatrixNode();
                 if (matrixNode != null)
