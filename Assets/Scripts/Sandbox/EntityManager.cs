@@ -200,13 +200,13 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 int newPopulation = Mathf.Max(currentPopulation - amount, 0);
                 int difference = newPopulation - currentPopulation;
-
-                Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
-
                 _entityLookupTable[column, row, index] = newPopulation;
-                entityEvents?.OnEntityHarvested?.Invoke(column, row, index);
 
                 SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
+                Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
+
+                entityEvents?.OnEntityHarvested?.Invoke(column, row, index);
+
 
                 return true;
             }
@@ -245,15 +245,13 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 int currentPopulation = _entityLookupTable[column, row, index];
                 int newPopulation = currentPopulation + amount;
-
                 int difference = newPopulation - currentPopulation;
-
-                Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
-
                 _entityLookupTable[column, row, index] = newPopulation;
-                entityEvents?.OnEntityIntroduced?.Invoke(column, row, index);
 
                 SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
+                Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
+
+                entityEvents?.OnEntityIntroduced?.Invoke(column, row, index);
 
                 return true;
             }
