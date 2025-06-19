@@ -19,10 +19,10 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - Hare
+    - House
     - Fox
     - Dog
-    - House
+    - Hare
     - Horse
     - Rock
     - Cat
@@ -62,13 +62,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -95,13 +95,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -274,6 +274,8 @@ MonoBehaviour:
   _movementRate: 0
   _vulnerable: 0
   _abundance: 0
+  _canHarvest: 0
+  _canIntroduce: 0
 --- !u!114 &-1515369370903765867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,6 +647,8 @@ MonoBehaviour:
   _movementRate: 0.3
   _vulnerable: 0
   _abundance: 0
+  _canHarvest: 1
+  _canIntroduce: 1
 --- !u!114 &8305353051423345535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,6 +737,8 @@ MonoBehaviour:
   _movementRate: 0.2
   _vulnerable: 0
   _abundance: 0
+  _canHarvest: 0
+  _canIntroduce: 0
 --- !u!114 &9215620791800968014
 MonoBehaviour:
   m_ObjectHideFlags: 0

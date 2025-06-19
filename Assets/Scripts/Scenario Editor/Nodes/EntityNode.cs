@@ -15,12 +15,12 @@ public class EntityNode : Node
     [SerializeField] private float _vulnerable;
     [SerializeField] private float _abundance;
 
-    private bool _harvestable;
-    public bool Harvestable { get { return _harvestable; } set { _harvestable = value; } }
+    [SerializeField] private bool _canHarvest;
+    public bool CanHarvest { get { return _canHarvest; } set { _canHarvest = value; } }
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _harvestQuantity;
 
-    private bool _introducable;
-    public bool Introducable { get { return _introducable; } set { _introducable = value; } }
+    [SerializeField] private bool _canIntroduce;
+    public bool CanIntroduce { get { return _canIntroduce; } set { _canIntroduce = value; } }
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _introduceQuantity;
 
     // Use this for initialization
@@ -37,7 +37,27 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _growthRate, _movementRate, _vulnerable, _abundance);
+        return new Entity(_id, _growthRate, _movementRate, _vulnerable, _abundance, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+    }
+
+    private Quantity[] GetHarvestQuantities()
+    {
+        if (GetInputPort("_harvestQuantity").GetConnections().Count > 0)
+        {
+            return GetInputPort("_harvestQuantity").GetInputValues<Quantity>();
+        }
+
+        return null;
+    }
+
+    private Quantity[] GetIntroduceQuantities()
+    {
+        if (GetInputPort("_introduceQuantity").GetConnections().Count > 0)
+        {
+            return GetInputPort("_introduceQuantity").GetInputValues<Quantity>();
+        }
+
+        return null;
     }
 
     public bool IsConnected()

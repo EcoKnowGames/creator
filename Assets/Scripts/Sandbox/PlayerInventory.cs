@@ -41,6 +41,7 @@ namespace Glitchers.EcoKnow.Sandbox
             _itemDefs = items;
         }
 
+        #region Add/Remove by Item ID
         public int AddItem(string id, int amount)
         {
             if (_inventory == null)
@@ -62,6 +63,8 @@ namespace Glitchers.EcoKnow.Sandbox
                 _inventory.Add(new InventoryItem(id.ToLower(), amount));
                 amountHeld = amount;
             }
+
+            Debug.Log($"{LogChannel} Added {amount} [{id}]");
 
             return amountHeld;
         }
@@ -97,9 +100,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 return 0;
             }
 
+            Debug.Log($"{LogChannel} Removed {amount} [{id}]");
+
             return amountHeld;
         }
-
         public int GetAmountHeld(string id)
         {
             if (_inventory == null)
@@ -116,5 +120,78 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return 0;
         }
+        #endregion
+
+        #region Add/Remove By Quantity
+        public bool HasQuantities(Quantity[] itemQuantities, int multiplier = 1)
+        {
+            //Do we have a valid inventory? 
+            if ((_inventory == null) || (_inventory.Count <= 0))
+            {
+                return false;
+            }
+
+            //Are the quantities valid?
+            if ((itemQuantities == null) || (itemQuantities.Count() <= 0))
+            {
+                return false;
+            }
+
+            //Check quantities against inventory
+            foreach (Quantity quantity in itemQuantities)
+            {
+                Debug.Log($"{LogChannel} [{quantity.ID}] Required: {quantity.Value * multiplier} / Owned: {GetAmountHeld(quantity.ID)}");
+
+                if (GetAmountHeld(quantity.ID) < (quantity.Value * multiplier))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void AddQuantities(Quantity[] itemQuantities, int multiplier = 1)
+        {
+            //Do we have a valid inventory? 
+            if ((_inventory == null) || (_inventory.Count <= 0))
+            {
+                return;
+            }
+
+            //Are the quantities valid?
+            if ((itemQuantities == null) || (itemQuantities.Count() <= 0))
+            {
+                return;
+            }
+
+            //Add items
+            foreach (Quantity quantity in itemQuantities)
+            {
+                AddItem(quantity.ID, quantity.Value * multiplier);
+            }
+        }
+
+        public void RemoveQuantities(Quantity[] itemQuantities, int multiplier = 1)
+        {
+            //Do we have a valid inventory? 
+            if ((_inventory == null) || (_inventory.Count <= 0))
+            {
+                return;
+            }
+
+            //Are the quantities valid?
+            if ((itemQuantities == null) || (itemQuantities.Count() <= 0))
+            {
+                return;
+            }
+
+            //Add items
+            foreach (Quantity quantity in itemQuantities)
+            {
+                RemoveItem(quantity.ID, quantity.Value * multiplier);
+            }
+        }
+        #endregion
     }
 }
