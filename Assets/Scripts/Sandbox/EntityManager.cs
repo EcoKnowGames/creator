@@ -30,13 +30,6 @@ namespace Glitchers.EcoKnow.Sandbox
 
     public delegate void EntityEvent(int column, int row, int id);
 
-    public class EntityEvents
-    {
-        public EntityEvent OnEntityHarvested;
-        public EntityEvent OnEntityIntroduced;
-    }
-
-
     //Note(caspar) -> This class stores and handles manipulation of the Entity data
     //Data can be requested or modified here
     public class EntityManager : MonoBehaviour
@@ -52,7 +45,8 @@ namespace Glitchers.EcoKnow.Sandbox
         //X, Y, entityIndex
         private int[,,] _entityLookupTable;
 
-        public EntityEvents entityEvents = new EntityEvents();
+        public EntityEvent OnEntityHarvested;
+        public EntityEvent OnEntityIntroduced;
 
         private const string LogChannel = "[EntityManager]";
 
@@ -205,7 +199,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
                 Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-                entityEvents?.OnEntityHarvested?.Invoke(column, row, index);
+                OnEntityHarvested?.Invoke(column, row, index);
 
 
                 return true;
@@ -251,7 +245,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
                 Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-                entityEvents?.OnEntityIntroduced?.Invoke(column, row, index);
+                OnEntityIntroduced?.Invoke(column, row, index);
 
                 return true;
             }

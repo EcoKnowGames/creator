@@ -12,6 +12,8 @@ namespace Glitchers.EcoKnow.Sandbox
         bool CanSell
     );
 
+    public delegate void InventoryEvent(string id, int amount);
+
     public class PlayerInventory : MonoBehaviour
     {
         private List<Item> _itemDefs = new List<Item>();
@@ -20,6 +22,8 @@ namespace Glitchers.EcoKnow.Sandbox
         public const string CurrencyID = "currency"; //This currency is constant between all games and not dictated by a node
         public const string ActionID = "action"; //This currency is constant between all games and not dictated by a node
         private const string LogChannel = "[PlayerInventory]";
+
+        public InventoryEvent OnItemSold;
 
         public void Init()
         {
@@ -95,6 +99,28 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return amountHeld;
         }
+
+        public bool SellItem(string id, int amount = 1)
+        {
+            int amountHeld = 0;
+            bool foundItem = _inventory.TryGetValue(id, out amountHeld);
+            if (foundItem && (amountHeld >= amount))
+            {
+                Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
+                if (def != null)
+                {
+                    RemoveItem(id, amount);
+                    AddItem(CurrencyID, def.Value * amount);
+
+                    OnItemSold?.Invoke(id, amount);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public int GetAmountHeld(string id)
         {
             if (_inventory == null)
