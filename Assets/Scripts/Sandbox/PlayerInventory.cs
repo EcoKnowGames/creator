@@ -140,7 +140,7 @@ namespace Glitchers.EcoKnow.Sandbox
             //Check quantities against inventory
             foreach (Quantity quantity in itemQuantities)
             {
-                Debug.Log($"{LogChannel} [{quantity.ID}] Required: {quantity.Value * multiplier} / Owned: {GetAmountHeld(quantity.ID)}");
+                //Debug.Log($"{LogChannel} [{quantity.ID}] Required: {quantity.Value * multiplier} / Owned: {GetAmountHeld(quantity.ID)}");
 
                 if (GetAmountHeld(quantity.ID) < (quantity.Value * multiplier))
                 {
