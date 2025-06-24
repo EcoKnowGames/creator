@@ -4,11 +4,16 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Grid
 {
+    public record CellEntity
+    (
+        int Index,
+        string ID,
+        int Population
+    );
+
     public class Cell : MonoBehaviour
     {
         [SerializeField] protected GameObject highlightObject;
-
-        [SerializeField] protected TMPro.TMP_Text entityListText;
 
         [SerializeField] private Cell_Token _cellTokenPrefab;
         [SerializeField] private Transform _cellTokenContainer;
@@ -31,8 +36,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             _column = column;
 
             this.gameObject.name = $"Cell {_column}_{_row}";
-
-            entityListText.text = string.Empty;
 
             ShowHighlight(false);
         }
@@ -121,26 +124,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public void UpdateEntityCount()
         {
             CellEntity[] entities = GetCellEntities();
-            UpdateDebugText(entities);
             UpdateTokens(entities);
-        }
-
-        private void UpdateDebugText(CellEntity[] entityList)
-        {
-            if (entityListText == null)
-            {
-                return;
-            }
-
-            entityListText.text = string.Empty;
-
-            if (entityList != null)
-            {
-                foreach (CellEntity entity in entityList)
-                {
-                    entityListText.text += entity.ID + ": " + entity.Population + "\n";
-                }
-            }
         }
 
         public void SetupEntityTokens()
@@ -167,9 +151,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 for (int i = 0; i < cellEntities.Length; i++)
                 {
                     Entity type = entityManager.GetEntityType(i);
+                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(i);
+
                     Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer);
                     token.Init(i, type);
-                    token.UpdatePopulation(cellEntities[i].Population);
+                    token.UpdatePopulation(cellEntities[i].Population, totalPopulation);
                 }
             }
         }
@@ -187,14 +173,24 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 return;
             }
 
-            if (entityList != null)
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+
+
+            if ((entityList != null) && (entityManager != null))
             {
-                for (int i = 0; i < entityList.Length; i++)
+                Cell_Token[] tokens = _cellTokenContainer.GetComponentsInChildren<Cell_Token>(true);
+                CellEntity[] orderedEntities = entityList.OrderByDescending(x => x.Population).ToArray();
+
+                for (int i = 0; i < orderedEntities.Length; i++)
                 {
-                    Cell_Token token = _cellTokenContainer.GetChild(i).GetComponent<Cell_Token>();
+                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(orderedEntities[i].Index);
+                    Cell_Token token = tokens.FirstOrDefault(x => x.Index == orderedEntities[i].Index); // Make sure we match before adjusting any numbers
                     if (token != null)
                     {
-                        token.UpdatePopulation(entityList[i].Population);
+                        token.UpdatePopulation(orderedEntities[i].Population, totalPopulation);
+                        token.transform.SetSiblingIndex(i);
+                        token.SetVisible(orderedEntities[i].Population > 0);
+
                     }
                 }
             }

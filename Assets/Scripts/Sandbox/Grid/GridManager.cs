@@ -294,7 +294,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 return;
             }
 
-            cellList[column, row].UpdateEntityCount();
+            UpdateAllCells(); //We need to update all cells so that the proportional percentage reflects Harvest/Introduce changes
+            //cellList[column, row].UpdateEntityCount();
         }
 
         public void UpdateAllCells()
