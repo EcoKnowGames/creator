@@ -89,6 +89,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
             }
 
+            gridManager.OnEntitiesAdded();
             gridManager.UpdateAllCells();
         }
         #endregion
