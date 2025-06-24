@@ -19,10 +19,10 @@ MonoBehaviour:
     - _map
     - _matrix
     - id
-    - Hare
+    - House
     - Fox
     - Dog
-    - House
+    - Hare
     - Horse
     - Rock
     - Cat
@@ -62,13 +62,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Hare
+    - _fieldName: House
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 4452621898610726545}
+        node: {fileID: -2726126907051347721}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -95,13 +95,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: House
+    - _fieldName: Hare
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -2726126907051347721}
+        node: {fileID: 4452621898610726545}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -218,6 +218,37 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _value: 60
   _canSell: 1
+--- !u!114 &-2738167629302401138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe31df47d61ed9439ed1b31bcaa520a, type: 3}
+  m_Name: Currency Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 360, y: 104}
+  ports:
+    keys:
+    - _quantity
+    values:
+    - _fieldName: _quantity
+      _node: {fileID: -2738167629302401138}
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _value: 50
 --- !u!114 &-2726126907051347721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +285,10 @@ MonoBehaviour:
       _node: {fileID: -2726126907051347721}
       _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _quantity
+        node: {fileID: -404136452309566578}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -275,7 +309,7 @@ MonoBehaviour:
   _vulnerable: 0
   _abundance: 0
   _canHarvest: 0
-  _canIntroduce: 0
+  _canIntroduce: 1
 --- !u!114 &-1515369370903765867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +360,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -488}
+  position: {x: 328, y: -760}
   ports:
     keys:
     - _quantity
@@ -382,6 +416,37 @@ MonoBehaviour:
   lowerLimit: 10000
   upperLimit: 50000
   requiredRounds: -1
+--- !u!114 &-404136452309566578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe31df47d61ed9439ed1b31bcaa520a, type: 3}
+  m_Name: Currency Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 344.90546, y: 681.18976}
+  ports:
+    keys:
+    - _quantity
+    values:
+    - _fieldName: _quantity
+      _node: {fileID: -404136452309566578}
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: -2726126907051347721}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _value: 100
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +475,10 @@ MonoBehaviour:
   - {fileID: -1218585377830705567}
   - {fileID: 1926212568143286280}
   - {fileID: 8305353051423345535}
+  - {fileID: -2738167629302401138}
+  - {fileID: 1959980211764070698}
+  - {fileID: 6972771029753438006}
+  - {fileID: -404136452309566578}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,7 +528,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -632}
+  position: {x: 328, y: -904}
   ports:
     keys:
     - _quantity
@@ -525,7 +594,7 @@ MonoBehaviour:
   m_Name: Currency Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -344}
+  position: {x: 328, y: -616}
   ports:
     keys:
     - _quantity
@@ -543,6 +612,38 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 50
+--- !u!114 &1959980211764070698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a6c58dd9e1faa48bd3b9efa622c3df, type: 3}
+  m_Name: Item Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 360, y: -24}
+  ports:
+    keys:
+    - _quantity
+    values:
+    - _fieldName: _quantity
+      _node: {fileID: 1959980211764070698}
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _introduceQuantity
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _value: 2
+  itemIndex: 1
 --- !u!114 &4220380142789208255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,6 +750,38 @@ MonoBehaviour:
   _abundance: 0
   _canHarvest: 1
   _canIntroduce: 1
+--- !u!114 &6972771029753438006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a6c58dd9e1faa48bd3b9efa622c3df, type: 3}
+  m_Name: Item Quantity
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 360, y: -152}
+  ports:
+    keys:
+    - _quantity
+    values:
+    - _fieldName: _quantity
+      _node: {fileID: 6972771029753438006}
+      _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: _harvestQuantity
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  _value: 5
+  itemIndex: 0
 --- !u!114 &8305353051423345535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,7 +795,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 328, y: -248}
+  position: {x: 328, y: -520}
   ports:
     keys:
     - _quantity
@@ -694,7 +827,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 632, y: -104}
+  position: {x: 632, y: -216}
   ports:
     keys:
     - _id
@@ -717,7 +850,13 @@ MonoBehaviour:
       _node: {fileID: 8368680822340120736}
       _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _quantity
+        node: {fileID: -2738167629302401138}
+        reroutePoints: []
+      - fieldName: _quantity
+        node: {fileID: 1959980211764070698}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -726,19 +865,22 @@ MonoBehaviour:
       _node: {fileID: 8368680822340120736}
       _typeQualifiedName: Quantity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: _quantity
+        node: {fileID: 6972771029753438006}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   _id: Fox
   _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  _growthRate: 0
+  _growthRate: -3.35
   _movementRate: 0.2
   _vulnerable: 0
   _abundance: 0
-  _canHarvest: 0
-  _canIntroduce: 0
+  _canHarvest: 1
+  _canIntroduce: 1
 --- !u!114 &9215620791800968014
 MonoBehaviour:
   m_ObjectHideFlags: 0
