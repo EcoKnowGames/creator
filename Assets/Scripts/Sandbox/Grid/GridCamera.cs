@@ -81,6 +81,15 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             {
                 MoveCamera(CameraMoveDir.UP);
             }
+
+            if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+            {
+                UpdateCameraZoom(CameraZoom.INZOOM);
+            }
+            else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                UpdateCameraZoom(CameraZoom.OUTZOOM);
+            }
         }
 
         private void CalculateBounds()
@@ -176,6 +185,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 default:
                     throw new ArgumentOutOfRangeException(nameof(zoomDirection), zoomDirection, null);
             }
+
+            _camera.orthographicSize = zoomValues[_currentZoomIndex];
         }
     }
 }

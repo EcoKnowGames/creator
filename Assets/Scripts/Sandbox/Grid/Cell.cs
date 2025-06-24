@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 
@@ -11,6 +9,9 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         [SerializeField] protected GameObject highlightObject;
 
         [SerializeField] protected TMPro.TMP_Text entityListText;
+
+        [SerializeField] private Cell_Token _cellTokenPrefab;
+        [SerializeField] private Transform _cellTokenContainer;
 
         private int _row;
         private int _column;
@@ -121,6 +122,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         {
             CellEntity[] entities = GetCellEntities();
             UpdateDebugText(entities);
+            UpdateTokens(entities);
         }
 
         private void UpdateDebugText(CellEntity[] entityList)
@@ -134,9 +136,67 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             if (entityList != null)
             {
-                foreach(CellEntity entity in entityList)
+                foreach (CellEntity entity in entityList)
                 {
                     entityListText.text += entity.ID + ": " + entity.Population + "\n";
+                }
+            }
+        }
+
+        public void SetupEntityTokens()
+        {
+            //We don't care about the exact entities in the cell
+            //Just populate with a token for each entity type
+
+            if ((_cellTokenPrefab == null) || (_cellTokenContainer == null))
+            {
+                //Error
+                return;
+            }
+
+            foreach (Transform child in _cellTokenContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+            if (entityManager != null)
+            {
+                CellEntity[] cellEntities = entityManager.GetEntitiesForCell(_column, _row);
+                for (int i = 0; i < cellEntities.Length; i++)
+                {
+                    Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer);
+                    token.Init(i);
+                    //token.SetIcon();
+                    //token.SetColour();
+                    token.UpdatePopulation(cellEntities[i].Population);
+                }
+            }
+        }
+
+        public void UpdateTokens(CellEntity[] entityList)
+        {
+            if (_cellTokenContainer == null)
+            {
+                return;
+            }
+
+            if (_cellTokenContainer.childCount != entityList.Length)
+            {
+                //Error?
+                return;
+            }
+
+            if (entityList != null)
+            {
+                for (int i = 0; i < entityList.Length; i++)
+                {
+                    Cell_Token token = _cellTokenContainer.GetChild(i).GetComponent<Cell_Token>();
+                    if (token != null)
+                    {
+                        token.UpdatePopulation(entityList[i].Population);
+                    }
                 }
             }
         }

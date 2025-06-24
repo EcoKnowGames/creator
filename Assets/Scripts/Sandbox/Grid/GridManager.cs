@@ -275,6 +275,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
+        public void OnEntitiesAdded()
+        {
+            foreach(Cell cell in cellList)
+            {
+                if (cell != null)
+                {
+                    cell.SetupEntityTokens();
+                }
+            }
+        }
+
         public void OnEntityUpdated(int column, int row, int id)
         {
             if (column < 0 || row < 0 || column >= columns || row >= rows)
