@@ -13,9 +13,10 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         [SerializeField] private TMP_Text _populationText;
         [SerializeField] private Image _entityIcon;
 
-        public void Init(int index)
+        public void Init(int index, Entity type)
         {
             _entityIndex = index;
+            SetIcon(type.Icon);
         }
 
         public void UpdatePopulation(int population)
@@ -23,6 +24,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             if (_populationText != null)
             {
                 _populationText.text = population.ToString();
+            }
+        }
+
+        private void SetIcon(Sprite sprite)
+        {
+            if ((_entityIcon != null) && (sprite != null))
+            {
+                _entityIcon.sprite = sprite;
             }
         }
     }
