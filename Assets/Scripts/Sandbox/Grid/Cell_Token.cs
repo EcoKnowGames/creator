@@ -11,6 +11,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
 
         [SerializeField] private TMP_Text _populationText;
+        [SerializeField] private Image _populationPercentage;
         [SerializeField] private Image _entityIcon;
 
         public void Init(int index, Entity type)
@@ -19,11 +20,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             SetIcon(type.Icon);
         }
 
-        public void UpdatePopulation(int population)
+        public void UpdatePopulation(int population, int total)
         {
             if (_populationText != null)
             {
                 _populationText.text = population.ToString();
+            }
+
+            if (_populationPercentage != null)
+            {
+                float percentage = (float)population / (float)total;
+                _populationPercentage.fillAmount = percentage;
             }
         }
 
@@ -33,6 +40,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             {
                 _entityIcon.sprite = sprite;
             }
+        }
+
+        public void SetVisible(bool visible)
+        {
+            this.gameObject.SetActive(visible);
         }
     }
 }
