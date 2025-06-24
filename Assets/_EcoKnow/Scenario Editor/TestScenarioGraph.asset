@@ -66,10 +66,7 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: _id
-        node: {fileID: 4452621898610726545}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -78,10 +75,7 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: _id
-        node: {fileID: 8368680822340120736}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -99,10 +93,7 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: _id
-        node: {fileID: -2726126907051347721}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -875,7 +866,7 @@ MonoBehaviour:
       _dynamic: 0
   _id: Fox
   _icon: {fileID: 21300000, guid: aaf3a2cfc3092da4e84519839d95ed97, type: 3}
-  _growthRate: -3.35
+  _growthRate: 0
   _movementRate: 0.2
   _vulnerable: 0
   _abundance: 0
