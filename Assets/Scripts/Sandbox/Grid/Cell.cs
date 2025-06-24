@@ -166,10 +166,9 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 CellEntity[] cellEntities = entityManager.GetEntitiesForCell(_column, _row);
                 for (int i = 0; i < cellEntities.Length; i++)
                 {
+                    Entity type = entityManager.GetEntityType(i);
                     Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer);
-                    token.Init(i);
-                    //token.SetIcon();
-                    //token.SetColour();
+                    token.Init(i, type);
                     token.UpdatePopulation(cellEntities[i].Population);
                 }
             }

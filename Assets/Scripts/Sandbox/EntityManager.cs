@@ -9,6 +9,7 @@ namespace Glitchers.EcoKnow.Sandbox
     public record Entity
         (
         string ID,
+        Sprite Icon,
         float GrowthRate,
         float MovementRate,
 
