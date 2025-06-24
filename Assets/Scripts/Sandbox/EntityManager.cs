@@ -116,7 +116,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 string id = _entityTypeList[i].ID;
                 int population = _entityLookupTable[column, row, i];
 
-                entityCounts[i] = new CellEntity(id, population);
+                entityCounts[i] = new CellEntity(i, id, population);
             }
 
             return entityCounts;
@@ -282,6 +282,23 @@ namespace Glitchers.EcoKnow.Sandbox
                         return;
                     }
 
+                    //Check for empty/invalid cells
+                    int nullCount = 0;
+                    foreach(CellEntity entity in entityList)
+                    {
+                        if (entity.Population < 0)
+                        {
+                            nullCount += 1;
+                        }
+                    }
+
+                    if (nullCount >= EntityTypeCount)
+                    {
+                        //This cell is completely empty, don't bother calculating
+                        //Debug.Log($"Row {row} / Column {column} is empty!");
+                        continue;
+                    }
+
                     float[,] A = AlphaMatrix;
                     if ((A.GetLongLength(0) != EntityTypeCount) || (A.GetLongLength(1) != EntityTypeCount))
                     {
@@ -343,6 +360,12 @@ namespace Glitchers.EcoKnow.Sandbox
                         {
                             int currentPopulation = _entityLookupTable[column, row, i];
                             int neighbouringCellCount = GetValidNeighbourCount(column, row, i);
+
+                            if (currentPopulation < 0)
+                            {
+                                //This cell/entity is empty, do not perform movement calculations
+                                continue;
+                            }
 
                             //TODO(caspar): Binomial?
                             //get number of entities to move
