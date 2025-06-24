@@ -18,6 +18,8 @@ public class EntityNodeEditor : NodeEditor
         if (_entityNode == null)
             _entityNode = target as EntityNode;
 
+        entityIcon = _entityNode.Icon;
+
         // Update serialized object's representation
         serializedObject.Update();
 
@@ -76,7 +78,7 @@ public class EntityNodeEditor : NodeEditor
 
             // Visual Options
             EditorGUILayout.LabelField("Visual Options", EditorStyles.centeredGreyMiniLabel);
-            entityIcon = EditorGUILayout.ObjectField(entityIcon, typeof(Sprite), true, GUILayout.Height(48), GUILayout.Width(48)) as Sprite;
+            _entityNode.Icon = EditorGUILayout.ObjectField(entityIcon, typeof(Sprite), true, GUILayout.Height(48), GUILayout.Width(48)) as Sprite;
             EditorGUILayout.Space();
 
             // Rates

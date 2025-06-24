@@ -9,6 +9,7 @@ public class EntityNode : Node
     public string ID => _id;
 
     [SerializeField] private Sprite _icon;
+    public Sprite Icon { get { return _icon; } set { _icon = value; } }
 
     [SerializeField] private float _growthRate;
     [SerializeField] private float _movementRate;
@@ -37,7 +38,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _growthRate, _movementRate, _vulnerable, _abundance, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _icon, _growthRate, _movementRate, _vulnerable, _abundance, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
     }
 
     private Quantity[] GetHarvestQuantities()
