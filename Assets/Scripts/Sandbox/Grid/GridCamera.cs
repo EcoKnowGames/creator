@@ -63,21 +63,21 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             _movementIntervalTimer -= Time.deltaTime;
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 MoveCamera(CameraMoveDir.LEFT);
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 MoveCamera(CameraMoveDir.RIGHT);
             }
 
 
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
             {
                 MoveCamera(CameraMoveDir.DOWN);
             }
-            else if (Input.GetKey(KeyCode.W))
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
                 MoveCamera(CameraMoveDir.UP);
             }

@@ -16,6 +16,7 @@ namespace Glitchers.EcoKnow.Sandbox
         float VulnerableThreshold,
         float AbundanceThreshold,
 
+        bool AutoPlace,
         bool CanHarvest,
         bool CanIntroduce,
 
@@ -85,7 +86,8 @@ namespace Glitchers.EcoKnow.Sandbox
                 {
                     for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? 100 : -1;
+                        int startPopulation = _entityTypeList[i].AutoPlace == true ? 100 : 0;
+                        _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? startPopulation : -1;
                     }
                 }
             }
@@ -113,10 +115,26 @@ namespace Glitchers.EcoKnow.Sandbox
 
             for (int i = 0; i < EntityTypeCount; i++)
             {
-                string id = _entityTypeList[i].ID;
+                Entity type = _entityTypeList[i];
+
+                string id = type.ID;
                 int population = _entityLookupTable[column, row, i];
 
-                entityCounts[i] = new CellEntity(i, id, population);
+                CellEntity.State state = CellEntity.State.STABLE;
+                if (population == 0)
+                {
+                    state = CellEntity.State.EXTINCT;
+                }
+                else if (population <= type.VulnerableThreshold)
+                {
+                    state = CellEntity.State.VULNERABLE;
+                }
+                else if (population >= type.AbundanceThreshold)
+                {
+                    state = CellEntity.State.ABUNDANT;
+                }
+
+                entityCounts[i] = new CellEntity(i, id, population, state);
             }
 
             return entityCounts;
