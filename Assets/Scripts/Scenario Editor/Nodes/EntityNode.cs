@@ -16,6 +16,9 @@ public class EntityNode : Node
     [SerializeField] private float _vulnerable;
     [SerializeField] private float _abundance;
 
+    [SerializeField] private bool _autoPlace;
+    public bool AutoPlace { get { return _autoPlace; } set { _autoPlace = value; } }
+
     [SerializeField] private bool _canHarvest;
     public bool CanHarvest { get { return _canHarvest; } set { _canHarvest = value; } }
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _harvestQuantity;
@@ -38,7 +41,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _icon, _growthRate, _movementRate, _vulnerable, _abundance, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _icon, _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
     }
 
     private Quantity[] GetHarvestQuantities()

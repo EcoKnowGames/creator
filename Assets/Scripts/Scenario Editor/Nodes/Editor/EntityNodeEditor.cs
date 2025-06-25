@@ -8,7 +8,6 @@ public class EntityNodeEditor : NodeEditor
 {
     private EntityNode _entityNode;
 
-    private bool autoPlaced = false;
     private bool showMore = false;
 
     private Sprite entityIcon;
@@ -89,7 +88,7 @@ public class EntityNodeEditor : NodeEditor
 
             // Placement & Harvesting Options
             EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
-            autoPlaced = EditorGUILayout.Toggle("Auto Place?", autoPlaced);
+            _entityNode.AutoPlace = EditorGUILayout.Toggle("Auto Place?", _entityNode.AutoPlace);
 
             _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
             if (_entityNode.CanHarvest)

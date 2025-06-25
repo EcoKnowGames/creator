@@ -4,12 +4,29 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Grid
 {
-    public record CellEntity
-    (
-        int Index,
-        string ID,
-        int Population
-    );
+    public class CellEntity
+    {
+        public enum State { EXTINCT, VULNERABLE, STABLE, ABUNDANT};
+        private State _currentState;
+        public State CurrentState => _currentState;
+
+        private int _index;
+        public int Index => _index;
+
+        private string _id;
+        public string ID => _id;
+
+        private int _population;
+        public int Population => _population;
+
+        public CellEntity(int index, string id, int population, State state)
+        {
+            _index = index;
+            _id = id;
+            _population = population;
+            _currentState = state;
+        }
+    };
 
     public class Cell : MonoBehaviour
     {
@@ -155,7 +172,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
                     Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer);
                     token.Init(i, type);
-                    token.UpdatePopulation(cellEntities[i].Population, totalPopulation);
+                    token.UpdatePopulation(cellEntities[i].Population, totalPopulation, cellEntities[i].CurrentState);
+                    token.SetVisible(cellEntities[i].Population > 0);
                 }
             }
         }
@@ -187,10 +205,15 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     Cell_Token token = tokens.FirstOrDefault(x => x.Index == orderedEntities[i].Index); // Make sure we match before adjusting any numbers
                     if (token != null)
                     {
-                        token.UpdatePopulation(orderedEntities[i].Population, totalPopulation);
+                        token.UpdatePopulation(orderedEntities[i].Population, totalPopulation, orderedEntities[i].CurrentState);
                         token.transform.SetSiblingIndex(i);
-                        token.SetVisible(orderedEntities[i].Population > 0);
 
+                        //We only want to set visible once population has increased
+                        //We never set invisible at zero population, only extinct
+                        if (orderedEntities[i].Population > 0)
+                        {
+                            token.SetVisible(true);
+                        }
                     }
                 }
             }
