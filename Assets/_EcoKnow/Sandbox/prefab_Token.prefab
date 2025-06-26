@@ -662,6 +662,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6970243344958086427}
   - component: {fileID: 8354860779579773986}
+  - component: {fileID: 3238666709739806276}
   m_Layer: 0
   m_Name: border_Vulnerable
   m_TagString: Untagged
@@ -712,6 +713,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3238666709739806276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396931811385787179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0834eb2d6f778a46a7fc6fb47ca871d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _innerShape: {fileID: 8881803226731261252}
 --- !u!1 &8889638960645967153
 GameObject:
   m_ObjectHideFlags: 0

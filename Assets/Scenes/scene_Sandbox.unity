@@ -918,6 +918,17 @@ MonoBehaviour:
   _inventoryPanel: {fileID: 5115763856819535920}
   _playerToolbar: {fileID: 1402807293}
   _resultsModal: {fileID: 9117195968787695510}
+--- !u!114 &2132229872 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7013349579855628096, guid: 54b0fa8ffac88674f9eb9a500b366b42, type: 3}
+  m_PrefabInstance: {fileID: 8318855313648673685}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a277bfeef312a114fa4a48f036b9ad60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2137618645 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4444142499864901676, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
@@ -2057,6 +2068,34 @@ PrefabInstance:
       propertyPath: _modifyCellModal
       value: 
       objectReference: {fileID: 1652672557}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2132229872}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowModal
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Glitchers.EcoKnow.Sandbox.UI.InventoryModal, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5411242425235895004, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5665315043874376920, guid: 990a0b905ba116e42bf3fb987ec0ccfc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
