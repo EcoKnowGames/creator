@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 698989141078472944}
   - component: {fileID: 2458401334560678058}
+  - component: {fileID: 2548358404126145846}
   m_Layer: 0
   m_Name: prefab_TokenBorder
   m_TagString: Untagged
@@ -128,6 +129,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _percentageMeter: {fileID: 8531007011664031704}
+--- !u!114 &2548358404126145846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130182221263562432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0834eb2d6f778a46a7fc6fb47ca871d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _innerShape: {fileID: 1318016980450248879}
 --- !u!1 &2502787476180790058
 GameObject:
   m_ObjectHideFlags: 0

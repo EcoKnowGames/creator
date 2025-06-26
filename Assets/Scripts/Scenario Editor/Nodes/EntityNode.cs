@@ -1,4 +1,5 @@
-﻿using Glitchers.EcoKnow.Sandbox;
+﻿using System.Linq;
+using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
 
@@ -10,6 +11,10 @@ public class EntityNode : Node
 
     [SerializeField] private Sprite _icon;
     public Sprite Icon { get { return _icon; } set { _icon = value; } }
+
+    [SerializeField] private int _colourIndex = -1;
+    public int ColourIndex { get { return _colourIndex; } set { _colourIndex = value; } }
+
 
     [SerializeField] private float _growthRate;
     [SerializeField] private float _movementRate;
@@ -31,6 +36,16 @@ public class EntityNode : Node
     protected override void Init()
     {
         base.Init();
+
+        //We may not have been added to the graph yet
+        if (graph is ScenarioNodeGraph scenario)
+        {
+            if (_colourIndex < 0)
+            {
+                int colour = scenario.nodes.OfType<EntityNode>().Count();
+                _colourIndex = Mathf.Clamp(colour, 0, scenario.GetColours().Length);
+            }
+        }
     }
 
     // Return the correct value of an output port when requested
@@ -41,7 +56,17 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _icon, _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _icon, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+    }
+
+    private Color GetColourFromIndex()
+    {
+        if (graph is ScenarioNodeGraph scenario)
+        {
+            return scenario.GetColour(_colourIndex);
+        }
+
+        return Color.white;
     }
 
     private Quantity[] GetHarvestQuantities()
