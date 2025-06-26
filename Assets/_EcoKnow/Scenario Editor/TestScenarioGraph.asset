@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 632, y: 296}
+  position: {x: 632, y: 344}
   ports:
     keys:
     - _id
@@ -304,6 +304,7 @@ MonoBehaviour:
       _dynamic: 0
   _id: House
   _icon: {fileID: 21300000, guid: d8b817172ea204e41a48dbb26c54ddfc, type: 3}
+  _colourIndex: 2
   _growthRate: 0
   _movementRate: 0
   _vulnerable: 0
@@ -480,6 +481,7 @@ MonoBehaviour:
   - {fileID: 1959980211764070698}
   - {fileID: 6972771029753438006}
   - {fileID: -404136452309566578}
+  colourPalette: {fileID: 11400000, guid: 53a2192e6791f2f42b5dad6138d0255f, type: 2}
 --- !u!114 &49053916092123579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,6 +747,7 @@ MonoBehaviour:
       _dynamic: 0
   _id: Hare
   _icon: {fileID: 21300000, guid: 42f8fe049c69bd54c8514d360097d5bd, type: 3}
+  _colourIndex: 0
   _growthRate: 1.4
   _movementRate: 0.3
   _vulnerable: 30
@@ -877,6 +880,7 @@ MonoBehaviour:
       _dynamic: 0
   _id: Fox
   _icon: {fileID: 21300000, guid: aaf3a2cfc3092da4e84519839d95ed97, type: 3}
+  _colourIndex: 1
   _growthRate: 0
   _movementRate: 0.2
   _vulnerable: 10

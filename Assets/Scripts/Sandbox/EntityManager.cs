@@ -10,6 +10,7 @@ namespace Glitchers.EcoKnow.Sandbox
         (
         string ID,
         Sprite Icon,
+        Color Colour,
         float GrowthRate,
         float MovementRate,
 
@@ -154,7 +155,11 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
                 {
-                    totalPopulation += _entityLookupTable[column, row, index];
+                    int population = _entityLookupTable[column, row, index];
+                    if (population > 0)
+                    {
+                        totalPopulation += population; //-1 population means the entity/cell is not valid, so don't add it
+                    }
                 }
             }
 
@@ -302,7 +307,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
                     //Check for empty/invalid cells
                     int nullCount = 0;
-                    foreach(CellEntity entity in entityList)
+                    foreach (CellEntity entity in entityList)
                     {
                         if (entity.Population < 0)
                         {

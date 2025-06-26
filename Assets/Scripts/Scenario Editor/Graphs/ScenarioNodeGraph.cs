@@ -9,6 +9,8 @@ using XNode;
 [CreateAssetMenu]
 public class ScenarioNodeGraph : NodeGraph
 {
+    [SerializeField] public ColourPaletteObject colourPalette;
+
     public override Node AddNode(Type type)
     {
         if (type == typeof(ScenarioNode))
@@ -62,4 +64,29 @@ public class ScenarioNodeGraph : NodeGraph
     {
         return nodes.OfType<WinConditionNode>().Where(x => x.IsConnected()).Select(x => x.GetWinCondition()).ToList();
     }
+
+    #region Colours
+    public ColourPaletteObject.ColourSwatch[] GetColours()
+    {
+        if (colourPalette != null)
+        {
+            return colourPalette.Colours;
+        }
+
+        return null;
+    }
+
+    public Color GetColour(int index)
+    {
+        if ((colourPalette != null) && (colourPalette.Colours != null))
+        {
+            if ((index >= 0) && (index < colourPalette.Colours.Count()))
+            {
+                return colourPalette.Colours[index].colour;
+            }
+        }
+
+        return Color.white;
+    }
+    #endregion
 }

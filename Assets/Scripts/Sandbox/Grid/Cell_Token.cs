@@ -31,6 +31,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             _entityIndex = index;
             SetIcon(type.Icon);
             SetState(CellEntity.State.STABLE);
+            UpdateBorderColour(type.Colour);
         }
 
         public void SetVisible(bool visible)
@@ -82,7 +83,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
-        #region State
+        #region State/Borders
         private void SetState(CellEntity.State state)
         {
             switch (state)
@@ -126,6 +127,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 foreach (Transform border in _borderContainer.transform)
                 {
                     border.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void UpdateBorderColour(Color colour)
+        {
+            if (_borderContainer != null)
+            {
+                foreach (TokenBorder border in _borderContainer.GetComponentsInChildren<TokenBorder>(true))
+                {
+                    border.SetColour(colour);
                 }
             }
         }
