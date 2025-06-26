@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox;
+using UnityEditor;
 using UnityEngine;
 using XNode;
 
@@ -15,6 +16,7 @@ public class ScenarioNodeGraph : NodeGraph
             if (GetScenarioNode() != null)
             {
                 Debug.LogError("[NODE EDITOR] ERROR: Trying to add a second Scenario node when one already exists. Aborting node spawn!");
+                EditorUtility.DisplayDialog("Scenario Editor: Error", "Trying to add a second Scenario node when one already exists. Aborting node spawn!", "OK");
                 return null;
             }
         }
