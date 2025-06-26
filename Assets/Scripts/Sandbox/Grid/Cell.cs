@@ -151,7 +151,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             if ((_cellTokenPrefab == null) || (_cellTokenContainer == null))
             {
-                //Error
+                Debug.LogError($"{LogChannel} Failed to spawn tokens at Cell Row {_row} / Column {_column}, token prefab or token container is null!");
                 return;
             }
 
@@ -187,7 +187,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             if (_cellTokenContainer.childCount != entityList.Length)
             {
-                //Error?
+                Debug.LogError($"{LogChannel} Failed to update tokens at Cell Row {_row} / Column {_column}, mismatch between token count and entity list length!");
                 return;
             }
 
