@@ -155,7 +155,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 return;
             }
 
-            foreach (Transform child in _cellTokenContainer.transform)
+            foreach (Cell_Token child in _cellTokenContainer.GetComponentsInChildren<Cell_Token>(true))
             {
                 Destroy(child.gameObject);
             }
@@ -197,22 +197,25 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             if ((entityList != null) && (entityManager != null))
             {
                 Cell_Token[] tokens = _cellTokenContainer.GetComponentsInChildren<Cell_Token>(true);
-                CellEntity[] orderedEntities = entityList.OrderByDescending(x => x.Population).ToArray();
+                CellEntity[] orderedEntities = entityList.OrderByDescending(x => x.Population).ThenByDescending(x => x.CurrentState).ToArray();
 
-                for (int i = 0; i < orderedEntities.Length; i++)
+                if (tokens.Length > 0)
                 {
-                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(orderedEntities[i].Index);
-                    Cell_Token token = tokens.FirstOrDefault(x => x.Index == orderedEntities[i].Index); // Make sure we match before adjusting any numbers
-                    if (token != null)
+                    for (int i = 0; i < orderedEntities.Length; i++)
                     {
-                        token.UpdatePopulation(orderedEntities[i].Population, totalPopulation, orderedEntities[i].CurrentState);
-                        token.transform.SetSiblingIndex(i);
-
-                        //We only want to set visible once population has increased
-                        //We never set invisible at zero population, only extinct
-                        if (orderedEntities[i].Population > 0)
+                        int totalPopulation = entityManager.GetTotalPopulationOfEntityType(orderedEntities[i].Index);
+                        Cell_Token token = tokens.FirstOrDefault(x => x.Index == orderedEntities[i].Index); // Make sure we match before adjusting any numbers
+                        if (token != null)
                         {
-                            token.SetVisible(true);
+                            token.UpdatePopulation(orderedEntities[i].Population, totalPopulation, orderedEntities[i].CurrentState);
+                            token.transform.SetSiblingIndex(i);
+
+                            //We only want to set visible once population has increased
+                            //We never set invisible at zero population, only extinct
+                            if (orderedEntities[i].Population > 0)
+                            {
+                                token.SetVisible(true);
+                            }
                         }
                     }
                 }

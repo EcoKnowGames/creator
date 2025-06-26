@@ -11,6 +11,7 @@ public class EntityNodeEditor : NodeEditor
     private bool showMore = false;
 
     private Sprite entityIcon;
+    private ColourPaletteObject.ColourSwatch entityColour;
 
     public override void OnBodyGUI()
     {
@@ -19,6 +20,9 @@ public class EntityNodeEditor : NodeEditor
 
         entityIcon = _entityNode.Icon;
 
+        ColourPaletteObject.ColourSwatch[] swatches = GetSwatches();
+        entityColour = swatches == null ? new ColourPaletteObject.ColourSwatch("black", Color.black) : swatches[_entityNode.ColourIndex];
+
         // Update serialized object's representation
         serializedObject.Update();
 
@@ -26,7 +30,7 @@ public class EntityNodeEditor : NodeEditor
         if (entityIcon != null && entityIcon.texture != null)
         {
             Rect previewRect = GUILayoutUtility.GetRect(180, 60, GUILayout.ExpandWidth(false));
-            EditorGUI.DrawRect(previewRect, UnityEngine.Color.gray);
+            EditorGUI.DrawRect(previewRect, entityColour.colour);
 
             // Calculate UVs
             Rect texCoords = new Rect(
@@ -76,9 +80,41 @@ public class EntityNodeEditor : NodeEditor
             EditorGUILayout.Space();
 
             // Visual Options
+            //Icon
             EditorGUILayout.LabelField("Visual Options", EditorStyles.centeredGreyMiniLabel);
             _entityNode.Icon = EditorGUILayout.ObjectField(entityIcon, typeof(Sprite), true, GUILayout.Height(48), GUILayout.Width(48)) as Sprite;
             EditorGUILayout.Space();
+
+            //Colour
+            if (swatches != null)
+            {
+                int colourIndex = _entityNode.ColourIndex;
+
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("<"))
+                {
+                    colourIndex = WrapIndex(colourIndex - 1, 0, swatches.Length);
+                }
+
+                entityColour = swatches[colourIndex];
+                Rect colourRect = GUILayoutUtility.GetRect(100, 20, GUILayout.ExpandWidth(false));
+                EditorGUI.DrawRect(new Rect(colourRect.x, colourRect.y, colourRect.width, colourRect.height), entityColour.colour);
+
+                var centeredStyle = GUI.skin.GetStyle("Label");
+                centeredStyle.alignment = TextAnchor.UpperCenter;
+                centeredStyle.fontStyle = FontStyle.Bold;
+                centeredStyle.normal.textColor = Color.black;
+                EditorGUI.LabelField(colourRect, new GUIContent(entityColour.name), centeredStyle);
+
+                if (GUILayout.Button(">"))
+                {
+                    colourIndex = WrapIndex(colourIndex + 1, 0, swatches.Length);
+                }
+                EditorGUILayout.EndHorizontal();
+
+                _entityNode.ColourIndex = colourIndex;
+            }
+
 
             // Rates
             EditorGUILayout.LabelField("Rates", EditorStyles.centeredGreyMiniLabel);
@@ -133,6 +169,34 @@ public class EntityNodeEditor : NodeEditor
 
         // Apply changes
         serializedObject.ApplyModifiedProperties();
+    }
+
+    public int WrapIndex(int value, int min, int max)
+    {
+        if (value >= max)
+        {
+            value = 0;
+        }
+        else if (value < 0)
+        {
+            value = max - 1;
+        }
+
+        return value;
+    }
+
+    private ColourPaletteObject.ColourSwatch[] GetSwatches()
+    {
+        if (_entityNode.graph is ScenarioNodeGraph scenario)
+        {
+            ColourPaletteObject.ColourSwatch[] colourList = scenario.GetColours();
+            if (colourList != null)
+            {
+                return colourList;
+            }
+        }
+
+        return null;
     }
 
 }
