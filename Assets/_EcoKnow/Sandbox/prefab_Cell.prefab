@@ -464,7 +464,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightObject: {fileID: 901068526692372020}
   _cellTokenPrefab: {fileID: 2812143473954796345, guid: 3035921ea38412e4fa6c011f385dc5c4, type: 3}
-  _cellTokenContainer: {fileID: 3176402707315285111}
+  _cellTokenContainer: {fileID: 4567345362638782228}
+  spacingCompact: -15
+  spacingWide: 10
 --- !u!61 &7290919154055530945
 BoxCollider2D:
   m_ObjectHideFlags: 0
