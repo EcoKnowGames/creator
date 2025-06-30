@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -275,8 +276,18 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Entities
-        public void OnEntitiesAdded()
+        public IEnumerator OnEntitiesAdded()
         {
+            foreach(Cell cell in cellList)
+            {
+                if (cell != null)
+                {
+                    cell.ClearEntityTokens();
+                }
+            }
+
+            yield return new WaitForEndOfFrame();
+
             foreach(Cell cell in cellList)
             {
                 if (cell != null)
@@ -284,6 +295,10 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     cell.SetupEntityTokens();
                 }
             }
+
+            yield return new WaitForEndOfFrame();
+
+            UpdateAllCells();
         }
 
         public void OnEntityUpdated(int column, int row, int id)

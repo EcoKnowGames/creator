@@ -93,8 +93,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
             }
 
-            gridManager.OnEntitiesAdded();
-            gridManager.UpdateAllCells();
+            StartCoroutine(gridManager.OnEntitiesAdded());
         }
         #endregion
 
