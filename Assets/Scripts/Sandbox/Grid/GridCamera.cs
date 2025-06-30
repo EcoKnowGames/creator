@@ -82,7 +82,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 MoveCamera(CameraMoveDir.UP);
             }
 
-            if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+            if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadPlus))
             {
                 UpdateCameraZoom(CameraZoom.INZOOM);
             }
