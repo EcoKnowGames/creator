@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI.Extensions;
 
 namespace Glitchers.EcoKnow.Sandbox.Grid
 {
@@ -32,8 +33,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
     {
         [SerializeField] protected GameObject highlightObject;
 
+        [Header("Tokens")]
         [SerializeField] private Cell_Token _cellTokenPrefab;
-        [SerializeField] private Transform _cellTokenContainer;
+        [SerializeField] private FlowLayoutGroup _cellTokenContainer;
+        [SerializeField] private float spacingCompact;
+        [SerializeField] private float spacingWide;
 
         private int _row;
         private int _column;
@@ -144,14 +148,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             UpdateTokens(entities);
         }
 
-        public void SetupEntityTokens()
+        public void ClearEntityTokens()
         {
-            //We don't care about the exact entities in the cell
-            //Just populate with a token for each entity type
-
             if ((_cellTokenPrefab == null) || (_cellTokenContainer == null))
             {
-                Debug.LogError($"{LogChannel} Failed to spawn tokens at Cell Row {_row} / Column {_column}, token prefab or token container is null!");
+                Debug.LogError($"{LogChannel} Failed to cleanup tokens at Cell Row {_row} / Column {_column}, token prefab or token container is null!");
                 return;
             }
 
@@ -159,7 +160,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             {
                 Destroy(child.gameObject);
             }
+        }
 
+        public void SetupEntityTokens()
+        {
+            //Populate with a token for each valid type, regardless of whether they are spawned in the cell yet
+
+            if ((_cellTokenPrefab == null) || (_cellTokenContainer == null))
+            {
+                Debug.LogError($"{LogChannel} Failed to spawn tokens at Cell Row {_row} / Column {_column}, token prefab or token container is null!");
+                return;
+            }
 
             EntityManager entityManager = SandboxManager.Instance.EntityManager;
             if (entityManager != null)
@@ -170,11 +181,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     Entity type = entityManager.GetEntityType(i);
                     int totalPopulation = entityManager.GetTotalPopulationOfEntityType(i);
 
-                    Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer);
+                    Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer.transform);
                     token.Init(i, type);
                     token.UpdatePopulation(cellEntities[i].Population, totalPopulation, cellEntities[i].CurrentState);
                     token.SetVisible(cellEntities[i].Population > 0);
                 }
+
+                UpdateTokenSpacing();
             }
         }
 
@@ -185,7 +198,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 return;
             }
 
-            if (_cellTokenContainer.childCount != entityList.Length)
+            if (_cellTokenContainer.transform.childCount != entityList.Length)
             {
                 Debug.LogError($"{LogChannel} Failed to update tokens at Cell Row {_row} / Column {_column}, mismatch between token count and entity list length!");
                 return;
@@ -218,6 +231,32 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                             }
                         }
                     }
+                }
+
+                UpdateTokenSpacing();
+            }
+        }
+
+        private void UpdateTokenSpacing()
+        {
+            if (_cellTokenContainer != null)
+            {
+                int tokenCount = _cellTokenContainer.GetComponentsInChildren<Cell_Token>(false).Count();
+
+                if (tokenCount <= 4)
+                {
+                    _cellTokenContainer.SpacingX = spacingWide;
+                    _cellTokenContainer.SpacingY = spacingWide;
+                }
+                else if (tokenCount <= 6)
+                {
+                    _cellTokenContainer.SpacingX = spacingWide;
+                    _cellTokenContainer.SpacingY = spacingCompact;
+                }
+                else
+                {
+                    _cellTokenContainer.SpacingX = spacingCompact;
+                    _cellTokenContainer.SpacingY = spacingCompact;
                 }
             }
         }
