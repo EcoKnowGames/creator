@@ -40,7 +40,7 @@ public class ItemQuantityNode : BaseQuantityNode
             //Return valid item list from graph
             if (graph is ScenarioNodeGraph scenarioGraph)
             {
-                return scenarioGraph.GetItemList();
+                return scenarioGraph.GetScenarioNode()?.ItemDefs;
             }
 
             return null;

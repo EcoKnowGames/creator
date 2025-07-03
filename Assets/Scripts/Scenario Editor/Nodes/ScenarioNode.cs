@@ -19,24 +19,57 @@ public class ScenarioNode : Node
 
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private string _items;
 
-    public List<Item> ItemDefs
+    public Matrix Matrix
     {
         get
         {
-            //Return valid item list from graph
-            //This ensures that the item list is always in the "correct" order
-            //The Graph will always keep an internal consistent index of Nodes based on the order they were added to the graph
-            //Whereas if we base the ItemDef indices on a locally stored list, the indexes could change if connections are broken and re-added
-            //This would disrupt any previously set-up nodes that reference item indices
-            if (graph is ScenarioNodeGraph scenarioGraph)
+            //Return valid matrix
+            if ((GetInputPort("_matrix") != null) && (GetInputPort("_matrix").ConnectionCount > 0))
             {
-                return scenarioGraph.GetItemList();
+                return GetInputPort("_matrix").GetConnections().Select(x => x.node).OfType<MatrixNode>().First().matrix;
             }
 
             return null;
         }
     }
 
+
+    //TODO(caspar) -> Better way of doing this? We need to check for multiples
+    public MapLayout MapLayout => GetInputPort("_map") != null && GetInputPort("_map").GetConnections().Count > 0 ? (MapLayout)GetInputPort("_map").GetInputValue() : null;
+
+    public List<WinConditionRecord> WinConditions
+    {
+        get
+        {
+            //Return valid win condition list
+            if ((GetInputPort("_winConditions") != null) && (GetInputPort("_winConditions").ConnectionCount > 0))
+            {
+                return GetInputPort("_winConditions").GetConnections().Select(x => x.node).OfType<WinConditionNode>().Select(x => x.GetWinCondition()).ToList();
+            }
+
+            return null;
+        }
+    }
+
+    public bool HasWinConditions => WinConditions != null && WinConditions.Count > 0;
+
+
+    public List<Item> ItemDefs
+    {
+        get
+        {
+            //Return valid item list
+            //This ensures that the item list is always in the "correct" order
+            if ((GetInputPort("_items") != null) && (GetInputPort("_items").ConnectionCount > 0))
+            {
+                return GetInputPort("_items").GetConnections().Select(x => x.node).OfType<ItemNode>().Select(x => x.GetItem()).OrderBy(x => x.ID).ToList();
+            }
+
+            return null;
+        }
+    }
+
+    public bool HasItemDefs => ItemDefs != null && ItemDefs.Count > 0;
 
     [SerializeField] private int _seed;
     public int Seed => _seed;
@@ -97,8 +130,11 @@ public class ScenarioNode : Node
         {
             ClearEntityPorts();
         }
+
+        Debug.Log("DYNAMIC PORTS: " + DynamicPorts.Count());
     }
 
+    #region Entities
     private void ClearEntityPorts()
     {
         if ((_entityPorts != null) && (_entityPorts.Count > 0))
@@ -107,10 +143,11 @@ public class ScenarioNode : Node
             {
                 RemoveDynamicPort(port);
             }
-
-            _entityPorts.Clear();
         }
+
+        _entityPorts.Clear();
     }
+    #endregion
 
     public override void OnRemoveConnection(NodePort port)
     {
@@ -121,11 +158,4 @@ public class ScenarioNode : Node
             ClearEntityPorts();
         }
     }
-
-    #region Map
-    public MapLayout GetMapLayout()
-    {
-        return (MapLayout)GetInputPort("_map").GetInputValue();
-    }
-    #endregion
 }
