@@ -1,8 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
@@ -89,55 +93,58 @@ namespace Glitchers.EcoKnow.Sandbox
             if (_scenarioNodeGraph != null)
             {
                 ScenarioNode scenarioNode = _scenarioNodeGraph.GetScenarioNode();
-                Debug.Log($"Scenario Name is: {scenarioNode.Name}");
-                Debug.Log($"Map Layout is: {scenarioNode.GetMapLayout().fileName}");
 
-                //Setup Random
-                Random.InitState(scenarioNode.Seed);
-
-                //Setup rounds
-                _currentRound = -1;
-                _maxRounds = scenarioNode.TotalRounds;
-                _maxActionsPerRound = scenarioNode.ActionsPerRound;
-
-                InitWinConditions(_scenarioNodeGraph.GetWinConditionList());
-
-                //Init grid
-                _gridManager?.Init();
-
-                //Init inventory
-                _playerInventory?.Init();
-                _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenarioNode.StartCurrency);
-
-                //Setup entities
-                MatrixNode matrixNode = _scenarioNodeGraph.GetMatrixNode();
-                if (matrixNode != null)
+                if (scenarioNode != null)
                 {
-                    _entityManager.RegisterAlphaMatrix(matrixNode.matrix);
+                    Debug.Log($"Scenario Name is: {scenarioNode.Name}");
+                    Debug.Log($"Map Layout is: {scenarioNode.MapLayout.fileName}");
+
+                    //Setup Random
+                    Random.InitState(scenarioNode.Seed);
+
+                    //Setup rounds
+                    _currentRound = -1;
+                    _maxRounds = scenarioNode.TotalRounds;
+                    _maxActionsPerRound = scenarioNode.ActionsPerRound;
+
+                    InitWinConditions(scenarioNode.WinConditions);
+
+                    //Init grid
+                    _gridManager?.Init();
+
+                    //Init inventory
+                    _playerInventory?.Init();
+                    _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenarioNode.StartCurrency);
+
+                    //Setup entities
+                    if (scenarioNode.Matrix != null)
+                    {
+                        _entityManager.RegisterAlphaMatrix(scenarioNode.Matrix);
+                    }
+
+                    if (_scenarioNodeGraph.HasConnectedEntityNodes())
+                    {
+                        _entityManager.RegisterEntities(_scenarioNodeGraph.GetEntityList());
+                    }
+
+                    if (scenarioNode.HasItemDefs)
+                    {
+                        _playerInventory.RegisterItemDefinitions(scenarioNode.ItemDefs);
+                    }
+
+                    //Setup grid
+                    GridDef gridDef = scenarioNode.MapLayout.gridDef;
+                    _gridManager?.EnableGrid();
+                    _gridManager?.SetupGrid(gridDef);
+
+                    _entityManager.AddEntitiesToGrid(_gridManager);
+
+                    //Set up all of our UI
+                    _sandboxUI?.Init();
+
+                    StartNewRound();
                 }
-
-                if (_scenarioNodeGraph.HasConnectedEntityNodes())
-                {
-                    _entityManager.RegisterEntities(_scenarioNodeGraph.GetEntityList());
-                }
-
-                if (_scenarioNodeGraph.HasConnectedItemNodes())
-                {
-                    _playerInventory.RegisterItemDefinitions(_scenarioNodeGraph.GetItemList());
-                }
-
-                //Setup grid
-                GridDef gridDef = scenarioNode.GetMapLayout().gridDef;
-                _gridManager?.EnableGrid();
-                _gridManager?.SetupGrid(gridDef);
-
-                _entityManager.AddEntitiesToGrid(_gridManager);
-
-                //Set up all of our UI
-                _sandboxUI?.Init();
             }
-
-            StartNewRound();
         }
         #endregion
 

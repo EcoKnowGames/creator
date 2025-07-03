@@ -18,11 +18,15 @@ MonoBehaviour:
     keys:
     - _map
     - _matrix
+    - id
+    - Fox
+    - Dog
+    - Hare
+    - Horse
+    - Rock
+    - Cat
     - _winConditions
     - _items
-    - House
-    - Fox
-    - Hare
     values:
     - _fieldName: _map
       _node: {fileID: -5440223889025535490}
@@ -48,6 +52,81 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: id
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Fox
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Dog
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Hare
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Horse
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Rock
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: _id
+        node: {fileID: -2726126907051347721}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Cat
+      _node: {fileID: -5440223889025535490}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
     - _fieldName: _winConditions
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
@@ -69,45 +148,18 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 9215620791800968014}
-        reroutePoints: []
-      - fieldName: _id
         node: {fileID: -2973959806790394706}
         reroutePoints: []
       - fieldName: _id
         node: {fileID: 1651366151217186011}
         reroutePoints: []
+      - fieldName: _id
+        node: {fileID: 9215620791800968014}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: House
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: Fox
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: Hare
-      _node: {fileID: -5440223889025535490}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
   scenarioName: Wilderness Test
   rounds: 8
   actionsPerRound: 4
@@ -212,7 +264,7 @@ MonoBehaviour:
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: House
+      - fieldName: Rock
         node: {fileID: -5440223889025535490}
         reroutePoints: []
       _direction: 0
@@ -240,7 +292,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  _id: House
+  _id: Rock
   _icon: {fileID: 21300000, guid: d8b817172ea204e41a48dbb26c54ddfc, type: 3}
   _colourIndex: 2
   _growthRate: 0
@@ -397,7 +449,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be61d6f1fd1a40f45adcffe21d7acf93, type: 3}
-  m_Name: TestScenarioGraph
+  m_Name: TestScenarioGraph- Unstable
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: -5440223889025535490}
@@ -450,12 +502,12 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  matricesCSV: {fileID: 4900000, guid: ba536ef5de4111d48ab3d34ca9c37723, type: 3}
+  matricesCSV: {fileID: 4900000, guid: 95c15401e45498f428bd03ee7d4a2c4d, type: 3}
   matrix:
     entityIDs:
     - Hare
     - Fox
-    - House
+    - Rock
 --- !u!114 &1576632361664831712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,12 +667,12 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  mapCSV: {fileID: 4900000, guid: 7eb01f0b5ff58f24187e4ade4ef7299b, type: 3}
+  mapCSV: {fileID: 4900000, guid: 286404855ddd1e24293523673dfe2d2d, type: 3}
   map:
-    fileName: Level 1
+    fileName: Wilderness
     gridDef:
-      rows: 6
-      columns: 12
+      rows: 13
+      columns: 14
 --- !u!114 &4452621898610726545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,7 +738,7 @@ MonoBehaviour:
   _id: Hare
   _icon: {fileID: 21300000, guid: 42f8fe049c69bd54c8514d360097d5bd, type: 3}
   _colourIndex: 0
-  _growthRate: 1.4
+  _growthRate: 0.6
   _movementRate: 0.3
   _vulnerable: 30
   _abundance: 300
@@ -819,7 +871,7 @@ MonoBehaviour:
   _id: Fox
   _icon: {fileID: 21300000, guid: aaf3a2cfc3092da4e84519839d95ed97, type: 3}
   _colourIndex: 1
-  _growthRate: 0
+  _growthRate: -0.3
   _movementRate: 0.2
   _vulnerable: 10
   _abundance: 150
@@ -857,6 +909,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _id: Rabbit Foot
-  _icon: {fileID: 21300000, guid: 42f8fe049c69bd54c8514d360097d5bd, type: 3}
+  _icon: {fileID: 0}
   _value: 10
   _canSell: 1
