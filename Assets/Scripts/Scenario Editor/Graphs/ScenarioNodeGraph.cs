@@ -90,7 +90,6 @@ public class ScenarioNodeGraph : NodeGraph
     [ContextMenu("Export JSON")]
     public void ExportJson()
     {
-
         ScenarioNode scenarioNode = GetScenarioNode();
         if (scenarioNode == null)
         {
@@ -99,6 +98,32 @@ public class ScenarioNodeGraph : NodeGraph
         }
         else
         {
+            //Validation
+            if (scenarioNode.MapLayout == null)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no map was defined for the Scenario. Make sure a Map Node exists and is connected to the Scenario Node.", "OK");
+                return;
+            }
+
+            if (scenarioNode.Matrix == null)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no matrix was defined for the Scenario. Make sure a Matrix Node exists and is connected to the Scenario Node.", "OK");
+                return;
+            }
+
+            if (GetEntityList().Count <= 0)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no entities were defined for the Scenario. Make sure Entity Nodes exist and are connected to the Scenario Node.", "OK");
+                return;
+            }
+
+            if (scenarioNode.Matrix.entityIDs.Count() != GetEntityList().Count)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, the number of connected Entity Nodes does not match the number of Entities defined by the Matrix. Make sure all required Entity Nodes exist and are connected to the Scenario Node.", "OK");
+                return;
+            }
+
+
             //Collect our data
             Scenario scenario = new Scenario(
                scenarioNode.Name,
@@ -113,7 +138,8 @@ public class ScenarioNodeGraph : NodeGraph
                scenarioNode.MapLayout
                );
 
-            string json = FormatJson(scenario);
+            //Sort out filepath and export
+            string json = JsonConvert.SerializeObject(scenario, Formatting.Indented);
             if (!string.IsNullOrEmpty(json))
             {
                 string fileName = scenario.Name;
@@ -124,14 +150,6 @@ public class ScenarioNodeGraph : NodeGraph
                 EditorUtility.DisplayDialog("Scenario Editor Export", "Scenario has been exported successfully to destination " + filePath, "OK");
             }
         }
-    }
-
-    private string FormatJson(Scenario scenario)
-    {
-        string scenarioJson = JsonConvert.SerializeObject(scenario, Formatting.Indented);
-        Debug.Log(scenarioJson);
-
-        return scenarioJson;
     }
 
 #endif

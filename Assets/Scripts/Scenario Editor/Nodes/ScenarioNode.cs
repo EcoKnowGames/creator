@@ -33,8 +33,6 @@ public class ScenarioNode : Node
         }
     }
 
-
-    //TODO(caspar) -> Better way of doing this? We need to check for multiples
     public MapLayout MapLayout => GetInputPort("_map") != null && GetInputPort("_map").GetConnections().Count > 0 ? (MapLayout)GetInputPort("_map").GetInputValue() : null;
 
     public List<WinConditionRecord> WinConditions
