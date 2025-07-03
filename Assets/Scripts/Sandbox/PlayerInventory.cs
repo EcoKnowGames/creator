@@ -7,7 +7,7 @@ namespace Glitchers.EcoKnow.Sandbox
 {
     public record Item(
         string ID,
-        Sprite Icon,
+        string Icon,
         int Value,
         bool CanSell
     );

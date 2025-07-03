@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Glitchers.EcoKnow.Sandbox;
+using UnityEditor;
 using UnityEngine;
 using XNode;
-
 
 public class EntityNode : Node
 {
@@ -10,6 +10,27 @@ public class EntityNode : Node
     public string ID => _id;
 
     [SerializeField] private Sprite _icon;
+    private string _iconPath
+    {
+        get
+        {
+#if UNITY_EDITOR
+            if (_icon != null)
+            {
+                string path = AssetDatabase.GetAssetPath(_icon);
+                int resourcesIndex = path.IndexOf("Resources/") + "Resources/".Length;
+                int extensionIndex = path.LastIndexOf(".");
+                if (resourcesIndex >= 0)
+                {
+                    path = path.Substring(resourcesIndex, extensionIndex - resourcesIndex);
+                    return path;
+                }
+            }
+#endif
+            return null;
+        }
+    }
+
     public Sprite Icon { get { return _icon; } set { _icon = value; } }
 
     [SerializeField] private int _colourIndex = -1;
@@ -56,17 +77,17 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _icon, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
     }
 
-    private Color GetColourFromIndex()
+    private string GetColourFromIndex()
     {
         if (graph is ScenarioNodeGraph scenario)
         {
-            return scenario.GetColour(_colourIndex);
+            return ColorUtility.ToHtmlStringRGBA(scenario.GetColour(_colourIndex));
         }
 
-        return Color.white;
+        return ColorUtility.ToHtmlStringRGBA(Color.white);
     }
 
     private Quantity[] GetHarvestQuantities()

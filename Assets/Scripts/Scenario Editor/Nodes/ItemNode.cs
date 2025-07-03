@@ -1,4 +1,5 @@
 ﻿using Glitchers.EcoKnow.Sandbox;
+using UnityEditor;
 using UnityEngine;
 using XNode;
 
@@ -9,6 +10,26 @@ public class ItemNode : Node
     public string ID => _id;
 
     [SerializeField] private Sprite _icon;
+    private string _iconPath
+    {
+        get
+        {
+#if UNITY_EDITOR
+            if (_icon != null)
+            {
+                string path = AssetDatabase.GetAssetPath(_icon);
+                int resourcesIndex = path.IndexOf("Resources/") + "Resources/".Length;
+                int extensionIndex = path.LastIndexOf(".");
+                if (resourcesIndex >= 0)
+                {
+                    path = path.Substring(resourcesIndex, extensionIndex - resourcesIndex);
+                    return path;
+                }
+            }
+#endif
+            return null;
+        }
+    }
 
 
     [SerializeField] private int _value;
@@ -31,7 +52,7 @@ public class ItemNode : Node
 
     public Item GetItem()
     {
-        return new Item(_id, _icon, _value, _canSell);
+        return new Item(_id, _iconPath, _value, _canSell);
     }
 
     public bool IsConnected()

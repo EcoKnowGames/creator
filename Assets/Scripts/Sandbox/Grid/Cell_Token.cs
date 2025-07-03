@@ -26,6 +26,9 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         private GameObject _currentBorder = null;
 
+        private const string LogChannel = "[Cell_Token]";
+
+
         public void Init(int index, Entity type)
         {
             _entityIndex = index;
@@ -66,11 +69,19 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         #endregion
 
         #region Icon
-        private void SetIcon(Sprite sprite)
+        private void SetIcon(string spritePath)
         {
-            if ((_entityIcon != null) && (sprite != null))
+            if ((_entityIcon != null) && !string.IsNullOrEmpty(spritePath))
             {
-                _entityIcon.sprite = sprite;
+                Sprite resource = Resources.Load<Sprite>(spritePath);
+                if (resource != null)
+                {
+                    _entityIcon.sprite = resource;
+                }
+                else
+                {
+                    Debug.LogError($"{LogChannel} Failed to find icon for entity at path {spritePath}!");
+                }
             }
         }
 
@@ -131,8 +142,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             }
         }
 
-        private void UpdateBorderColour(Color colour)
+        private void UpdateBorderColour(string hexColour)
         {
+            Color colour = Color.white;
+            ColorUtility.TryParseHtmlString("#" + hexColour, out colour);
+
             if (_borderContainer != null)
             {
                 foreach (TokenBorder border in _borderContainer.GetComponentsInChildren<TokenBorder>(true))
