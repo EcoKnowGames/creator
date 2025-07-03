@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using XNode;
 
+//All data needed to create a scenario
 public record Scenario
     (
         string Name,
@@ -19,6 +20,14 @@ public record Scenario
         WinConditionRecord[] WinConditions,
         Matrix Matrix,
         MapLayout Map
+    );
+
+//Header info
+public record ScenarioConfig
+    (
+        string AppVersion,
+        string UnityVersion,
+        Scenario Scenario
     );
 
 [CreateAssetMenu]
@@ -138,8 +147,15 @@ public class ScenarioNodeGraph : NodeGraph
                scenarioNode.MapLayout
                );
 
+            //Package it up with any additional header data we might need
+            ScenarioConfig config = new ScenarioConfig(
+                Application.version,
+                Application.unityVersion,
+                scenario
+                );
+
             //Sort out filepath and export
-            string json = JsonConvert.SerializeObject(scenario, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
             if (!string.IsNullOrEmpty(json))
             {
                 string fileName = scenario.Name;
