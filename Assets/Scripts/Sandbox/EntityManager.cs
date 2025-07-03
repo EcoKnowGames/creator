@@ -6,11 +6,13 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
+
+    [System.Serializable]
     public record Entity
         (
         string ID,
-        Sprite Icon,
-        Color Colour,
+        string Icon,
+        string Colour,
         float GrowthRate,
         float MovementRate,
 

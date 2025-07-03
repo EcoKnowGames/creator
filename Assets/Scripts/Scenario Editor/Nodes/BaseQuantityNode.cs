@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using XNode;
 
+[System.Serializable]
 public record Quantity
 (
     string ID,
