@@ -21,7 +21,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnReplayPressed()
         {
-            SandboxManager.Instance.StartNewGame();
+            SandboxManager.Instance.ReplayCurrentScenario();
         }
 
         public void OnQuitPressed()

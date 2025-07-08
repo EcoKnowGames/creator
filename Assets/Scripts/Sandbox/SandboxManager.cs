@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
-using UnityEditor;
+using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
@@ -51,8 +48,12 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
+        [Header("Test")]
+        [SerializeField, TextArea] private string _scenarioJson;
+
         [Header("Scenario")]
         [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
+        private Scenario _lastPlayedScenario;
 
         [Header("Gameplay")]
         [SerializeField] private EntityManager _entityManager;
@@ -73,14 +74,23 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private int _maxActionsPerRound = 1;
 
+        private int _defaultRounds = 2;
+        private int _defaultActionsPerRound = 2;
+
         public enum Result { WIN, LOSE };
         private List<WinCondition> _winConditions;
         public List<WinCondition> WinConditions => _winConditions;
 
+        private const string LogChannel = "[SandboxManager]";
+
         #region Lifecycle
         void Start()
         {
-            StartNewGame();
+            ScenarioConfig config = LoadConfig(_scenarioJson);
+            if (config != null)
+            {
+                StartNewGame(config.Scenario);
+            }
         }
 
         void Update()
@@ -88,62 +98,152 @@ namespace Glitchers.EcoKnow.Sandbox
             _gridManager?.HandleInput();
         }
 
-        public void StartNewGame()
+        private ScenarioConfig LoadConfig(string json)
         {
-            if (_scenarioNodeGraph != null)
+            if (string.IsNullOrEmpty(json))
             {
-                ScenarioNode scenarioNode = _scenarioNodeGraph.GetScenarioNode();
+                Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON, JSON is null or empty");
+                return null;
+            }
 
-                if (scenarioNode != null)
+            //Deserialise from JSON
+            List<string> errors = new List<string>();
+            ScenarioConfig config = JsonConvert.DeserializeObject<ScenarioConfig>(_scenarioJson,
+                new JsonSerializerSettings
                 {
-                    Debug.Log($"Scenario Name is: {scenarioNode.Name}");
-                    Debug.Log($"Map Layout is: {scenarioNode.MapLayout.fileName}");
-
-                    //Setup Random
-                    Random.InitState(scenarioNode.Seed);
-
-                    //Setup rounds
-                    _currentRound = -1;
-                    _maxRounds = scenarioNode.TotalRounds;
-                    _maxActionsPerRound = scenarioNode.ActionsPerRound;
-
-                    InitWinConditions(scenarioNode.WinConditions);
-
-                    //Init grid
-                    _gridManager?.Init();
-
-                    //Init inventory
-                    _playerInventory?.Init();
-                    _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenarioNode.StartCurrency);
-
-                    //Setup entities
-                    if (scenarioNode.Matrix != null)
+                    Error = (sender, args) =>
                     {
-                        _entityManager.RegisterAlphaMatrix(scenarioNode.Matrix);
+                        errors.Add(args.ErrorContext.Error.Message);
+                        args.ErrorContext.Handled = true;
                     }
+                });
 
-                    if (_scenarioNodeGraph.HasConnectedEntityNodes())
-                    {
-                        _entityManager.RegisterEntities(_scenarioNodeGraph.GetEntityList());
-                    }
-
-                    if (scenarioNode.HasItemDefs)
-                    {
-                        _playerInventory.RegisterItemDefinitions(scenarioNode.ItemDefs);
-                    }
-
-                    //Setup grid
-                    GridDef gridDef = scenarioNode.MapLayout.gridDef;
-                    _gridManager?.EnableGrid();
-                    _gridManager?.SetupGrid(gridDef);
-
-                    _entityManager.AddEntitiesToGrid(_gridManager);
-
-                    //Set up all of our UI
-                    _sandboxUI?.Init();
-
-                    StartNewRound();
+            //Check and print errors, if any
+            if (errors.Count > 0)
+            {
+                foreach (string error in errors)
+                {
+                    Debug.Log($"{LogChannel} Failed to deserialise ScenarioConfig from JSON: {error}");
                 }
+            }
+
+            if (config != null)
+            {
+                //Validation
+                if (Application.version != config.AppVersion)
+                {
+                    Debug.LogWarning($"{LogChannel} Scenario {config.Scenario.Name} was exported from a different version of the Application {config.AppVersion} (Current: {Application.version}). Scenario may not work as intended");
+                }
+#if UNITY_EDITOR
+                if (Application.unityVersion != config.UnityVersion)
+                {
+                    Debug.LogWarning($"{LogChannel} Scenario {config.Scenario.Name} was exported from a different version of the Unity Editor {config.UnityVersion} (Current: {Application.unityVersion}). Scenario may not work as intended");
+                }
+#endif
+
+                if (config.Scenario == null)
+                {
+                    Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Scenario is null!");
+                    return null;
+                }
+                else
+                {
+                    if (config.Scenario.Map == null)
+                    {
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Map Layout is null! Scenario must have a valid Map Layout");
+                        return null;
+                    }
+
+                    if (config.Scenario.Matrix == null)
+                    {
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Matrix is null! Scenario must have a valid Matrix");
+                        return null;
+                    }
+
+                    if (config.Scenario.Entities == null || config.Scenario.Entities.Count() <= 0)
+                    {
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. No Entities found in the JSON file. Scenario must have valid Entities");
+                        return null;
+                    }
+
+                    if (config.Scenario.WinConditions == null || config.Scenario.WinConditions.Count() <= 0)
+                    {
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. No Win Conditions found in the JSON file. Scenario must have at least one valid Win Condition");
+                        return null;
+                    }
+
+                    if (config.Scenario.Rounds <= 0)
+                    {
+                        Debug.LogWarning($"{LogChannel} Invalid number of rounds ({config.Scenario.Rounds}) found in Scenario {config.Scenario.Name}. Defaulting to {_defaultRounds} Rounds");
+                    }
+
+                    if (config.Scenario.ActionsPerRound <= 0)
+                    {
+                        Debug.LogWarning($"{LogChannel} Invalid number of actions per round ({config.Scenario.Rounds}) found in Scenario {config.Scenario.Name}. Defaulting to {_defaultActionsPerRound} Action");
+                    }
+                }
+
+                //If we have reached this point we are valid
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Likely an error with parsing/deserialisation");
+            }
+
+            return config;
+        }
+
+        public void StartNewGame(Scenario scenario)
+        {
+            if (scenario != null)
+            {
+                Debug.Log($"Scenario Name is: {scenario.Name}");
+                Debug.Log($"Map Layout is: {scenario.Map.fileName}");
+
+                _lastPlayedScenario = scenario;
+
+                //Setup Random
+                Random.InitState(scenario.Seed);
+
+                //Setup rounds
+                _currentRound = -1;
+                _maxRounds = scenario.Rounds <= 0 ? _defaultRounds : scenario.Rounds;
+                _maxActionsPerRound = scenario.ActionsPerRound <= 0 ? _defaultActionsPerRound : scenario.ActionsPerRound;
+
+                InitWinConditions(scenario.WinConditions.ToList());
+
+                //Init grid
+                _gridManager?.Init();
+
+                //Init inventory
+                _playerInventory?.Init();
+                _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenario.StartCurrency);
+
+                //Setup entities and items
+                _entityManager.RegisterAlphaMatrix(scenario.Matrix);
+                _entityManager.RegisterEntities(scenario.Entities.ToList());
+                _playerInventory.RegisterItemDefinitions(scenario.Items.ToList());
+
+
+                //Setup grid
+                GridDef gridDef = scenario.Map.gridDef;
+                _gridManager?.EnableGrid();
+                _gridManager?.SetupGrid(gridDef);
+
+                _entityManager.AddEntitiesToGrid(_gridManager);
+
+                //Set up all of our UI
+                _sandboxUI?.Init();
+
+                StartNewRound();
+            }
+        }
+
+        public void ReplayCurrentScenario()
+        {
+            if (_lastPlayedScenario != null)
+            {
+                StartNewGame(_lastPlayedScenario);
             }
         }
         #endregion
@@ -221,7 +321,7 @@ namespace Glitchers.EcoKnow.Sandbox
         {
             _winConditions = new List<WinCondition>();
 
-            foreach(WinConditionRecord record in winConditions)
+            foreach (WinConditionRecord record in winConditions)
             {
                 WinCondition condition = new WinCondition();
                 condition.Init(record);
