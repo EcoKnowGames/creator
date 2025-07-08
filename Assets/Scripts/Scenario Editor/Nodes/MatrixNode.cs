@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 using XNode;
 
@@ -8,6 +9,9 @@ public class Matrix
 {
     public string[] entityIDs;
     public float[,] entityMatrix;
+
+    [JsonConstructor]
+    public Matrix() { }
 
     public Matrix(TextAsset matrixCSV)
     {
