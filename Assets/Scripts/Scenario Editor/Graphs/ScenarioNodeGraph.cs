@@ -96,6 +96,38 @@ public class ScenarioNodeGraph : NodeGraph
 
 #if UNITY_EDITOR
 
+    public ScenarioConfig GetConfig()
+    {
+        ScenarioNode scenarioNode = GetScenarioNode();
+        if (scenarioNode == null)
+        {
+            return null;
+        }
+
+        //Collect our data
+        Scenario scenario = new Scenario(
+           scenarioNode.Name,
+           scenarioNode.TotalRounds,
+           scenarioNode.ActionsPerRound,
+           scenarioNode.StartCurrency,
+           scenarioNode.Seed,
+           GetEntityList().ToArray(),                //Note(caspar): I wanted to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
+           scenarioNode.ItemDefs.ToArray(),
+           scenarioNode.WinConditions.ToArray(),
+           scenarioNode.Matrix,
+           scenarioNode.MapLayout
+           );
+
+        //Package it up with any additional header data we might need
+        ScenarioConfig config = new ScenarioConfig(
+            Application.version,
+            Application.unityVersion,
+            scenario
+            );
+
+        return config;
+    }
+
     [ContextMenu("Export JSON")]
     public void ExportJson()
     {
@@ -132,38 +164,31 @@ public class ScenarioNodeGraph : NodeGraph
                 return;
             }
 
-
-            //Collect our data
-            Scenario scenario = new Scenario(
-               scenarioNode.Name,
-               scenarioNode.TotalRounds,
-               scenarioNode.ActionsPerRound,
-               scenarioNode.StartCurrency,
-               scenarioNode.Seed,
-               GetEntityList().ToArray(),                //Note(caspar): I wanted to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
-               scenarioNode.ItemDefs.ToArray(),
-               scenarioNode.WinConditions.ToArray(),
-               scenarioNode.Matrix,
-               scenarioNode.MapLayout
-               );
-
-            //Package it up with any additional header data we might need
-            ScenarioConfig config = new ScenarioConfig(
-                Application.version,
-                Application.unityVersion,
-                scenario
-                );
-
-            //Sort out filepath and export
-            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
-            if (!string.IsNullOrEmpty(json))
+            if (scenarioNode.WinConditions.Count() <= 0)
             {
-                string fileName = scenario.Name;
-                string filePath = Application.persistentDataPath + "/" + fileName + ".json";
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no win conditions have been defined for the Scenario. Make sure at least one Win Condition Node exists and is connected to the Scenario Node.", "OK");
+                return;
+            }
 
-                System.IO.File.WriteAllText(filePath, json);
+            ScenarioConfig config = GetConfig();
 
-                EditorUtility.DisplayDialog("Scenario Editor Export", "Scenario has been exported successfully to destination " + filePath, "OK");
+            if (config == null)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, ScenarioConfig did not serialise correctly. Please check the Node setup and try again", "OK");
+            }
+            else
+            {
+                //Sort out filepath and export
+                string json = JsonConvert.SerializeObject(config, Formatting.Indented);
+                if (!string.IsNullOrEmpty(json))
+                {
+                    string fileName = config.Scenario.Name;
+                    string filePath = Application.persistentDataPath + "/" + fileName + ".json";
+
+                    System.IO.File.WriteAllText(filePath, json);
+
+                    EditorUtility.DisplayDialog("Scenario Editor Export", "Scenario has been exported successfully to destination " + filePath, "OK");
+                }
             }
         }
     }

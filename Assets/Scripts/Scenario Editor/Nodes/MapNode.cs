@@ -1,4 +1,5 @@
 ﻿using Glitchers.EcoKnow.Sandbox.Grid;
+using Newtonsoft.Json;
 using UnityEngine;
 using XNode;
 
@@ -10,6 +11,8 @@ public class MapLayout
     public string fileName;
     public GridDef gridDef;
 
+    [JsonConstructor]
+    public MapLayout() { }
     public MapLayout(TextAsset csv)
     {
         fileName = csv.name;
