@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
 using Newtonsoft.Json;
+using SimpleFileBrowser;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
@@ -48,8 +50,8 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
-        [Header("Test")]
-        [SerializeField, TextArea] private string _scenarioJson;
+        //[Header("Test")]
+        //[SerializeField, TextArea] private string _scenarioJson;
 
         [Header("Scenario")]
         [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
@@ -86,11 +88,7 @@ namespace Glitchers.EcoKnow.Sandbox
         #region Lifecycle
         void Start()
         {
-            ScenarioConfig config = LoadConfig(_scenarioJson);
-            if (config != null)
-            {
-                StartNewGame(config.Scenario);
-            }
+            ShowLoadDialog();
         }
 
         void Update()
@@ -98,6 +96,57 @@ namespace Glitchers.EcoKnow.Sandbox
             _gridManager?.HandleInput();
         }
 
+        //TODO(caspar): Probably move all of this file loading stuff to a main menu/bootstrap script. We should only need to pass the Sandbox the parsed ScenarioConfig and nothing else!
+        private void ShowLoadDialog()
+        {
+            FileBrowser.SetDefaultFilter(".json");
+            FileBrowser.ShowLoadDialog(
+            (filePaths) =>
+            {
+                //On file chosen
+                string rawJson = ParseJsonFromFile(filePaths);
+                if (!string.IsNullOrEmpty(rawJson))
+                {
+                    ScenarioConfig config = LoadConfig(rawJson);
+                    if (config != null)
+                    {
+                        StartNewGame(config.Scenario);
+                    }
+                }
+            },
+            () =>
+            {
+                //On cancelled
+                Debug.LogError($"{LogChannel} Failed to load a valid JSON file");
+            },
+            FileBrowser.PickMode.Files,
+            false,
+            null,
+            null,
+            "Load Scenario JSON File"
+            );
+        }
+
+        private string ParseJsonFromFile(string[] filePaths)
+        {
+            if ((filePaths != null) && (filePaths.Length > 0))
+            {
+                //Ignore multi-select
+                string filePath = filePaths[0];
+
+                //Read from file
+                string text = System.IO.File.ReadAllText(filePath);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    return text;
+                }
+            }
+
+            Debug.LogError($"{LogChannel} Failed to parse Json, either filePath was invalid or the selected file was empty");
+            return null;
+        }
+
+        //Load ScenarioConfig from raw json
         private ScenarioConfig LoadConfig(string json)
         {
             if (string.IsNullOrEmpty(json))
@@ -108,7 +157,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
             //Deserialise from JSON
             List<string> errors = new List<string>();
-            ScenarioConfig config = JsonConvert.DeserializeObject<ScenarioConfig>(_scenarioJson,
+            ScenarioConfig config = JsonConvert.DeserializeObject<ScenarioConfig>(json,
                 new JsonSerializerSettings
                 {
                     Error = (sender, args) =>
