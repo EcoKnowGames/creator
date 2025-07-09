@@ -565,97 +565,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180a250c194b7ee42bd0a2646d5703b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scenarioJson: "{\r\n  \"AppVersion\": \"1.0\",\r\n  \"UnityVersion\": \"6000.0.49f1\",\r\n 
-    \"Scenario\": {\r\n    \"Name\": \"Wilderness Test\",\r\n    \"Rounds\": 8,\r\n   
-    \"ActionsPerRound\": 4,\r\n    \"StartCurrency\": 800000,\r\n    \"Seed\": 123456,\r\n   
-    \"Entities\": [\r\n      {\r\n        \"ID\": \"Hare\",\r\n        \"Icon\":
-    \"Icons/Icon_Hare\",\r\n        \"Colour\": \"FC9F4EFF\",\r\n        \"GrowthRate\":
-    1.4,\r\n        \"MovementRate\": 0.3,\r\n        \"VulnerableThreshold\": 30.0,\r\n       
-    \"AbundanceThreshold\": 300.0,\r\n        \"AutoPlace\": true,\r\n        \"CanHarvest\":
-    true,\r\n        \"CanIntroduce\": true,\r\n        \"HarvestQuantities\": [\r\n         
-    {\r\n            \"ID\": \"Rabbit Foot\",\r\n            \"Value\": 4\r\n         
-    },\r\n          {\r\n            \"ID\": \"Meat\",\r\n            \"Value\":
-    1\r\n          }\r\n        ],\r\n        \"IntroduceQuantities\": [\r\n         
-    {\r\n            \"ID\": \"currency\",\r\n            \"Value\": 50\r\n         
-    },\r\n          {\r\n            \"ID\": \"Rabbit Foot\",\r\n            \"Value\":
-    1\r\n          }\r\n        ]\r\n      },\r\n      {\r\n        \"ID\": \"Fox\",\r\n       
-    \"Icon\": \"Icons/Icon_Fox\",\r\n        \"Colour\": \"D2F62EFF\",\r\n       
-    \"GrowthRate\": 0.0,\r\n        \"MovementRate\": 0.2,\r\n        \"VulnerableThreshold\":
-    10.0,\r\n        \"AbundanceThreshold\": 150.0,\r\n        \"AutoPlace\": true,\r\n       
-    \"CanHarvest\": true,\r\n        \"CanIntroduce\": true,\r\n        \"HarvestQuantities\":
-    [\r\n          {\r\n            \"ID\": \"Meat\",\r\n            \"Value\": 5\r\n         
-    }\r\n        ],\r\n        \"IntroduceQuantities\": [\r\n          {\r\n           
-    \"ID\": \"currency\",\r\n            \"Value\": 50\r\n          },\r\n         
-    {\r\n            \"ID\": \"Rabbit Foot\",\r\n            \"Value\": 2\r\n         
-    }\r\n        ]\r\n      },\r\n      {\r\n        \"ID\": \"House\",\r\n       
-    \"Icon\": \"Icons/Icon_Building\",\r\n        \"Colour\": \"FC6969FF\",\r\n       
-    \"GrowthRate\": 0.0,\r\n        \"MovementRate\": 0.0,\r\n        \"VulnerableThreshold\":
-    0.0,\r\n        \"AbundanceThreshold\": 200.0,\r\n        \"AutoPlace\": false,\r\n       
-    \"CanHarvest\": false,\r\n        \"CanIntroduce\": true,\r\n        \"HarvestQuantities\":
-    null,\r\n        \"IntroduceQuantities\": [\r\n          {\r\n            \"ID\":
-    \"currency\",\r\n            \"Value\": 1\r\n          }\r\n        ]\r\n     
-    }\r\n    ],\r\n    \"Items\": [\r\n      {\r\n        \"ID\": \"Meat\",\r\n       
-    \"Icon\": null,\r\n        \"Value\": 5,\r\n        \"CanSell\": true\r\n     
-    },\r\n      {\r\n        \"ID\": \"Rabbit Foot\",\r\n        \"Icon\": \"Icons/Icon_Hare\",\r\n       
-    \"Value\": 10,\r\n        \"CanSell\": true\r\n      },\r\n      {\r\n       
-    \"ID\": \"Wood\",\r\n        \"Icon\": null,\r\n        \"Value\": 60,\r\n       
-    \"CanSell\": true\r\n      }\r\n    ],\r\n    \"WinConditions\": [\r\n      {\r\n       
-    \"Title\": \"Fox Population\",\r\n        \"Description\": \"Keep Fox Population
-    above 4000 for 3 rounds!\",\r\n        \"EntityIndex\": 1,\r\n        \"LowerLimit\":
-    4000.0,\r\n        \"UpperLimit\": 0.0,\r\n        \"RequiredRounds\": 3\r\n     
-    },\r\n      {\r\n        \"Title\": \"Hare Population\",\r\n        \"Description\":
-    \"Keep Hares within the range of 10000-20000\",\r\n        \"EntityIndex\": 0,\r\n       
-    \"LowerLimit\": 10000.0,\r\n        \"UpperLimit\": 50000.0,\r\n        \"RequiredRounds\":
-    -1\r\n      }\r\n    ],\r\n    \"Matrix\": {\r\n      \"entityIDs\": [\r\n       
-    \"Hare\",\r\n        \"Fox\",\r\n        \"House\"\r\n      ],\r\n      \"entityMatrix\":
-    [\r\n        [\r\n          -0.002,\r\n          0.001,\r\n          0.0\r\n       
-    ],\r\n        [\r\n          -0.002,\r\n          -0.004,\r\n          0.0\r\n       
-    ],\r\n        [\r\n          0.0,\r\n          0.0,\r\n          0.0\r\n       
-    ]\r\n      ]\r\n    },\r\n    \"Map\": {\r\n      \"fileName\": \"Level 1\",\r\n     
-    \"gridDef\": {\r\n        \"rows\": 6,\r\n        \"columns\": 12,\r\n       
-    \"tileIDs\": [\r\n          [\r\n            1,\r\n            4,\r\n           
-    1,\r\n            -1,\r\n            -1,\r\n            -1\r\n          ],\r\n         
-    [\r\n            1,\r\n            1,\r\n            6,\r\n            1,\r\n           
-    1,\r\n            -1\r\n          ],\r\n          [\r\n            1,\r\n           
-    1,\r\n            1,\r\n            1,\r\n            1,\r\n            -1\r\n         
-    ],\r\n          [\r\n            3,\r\n            3,\r\n            3,\r\n           
-    3,\r\n            1,\r\n            1\r\n          ],\r\n          [\r\n           
-    1,\r\n            1,\r\n            1,\r\n            3,\r\n            1,\r\n           
-    1\r\n          ],\r\n          [\r\n            1,\r\n            1,\r\n           
-    1,\r\n            3,\r\n            1,\r\n            1\r\n          ],\r\n         
-    [\r\n            1,\r\n            1,\r\n            1,\r\n            3,\r\n           
-    1,\r\n            1\r\n          ],\r\n          [\r\n            1,\r\n           
-    8,\r\n            1,\r\n            3,\r\n            1,\r\n            1\r\n         
-    ],\r\n          [\r\n            -1,\r\n            1,\r\n            1,\r\n           
-    3,\r\n            3,\r\n            3\r\n          ],\r\n          [\r\n           
-    -1,\r\n            1,\r\n            4,\r\n            1,\r\n            1,\r\n           
-    -1\r\n          ],\r\n          [\r\n            -1,\r\n            1,\r\n           
-    1,\r\n            1,\r\n            1,\r\n            -1\r\n          ],\r\n         
-    [\r\n            -1,\r\n            -1,\r\n            1,\r\n            1,\r\n           
-    1,\r\n            -1\r\n          ]\r\n        ]\r\n      }\r\n    }\r\n  }\r\n}"
-  _quantityJson: "{\r\n      \"fileName\": \"Level 1\",\r\n      \"gridDef\": {\r\n       
-    \"rows\": 6,\r\n        \"columns\": 12,\r\n        \"tileIDs\": [\r\n         
-    [\r\n            1,\r\n            4,\r\n            1,\r\n            -1,\r\n           
-    -1,\r\n            -1\r\n          ],\r\n          [\r\n            1,\r\n           
-    1,\r\n            6,\r\n            1,\r\n            1,\r\n            -1\r\n         
-    ],\r\n          [\r\n            1,\r\n            1,\r\n            1,\r\n           
-    1,\r\n            1,\r\n            -1\r\n          ],\r\n          [\r\n           
-    3,\r\n            3,\r\n            3,\r\n            3,\r\n            1,\r\n           
-    1\r\n          ],\r\n          [\r\n            1,\r\n            1,\r\n           
-    1,\r\n            3,\r\n            1,\r\n            1\r\n          ],\r\n         
-    [\r\n            1,\r\n            1,\r\n            1,\r\n            3,\r\n           
-    1,\r\n            1\r\n          ],\r\n          [\r\n            1,\r\n           
-    1,\r\n            1,\r\n            3,\r\n            1,\r\n            1\r\n         
-    ],\r\n          [\r\n            1,\r\n            8,\r\n            1,\r\n           
-    3,\r\n            1,\r\n            1\r\n          ],\r\n          [\r\n           
-    -1,\r\n            1,\r\n            1,\r\n            3,\r\n            3,\r\n           
-    3\r\n          ],\r\n          [\r\n            -1,\r\n            1,\r\n           
-    4,\r\n            1,\r\n            1,\r\n            -1\r\n          ],\r\n         
-    [\r\n            -1,\r\n            1,\r\n            1,\r\n            1,\r\n           
-    1,\r\n            -1\r\n          ],\r\n          [\r\n            -1,\r\n           
-    -1,\r\n            1,\r\n            1,\r\n            1,\r\n            -1\r\n         
-    ]\r\n        ]\r\n      }\r\n    }"
-  _scenarioNodeGraph: {fileID: 11400000, guid: 18c6127575fc0114a8ad5d88cef5c03f, type: 2}
   _entityManager: {fileID: 681165316}
   _gridManager: {fileID: 451632253}
   _playerInventory: {fileID: 30119242}
@@ -1008,6 +917,51 @@ MonoBehaviour:
   _inventoryPanel: {fileID: 5115763856819535920}
   _playerToolbar: {fileID: 1402807293}
   _resultsModal: {fileID: 9117195968787695510}
+--- !u!1 &1935254555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935254557}
+  - component: {fileID: 1935254556}
+  m_Layer: 0
+  m_Name: ScenarioLoader TEMP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1935254556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935254555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180c75c008f98e346b8a2ab50ac26269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scenarioNodeGraph: {fileID: 11400000, guid: 18c6127575fc0114a8ad5d88cef5c03f, type: 2}
+--- !u!4 &1935254557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935254555}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2132229872 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7013349579855628096, guid: 54b0fa8ffac88674f9eb9a500b366b42, type: 3}
@@ -2887,3 +2841,4 @@ SceneRoots:
   - {fileID: 451632254}
   - {fileID: 506862058}
   - {fileID: 1895389755}
+  - {fileID: 1935254557}
