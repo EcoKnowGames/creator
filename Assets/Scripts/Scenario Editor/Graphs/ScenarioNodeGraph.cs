@@ -7,6 +7,8 @@ using UnityEditor;
 using UnityEngine;
 using XNode;
 
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+
 //All data needed to create a scenario
 public record Scenario
     (
@@ -34,6 +36,69 @@ public record ScenarioConfig
 public class ScenarioNodeGraph : NodeGraph
 {
     [SerializeField] public ColourPaletteObject colourPalette;
+
+    [SerializeField] private string _appVersion;
+    [SerializeField] private string _unityVersion;
+    [SerializeField] private string _xNodeVersion;
+
+    public string AppVersion => _appVersion;
+    public string UnityVersion => _unityVersion;
+    public string XNodeVersion => _xNodeVersion;
+
+    void Reset()
+    {
+        _appVersion = Application.version;
+        _unityVersion = Application.unityVersion;
+
+        PackageInfo info = PackageInfo.FindForPackageName("com.github.siccity.xnode");
+        if (info != null)
+        {
+            _xNodeVersion = info.version;
+        }
+    }
+
+    private void OnEnable()
+    {
+#if UNITY_EDITOR
+        //TODO(caspar): Do we upgrade graphs to the latest version? But not downgrade? How do we resolve this? Do we upgrade when the user saves changes to the object?
+
+        string warningStr = string.Format($"Warning, The Scenario Graph \"{this.name}\" was created using a different version of the app. It may be incompatible and some nodes may not behave as expected.\n");
+        bool showWarning = false;
+
+        //Check App
+        if (_appVersion != Application.version)
+        {
+            showWarning = true;
+            warningStr += string.Format($"\nApp Version: {_appVersion}    (Current: {Application.version})");
+        }
+
+        //Check Unity
+        if (_unityVersion != Application.unityVersion)
+        {
+            showWarning = true;
+            warningStr += string.Format($"\nUnity Version: {_unityVersion}    (Current: {Application.unityVersion})");
+        }
+
+        //Check xNode
+        string xNodeCurrent = "Unknown";
+        PackageInfo info = PackageInfo.FindForPackageName("com.github.siccity.xnode");
+        if (info != null)
+        {
+            xNodeCurrent = info.version;
+        }
+
+        if (_xNodeVersion != xNodeCurrent)
+        {
+            showWarning = true;
+            warningStr += string.Format($"\nxNode Version: {_xNodeVersion}    (Current: {xNodeCurrent})");
+        }
+
+        if (showWarning)
+        {
+            EditorUtility.DisplayDialog("ERROR", warningStr, "OK");
+        }
+#endif
+    }
 
     public override Node AddNode(Type type)
     {
