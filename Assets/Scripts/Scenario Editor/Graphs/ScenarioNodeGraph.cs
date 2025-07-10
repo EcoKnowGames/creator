@@ -177,7 +177,7 @@ public class ScenarioNodeGraph : NodeGraph
            scenarioNode.StartCurrency,
            scenarioNode.Seed,
            GetEntityList().ToArray(),                //Note(caspar): I wanted to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
-           scenarioNode.ItemDefs.ToArray(),
+           scenarioNode.ItemDefs == null ? null : scenarioNode.ItemDefs.ToArray(),
            scenarioNode.WinConditions.ToArray(),
            scenarioNode.Matrix,
            scenarioNode.MapLayout
@@ -205,6 +205,12 @@ public class ScenarioNodeGraph : NodeGraph
         else
         {
             //Validation
+            if (string.IsNullOrEmpty(scenarioNode.Name))
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no name was defined for the Scenario!", "OK");
+                return;
+            }
+
             if (scenarioNode.MapLayout == null)
             {
                 EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no map was defined for the Scenario. Make sure a Map Node exists and is connected to the Scenario Node.", "OK");
@@ -229,7 +235,7 @@ public class ScenarioNodeGraph : NodeGraph
                 return;
             }
 
-            if (scenarioNode.WinConditions.Count() <= 0)
+            if (scenarioNode.WinConditions == null || scenarioNode.WinConditions.Count() <= 0)
             {
                 EditorUtility.DisplayDialog("ERROR", "Scenario export failed, no win conditions have been defined for the Scenario. Make sure at least one Win Condition Node exists and is connected to the Scenario Node.", "OK");
                 return;
