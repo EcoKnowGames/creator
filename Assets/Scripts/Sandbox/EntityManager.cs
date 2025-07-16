@@ -143,6 +143,36 @@ namespace Glitchers.EcoKnow.Sandbox
             return entityCounts;
         }
 
+        public Dictionary<string, int> GetPopulationsInCell(int column, int row)
+        {
+            Dictionary<string, int> populations = new Dictionary<string, int>();
+
+            for (int i = 0; i < EntityTypeCount; i++)
+            {
+                Entity type = _entityTypeList[i];
+                int population = _entityLookupTable[column, row, i];
+
+                populations.Add(type.ID, population);
+            }
+
+            return populations;
+        }
+
+        public Dictionary<string, int>[,] GetPopulationsByCell()
+        {
+            Dictionary<string, int>[,] populations = new Dictionary<string, int>[_entityLookupTable.GetLongLength(0), _entityLookupTable.GetLongLength(1)];
+
+            for (int column = 0; column < _entityLookupTable.GetLongLength(0); column++)
+            {
+                for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
+                {
+                    populations[column, row] = GetPopulationsInCell(column, row);
+                }
+            }
+
+            return populations;
+        }
+
         public int GetTotalPopulationOfEntityType(int index)
         {
             if (index >= _entityLookupTable.GetLongLength(2) || index < 0)
