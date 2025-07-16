@@ -10,11 +10,16 @@ namespace Glitchers.EcoKnow.Sandbox.Data
     [JsonConverter(typeof(StringEnumConverter))]
     public enum EventType { GAME_START, GAME_END, ROUND_END, INTRODUCE, HARVEST, SELL};
 
-    public record CellDataObject
+    /*public record CellDataObject
         (
             int X,
             int Y,
             Dictionary<string, int> Populations
+        );*/
+
+    public record MapDataObject
+        (
+            Dictionary<string, int>[,] Populations
         );
 
     public record WinConditionDataObject
@@ -31,6 +36,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             Dictionary<string, int> Populations,
             Dictionary<string, int> Inventory,
             List<WinConditionDataObject> WinConditions,
+            MapDataObject Map,
             System.Object Meta
         );
 
@@ -89,13 +95,6 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             DontDestroyOnLoad(gameObject);
         }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.P))
@@ -113,15 +112,11 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                 GetPopulations(),
                 GetInventory(),
                 GetWinConditions(),
+                GetMapPopulations(),
                 meta
-                );
+                ); ;
 
 
-            PushEvent(ev);
-        }
-
-        private void PushEvent(EventDataObject ev)
-        {
             if (_eventLog == null)
             {
                 _eventLog = new List<EventDataObject>();
@@ -194,11 +189,26 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             );
         }
 
-        //TODO(caspar): Do we fetch this from elsewhere, or keep all data gathering to this singleton?
         #region Data Gathering
+        private MapDataObject GetMapPopulations()
+        {
+            Dictionary<string, int>[,] populations = null;
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                populations = SandboxManager.Instance.EntityManager.GetPopulationsByCell();
+            }
+
+            MapDataObject mapData = new MapDataObject
+                (
+                    populations
+                );
+
+            return mapData;
+        }
+
         private Dictionary<string, int> GetPopulations()
         {
-            Dictionary<string, int> _populationList = new Dictionary<string, int>();
+            Dictionary<string, int> populationList = new Dictionary<string, int>();
 
             for (int i = 0; i < SandboxManager.Instance.EntityManager.EntityTypeCount; i++)
             {
@@ -206,11 +216,11 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                 if (entityType != null)
                 {
                     int total = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
-                    _populationList.Add(entityType.ID, total);
+                    populationList.Add(entityType.ID, total);
                 }
             }
 
-            return _populationList;
+            return populationList;
         }
 
         private Dictionary<string, int> GetInventory()
@@ -225,12 +235,11 @@ namespace Glitchers.EcoKnow.Sandbox.Data
 
         private List<WinConditionDataObject> GetWinConditions()
         {
-            List<WinConditionDataObject> _winConditionList = new List<WinConditionDataObject>();
+            List<WinConditionDataObject> winConditionList = new List<WinConditionDataObject>();
 
             for (int i = 0; i < SandboxManager.Instance.WinConditions.Count; i++)
             {
                 WinCondition winCondition = SandboxManager.Instance.WinConditions[i];
-
                 WinConditionDataObject data = new WinConditionDataObject
                     (
                         winCondition.title,
@@ -238,10 +247,10 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                         winCondition.ConsecutiveSuccesses
                     );
 
-                _winConditionList.Add(data);
+                winConditionList.Add(data);
             }
 
-            return _winConditionList;
+            return winConditionList;
         }
         #endregion
     }
