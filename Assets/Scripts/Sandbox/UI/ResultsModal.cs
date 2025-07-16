@@ -28,5 +28,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             Application.Quit();
         }
+
+        public void OnExportDataPressed()
+        {
+#if !UNITY_WEBGL
+            Data.DataManager.Instance.ShowSaveDialog(null, null);
+
+            //TODO(caspar): Do we want to allow data export on WebGL? This will likely require some js
+#endif
+        }
     }
 }

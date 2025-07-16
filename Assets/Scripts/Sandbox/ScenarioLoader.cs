@@ -50,8 +50,9 @@ namespace Glitchers.EcoKnow.Sandbox
 
         [Header("Scenario")]
         [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
-        private Scenario _lastPlayedScenario;
-        public Scenario LastPlayedScenario => _lastPlayedScenario;
+        private ScenarioConfig _loadedConfig;
+        public ScenarioConfig LoadedConfig => _loadedConfig;
+        public Scenario LastPlayedScenario => _loadedConfig == null ? null : _loadedConfig.Scenario;
 
         private const string LogChannel = "[ScenarioLoader]";
 
@@ -63,7 +64,7 @@ namespace Glitchers.EcoKnow.Sandbox
         #region Loading Scenario Config
         public static void ShowLoadDialog(Action<Scenario> onSuccess, Action onCancel)
         {
-            FileBrowser.SetDefaultFilter(".json");
+            FileBrowser.SetFilters(false, ".json");
             FileBrowser.ShowLoadDialog(
             (filePaths) =>
             {
@@ -74,7 +75,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     ScenarioConfig config = LoadConfig(rawJson);
                     if (config != null)
                     {
-                        Instance._lastPlayedScenario = config.Scenario;
+                        Instance._loadedConfig = config;
                         onSuccess?.Invoke(config.Scenario);
                     }
                 }
@@ -230,7 +231,7 @@ namespace Glitchers.EcoKnow.Sandbox
             ScenarioConfig config = ScenarioLoader.Instance.GetCurrentGraphConfig();
             if (config != null)
             {
-                _lastPlayedScenario = config.Scenario;
+                _loadedConfig = config;
                 SandboxManager.Instance.StartNewGame(config.Scenario);
             }
         }
