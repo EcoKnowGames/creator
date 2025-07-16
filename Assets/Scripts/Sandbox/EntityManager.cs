@@ -151,7 +151,6 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 Entity type = _entityTypeList[i];
                 int population = _entityLookupTable[column, row, i];
-
                 populations.Add(type.ID, population);
             }
 
@@ -452,7 +451,11 @@ namespace Glitchers.EcoKnow.Sandbox
                                             yPos >= 0 &&
                                             yPos < _entityLookupTable.GetLongLength(1))
                                     {
-                                        movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                        //Check for valid cell
+                                        if (_entityLookupTable[xPos, yPos, i] >= 0)
+                                        {
+                                            movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                        }
                                     }
                                 }
                             }
@@ -464,7 +467,11 @@ namespace Glitchers.EcoKnow.Sandbox
                     {
                         for (int row = 0; row < _entityLookupTable.GetLongLength(1); row++)
                         {
-                            _entityLookupTable[column, row, i] = Mathf.Max(_entityLookupTable[column, row, i] + movementTable[column, row, i], 0);
+                            //Check for valid cell
+                            if (_entityLookupTable[column, row, i] >= 0)
+                            {
+                                _entityLookupTable[column, row, i] = Mathf.Max(_entityLookupTable[column, row, i] + movementTable[column, row, i], 0);
+                            }
                         }
                     }
                 }
