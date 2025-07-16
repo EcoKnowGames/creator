@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Glitchers.EcoKnow.Sandbox.Data;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
-using Newtonsoft.Json;
-using SimpleFileBrowser;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
@@ -130,6 +129,9 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Set up all of our UI
                 _sandboxUI?.Init();
 
+                //Update Events
+                DataManager.Instance.RecordEvent(Data.EventType.GAME_START);
+
                 StartNewRound();
             }
         }
@@ -159,12 +161,20 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void OnRoundEnded()
         {
-            bool playerWins = AreWinConditionsMet();
-            bool finalRound = _currentRound >= _maxRounds - 1;
+            //Check our win conditions
+            foreach (WinCondition winCondition in _winConditions)
+            {
+                winCondition.OnNewRound();
+            }
 
+            //Now track data
+            Data.DataManager.Instance.RecordEvent(Data.EventType.ROUND_END);
+
+            //Branch based on current round number
+            bool finalRound = _currentRound >= _maxRounds - 1;
             if (finalRound)
             {
-                _sandboxUI?.OnGameEnded(playerWins == true ? Result.WIN : Result.LOSE);
+                EndGame();
             }
             else
             {
@@ -188,6 +198,14 @@ namespace Glitchers.EcoKnow.Sandbox
             //Update UI
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
         }
+
+        private void EndGame()
+        {
+            bool playerWins = AreWinConditionsMet();
+            _sandboxUI?.OnGameEnded(playerWins == true ? Result.WIN : Result.LOSE);
+            Data.DataManager.Instance.RecordEvent(Data.EventType.GAME_END);
+
+        }
         #endregion
 
         #region WinConditions
@@ -197,7 +215,6 @@ namespace Glitchers.EcoKnow.Sandbox
             int totalWinConditionsCompleted = 0;
             foreach (WinCondition winCondition in _winConditions)
             {
-                winCondition.OnNewRound();
                 totalWinConditionsCompleted += winCondition.Completed == true ? 1 : 0;
             }
 

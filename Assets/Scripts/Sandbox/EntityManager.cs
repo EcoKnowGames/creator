@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Glitchers.EcoKnow.Sandbox.Data;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
 
@@ -225,6 +226,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
                 Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
+                Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
                 OnEntityHarvested?.Invoke(column, row, index);
 
 
@@ -271,6 +273,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
                 Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
+                Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
                 OnEntityIntroduced?.Invoke(column, row, index);
 
                 return true;
