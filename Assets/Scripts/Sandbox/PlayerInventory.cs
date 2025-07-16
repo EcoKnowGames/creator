@@ -18,6 +18,7 @@ namespace Glitchers.EcoKnow.Sandbox
     {
         private List<Item> _itemDefs = new List<Item>();
         private Dictionary<string, int> _inventory = new Dictionary<string, int>();
+        public Dictionary<string, int> Inventory => _inventory;
 
         public const string CurrencyID = "currency"; //This currency is constant between all games and not dictated by a node
         public const string ActionID = "action"; //This currency is constant between all games and not dictated by a node
@@ -112,6 +113,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     RemoveItem(id, amount);
                     AddItem(CurrencyID, def.Value * amount);
 
+                    Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
                     OnItemSold?.Invoke(id, amount);
 
                     return true;
