@@ -110,10 +110,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
                 if (def != null)
                 {
+                    //Adjust inventory
                     RemoveItem(id, amount);
                     AddItem(CurrencyID, def.Value * amount);
 
-                    Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
                     OnItemSold?.Invoke(id, amount);
 
                     return true;

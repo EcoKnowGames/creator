@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SimpleFileBrowser;
@@ -7,46 +8,6 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Data
 {
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum EventType { GAME_START, GAME_END, ROUND_END, INTRODUCE, HARVEST, SELL};
-
-    /*public record CellDataObject
-        (
-            int X,
-            int Y,
-            Dictionary<string, int> Populations
-        );*/
-
-    public record MapDataObject
-        (
-            Dictionary<string, int>[,] Populations
-        );
-
-    public record WinConditionDataObject
-        (
-            string Title,
-            bool Completed,
-            int Streak
-        );
-
-    public record EventDataObject
-        (
-            EventType Type,
-            int Player,
-            Dictionary<string, int> Populations,
-            Dictionary<string, int> Inventory,
-            List<WinConditionDataObject> WinConditions,
-            MapDataObject Map,
-            System.Object Meta
-        );
-
-    public record GameDataObject
-        (
-            ScenarioConfig Config,
-            EventDataObject[] Events
-        );
-
-
     public class DataManager : MonoBehaviour
     {
         #region Singleton
@@ -89,6 +50,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         #endregion
 
         private List<EventDataObject> _eventLog;
+        public int RecordedEventCount => _eventLog.Count;
 
         private void Awake()
         {
@@ -103,8 +65,29 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
         }
 
-        public void RecordEvent(EventType type, System.Object meta = null)
+        public void RecordEvent(EventType type)
         {
+            if (_eventLog == null)
+            {
+                _eventLog = new List<EventDataObject>();
+            }
+
+            Dictionary<string, object> metaData = new Dictionary<string, object>();
+
+            //This works
+            if (type == EventType.SELL
+                || type == EventType.INTRODUCE
+                || type == EventType.HARVEST)
+            {
+                Dictionary<string, int> inventoryDiff = GetInventoryDifference(GetInventory());
+                if (inventoryDiff != null)
+                {
+                    //metaData.Add("InventoryChange", inventoryDiff);
+                }
+            }
+
+
+
             //Gather data here
             EventDataObject ev = new EventDataObject(
                 type,
@@ -113,14 +96,9 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                 GetInventory(),
                 GetWinConditions(),
                 GetMapPopulations(),
-                meta
-                ); ;
+                metaData// != null ? metaData.ToDictionary(x => x.Key, y => y.Object) : null
+                );
 
-
-            if (_eventLog == null)
-            {
-                _eventLog = new List<EventDataObject>();
-            }
 
             if (ev != null)
             {
@@ -252,6 +230,42 @@ namespace Glitchers.EcoKnow.Sandbox.Data
 
             return winConditionList;
         }
+        #endregion
+
+        #region Data Comparison
+        private Dictionary<string, int> GetInventoryDifference(Dictionary<string, int> current)
+        {
+            if (RecordedEventCount < 1)
+            {
+                return current;
+            }
+
+            Dictionary<string, int> previousInventory = _eventLog[RecordedEventCount - 1].Inventory;
+            if (previousInventory != null)
+            {
+                Dictionary<string, int> inventoryDiff = new Dictionary<string, int>(previousInventory);
+                foreach(KeyValuePair<string, int> item in current)
+                {
+                    if (previousInventory.ContainsKey(item.Key))
+                    {
+                        inventoryDiff[item.Key] = current[item.Key] - previousInventory[item.Key];
+                        if (inventoryDiff[item.Key] == 0)
+                        {
+                            inventoryDiff.Remove(item.Key);
+                        }
+                    }
+                    else
+                    {
+                        inventoryDiff.Remove(item.Key);
+                    }
+                }
+
+                return inventoryDiff;
+            }
+
+            return null;
+        }
+
         #endregion
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-    public enum PlayerAction { NONE, INTRODUCE, HARVEST };
+    public enum PlayerAction { NONE, INTRODUCE, HARVEST }; //SELL ?
 
     public class PlayerToolbar : MonoBehaviour
     {
@@ -32,6 +32,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 SandboxManager.Instance.GridManager.gridEvents.OnCellClicked += OnCellClicked;
             }
 
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityHarvested;
+                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityIntroduced;
+            }
+
             SetCurrentAction(PlayerAction.NONE);
 
             _modifyCellModal?.HideModal();
@@ -51,6 +57,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 ShowIntroduceModal(_selectedCell.GetCellEntities());
             }
         }
+
+        public void OnEntityHarvested(int column, int row, int id)
+        {
+            SetCurrentAction(PlayerAction.NONE);
+            OnActionSuccess();
+
+            Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
+        }
+
+        public void OnEntityIntroduced(int column, int row, int id)
+        {
+            SetCurrentAction(PlayerAction.NONE);
+            OnActionSuccess();
+
+            Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
+        }
+
 
         public void OnHarvestPressed()
         {
@@ -160,14 +183,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if ((_selectedCell != null) && (SandboxManager.Instance.EntityManager != null))
             {
+                //TODO(caspar): Rethink this -> Should we respond to an event rather than returning success?
                 bool success = false;
                 success = SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(_selectedCell.Column, _selectedCell.Row, index, amount);
 
-                if (success)
+                /*if (success)
                 {
                     SetCurrentAction(PlayerAction.NONE);
                     OnActionSuccess();
-                }
+
+                    Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
+                }*/
             }
         }
         #endregion
@@ -187,11 +213,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 bool success = false;
                 success = SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(_selectedCell.Column, _selectedCell.Row, index, amount);
 
-                if (success)
+                /*if (success)
                 {
                     SetCurrentAction(PlayerAction.NONE);
                     OnActionSuccess();
-                }
+
+                    Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
+                }*/
             }
         }
         #endregion
