@@ -62,6 +62,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void OnItemSold(string id, int amount)
         {
             RefreshInventory();
+
+            //TODO(caspar): Spend action point
+            Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
         }
     }
 }

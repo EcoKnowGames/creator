@@ -129,9 +129,6 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Set up all of our UI
                 _sandboxUI?.Init();
 
-                //Update Events
-                DataManager.Instance.RecordEvent(Data.EventType.GAME_START);
-
                 StartNewRound();
             }
         }
@@ -197,6 +194,12 @@ namespace Glitchers.EcoKnow.Sandbox
 
             //Update UI
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
+
+            if (_currentRound == 0)
+            {
+                //Capture here to make sure we have our starting action count and Player index
+                DataManager.Instance.RecordEvent(Data.EventType.GAME_START);
+            }
         }
 
         private void EndGame()
