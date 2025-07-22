@@ -181,6 +181,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 Cell cell = CastToCell();
                 if (cell != null)
                 {
+                    cell.OnClicked();
                     gridEvents.OnCellClicked?.Invoke(cell);
                 }
             }
