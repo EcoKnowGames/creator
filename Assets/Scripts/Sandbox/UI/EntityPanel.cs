@@ -10,9 +10,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Transform _entityButtonContainer;
         [SerializeField] private Button _entityButtonPrefab;
 
-        private int _selectedEntity = -1;
-        public int SelectedEntity => _selectedEntity;
-
         public Action<int> onEntitySelected;
 
         public void Init(Entity[] entities)
@@ -49,8 +46,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                 int entityIndex = i;
                 button.onClick.AddListener(delegate {
-                    _selectedEntity = entityIndex;
-                    onEntitySelected?.Invoke(_selectedEntity);
+                    onEntitySelected?.Invoke(entityIndex);
                 });
             }
 

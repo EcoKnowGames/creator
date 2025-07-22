@@ -104,7 +104,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 int.TryParse(_inputField.text, out modifyAmount);
             }
 
-            //Send data to the PlayerToolbar
+            //Send data to the SandboxUI
             onConfirmPressed?.Invoke(_selectedEntity, modifyAmount);
         }
 
@@ -224,7 +224,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
 
-            if (modifyAmount <= 0)
+            if (_selectedCells.Count <= 0)
             {
                 inventoryPrefix = "<color=red\">No cells selected!</color>\n";
             }
