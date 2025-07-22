@@ -37,13 +37,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (SandboxManager.Instance.EntityManager != null)
             {
-                for (int i = 0; i < SandboxManager.Instance.EntityManager.EntityTypeCount; i++)
+                Entity[] entityList = SandboxManager.Instance.EntityManager.GetEntityTypeList();
+                if (entityList != null)
                 {
-                    Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(i);
-                    if (entityType != null)
+                    for (int i = 0; i < entityList.Length; i++)
                     {
-                        int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
-                        _populationTotals.text += string.Format($"{population} / {entityType.ID}\n");
+                        Entity entityType = entityList[i];
+                        if (entityType != null)
+                        {
+                            int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
+                            _populationTotals.text += string.Format($"{population} / {entityType.ID}\n");
+                        }
                     }
                 }
             }

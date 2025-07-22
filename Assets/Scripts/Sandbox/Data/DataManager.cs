@@ -188,13 +188,20 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         {
             Dictionary<string, int> populationList = new Dictionary<string, int>();
 
-            for (int i = 0; i < SandboxManager.Instance.EntityManager.EntityTypeCount; i++)
+            if (SandboxManager.Instance.EntityManager != null)
             {
-                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(i);
-                if (entityType != null)
+                Entity[] entityList = SandboxManager.Instance.EntityManager.GetEntityTypeList();
+                if (entityList != null)
                 {
-                    int total = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
-                    populationList.Add(entityType.ID, total);
+                    for (int i = 0; i < entityList.Length; i++)
+                    {
+                        Entity entityType = entityList[i];
+                        if (entityType != null)
+                        {
+                            int total = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
+                            populationList.Add(entityType.ID, total);
+                        }
+                    }
                 }
             }
 

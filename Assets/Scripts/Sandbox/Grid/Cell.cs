@@ -32,6 +32,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
     public class Cell : MonoBehaviour
     {
         [SerializeField] protected GameObject highlightObject;
+        [SerializeField] protected GameObject selectedObject;
 
         [Header("Tokens")]
         [SerializeField] private Cell_Token _cellTokenPrefab;
@@ -99,11 +100,20 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
-        #region Highlight
+        #region Highlight and Selection
+        public void OnClicked()
+        {
+
+        }
 
         public void ShowHighlight(bool visible)
         {
             highlightObject?.SetActive(visible);
+        }
+
+        public void ShowSelected(bool visible)
+        {
+            selectedObject?.SetActive(visible);
         }
         #endregion
 
