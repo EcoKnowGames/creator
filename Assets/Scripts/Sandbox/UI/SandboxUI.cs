@@ -138,6 +138,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _playerToolbar?.SetActionText(_currentAction);
         }
 
+        private void OnActionSuccess(PlayerAction actionType)
+        {
+            SetCurrentAction(PlayerAction.NONE);
+            int actionsRemaining = SandboxManager.SpendAction();
+
+            if (actionType == PlayerAction.HARVEST)
+            {
+                Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
+            }
+            else if (actionType == PlayerAction.INTRODUCE)
+            {
+                Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
+            }
+
+            //Update some UI elements
+            _playerToolbar.UpdateActionsRemaining(actionsRemaining);
+        }
+
         private void OnActionCancelled()
         {
             SetCurrentAction(PlayerAction.NONE);
@@ -151,11 +169,30 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.ShowModal(PlayerAction.HARVEST, entityIndex, OnHarvestConfirmed, OnActionCancelled);
         }
 
-        protected void OnHarvestConfirmed(int index, int amount)
+        protected void OnHarvestConfirmed(int index, List<Cell> selectedCells, int amount)
         {
             _modifyCellModal?.HideModal();
 
-            //TODO(caspar): Harvest logic
+            int successCount = 0;
+            if ((SandboxManager.Instance.EntityManager != null) && (selectedCells.Count > 0))
+            {
+                foreach(Cell cell in selectedCells)
+                {
+                    if (SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, index, amount))
+                    {
+                        successCount += 1;
+                    }
+                }
+            }
+
+            if (successCount > 0)
+            {
+                OnActionSuccess(PlayerAction.HARVEST);
+            }
+            else
+            {
+                OnActionCancelled();
+            }
         }
         #endregion
 
@@ -165,11 +202,30 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnActionCancelled);
         }
 
-        protected void OnIntroduceConfirmed(int index, int amount)
+        protected void OnIntroduceConfirmed(int index, List<Cell> selectedCells, int amount)
         {
             _modifyCellModal?.HideModal();
 
-            //TODO(caspar): Introduce logic
+            int successCount = 0;
+            if ((SandboxManager.Instance.EntityManager != null) && (selectedCells.Count > 0))
+            {
+                foreach (Cell cell in selectedCells)
+                {
+                    if (SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, index, amount))
+                    {
+                        successCount += 1;
+                    }
+                }
+            }
+
+            if (successCount > 0)
+            {
+                OnActionSuccess(PlayerAction.INTRODUCE);
+            }
+            else
+            {
+                OnActionCancelled();
+            }
         }
         #endregion
     }

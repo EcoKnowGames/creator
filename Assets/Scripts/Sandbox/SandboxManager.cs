@@ -118,7 +118,6 @@ namespace Glitchers.EcoKnow.Sandbox
                 _entityManager.RegisterEntities(scenario.Entities.ToList());
                 _playerInventory.RegisterItemDefinitions(scenario.Items.ToList());
 
-
                 //Setup grid
                 GridDef gridDef = scenario.Map.gridDef;
                 _gridManager?.EnableGrid();
@@ -246,19 +245,27 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
+        //TODO(caspar): Move these to SandboxUI?
         #region Actions
         public static bool CanPerformAction()
         {
-            if (Instance != null)
+            if ((Instance != null) && (Instance.PlayerInventory != null))
             {
-                PlayerInventory inventory = Instance.PlayerInventory;
-                if (inventory != null)
-                {
-                    return inventory.GetAmountHeld(PlayerInventory.ActionID) > 0;
-                }
+                return Instance.PlayerInventory.GetAmountHeld(PlayerInventory.ActionID) > 0;
             }
 
             return false;
+        }
+
+        public static int SpendAction()
+        {
+            int actionsRemaining = 0;
+            if ((Instance != null) && (Instance.PlayerInventory != null))
+            {
+                actionsRemaining = Instance.PlayerInventory.RemoveItem(PlayerInventory.ActionID, 1);
+            }
+
+            return actionsRemaining;
         }
         #endregion
     }
