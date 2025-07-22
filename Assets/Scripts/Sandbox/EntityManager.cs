@@ -154,6 +154,17 @@ namespace Glitchers.EcoKnow.Sandbox
             return entityCounts;
         }
 
+        public int GetPopulationInCell(int column, int row, int index)
+        {
+            if (index >= _entityLookupTable.GetLongLength(2) || index < 0)
+            {
+                Debug.LogError($"{LogChannel} Failed to find population of Entity with index [{index}] in Cell [{column}, {row}], index is invalid!");
+                return 0;
+            }
+
+            return _entityLookupTable[column, row, index];
+        }
+
         public Dictionary<string, int> GetPopulationsInCell(int column, int row)
         {
             Dictionary<string, int> populations = new Dictionary<string, int>();
@@ -266,28 +277,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
                 Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-
-                //TODO(caspar): This whole thing needs to be refactored once the new Harvest/Introduce mechanics are implemented
-                //Create metadata for inventory and entities
-                /*Dictionary<string, int> populationChanges = new Dictionary<string, int>();
-                for (int i = 0; i < EntityTypeCount; i++)
-                {
-                    if (i == index)
-                    {
-                        populationChanges.Add(type.ID, -amount);
-                    }
-                    else
-                    {
-                        populationChanges.Add(_entityTypeList[i].ID, 0);
-                    }
-                }
-
-                List<CellDataObject> cellDataList = new List<CellDataObject>();
-                cellDataList.Add(new CellDataObject(column, row, populationChanges));*/
-
-                //DataManager.Instance.RecordEvent(Data.EventType.HARVEST);//, new MetaDataObject[] { new CellMetaDataObject(cellDataList), new InventoryMetaDataObject(type.HarvestQuantities.ToDictionary(x => x.ID, y => y.Value * Math.Abs(difference))) });
                 OnEntityHarvested?.Invoke(column, row, index);
-
 
                 return true;
             }
@@ -332,26 +322,6 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
                 Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-
-                //TODO(caspar): This whole thing needs to be refactored once the new Harvest/Introduce mechanics are implemented
-                //Create metadata for inventory and entities
-                /*Dictionary<string, int> populationChanges = new Dictionary<string, int>();
-                for (int i = 0; i < EntityTypeCount; i++)
-                {
-                    if (i == index)
-                    {
-                        populationChanges.Add(type.ID, amount);
-                    }
-                    else
-                    {
-                        populationChanges.Add(_entityTypeList[i].ID, 0);
-                    }
-                }
-
-                List<CellDataObject> cellDataList = new List<CellDataObject>();
-                cellDataList.Add(new CellDataObject(column, row, populationChanges));*/
-
-                //DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);//, new MetaDataObject[] { new CellMetaDataObject(cellDataList), new InventoryMetaDataObject(type.IntroduceQuantities.ToDictionary(x => x.ID, y => -y.Value * amount)) });
                 OnEntityIntroduced?.Invoke(column, row, index);
 
                 return true;

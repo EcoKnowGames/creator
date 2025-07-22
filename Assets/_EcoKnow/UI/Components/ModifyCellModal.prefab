@@ -328,8 +328,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -55.7}
-  m_SizeDelta: {x: 178.19, y: 0}
+  m_AnchoredPosition: {x: 300, y: -30}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7957665553524071963
 CanvasRenderer:
@@ -496,7 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _title: {fileID: 3125082587184143469}
   _inputField: {fileID: 5215382476635356401}
-  _selectedID: {fileID: 4123436376137978312}
+  _selectedEntityText: {fileID: 0}
   _selectedPopulation: {fileID: 8422062948060693148}
   _inventoryChange: {fileID: 3628012184187608522}
   _confirmButton: {fileID: 8218015211915189771}
@@ -535,8 +535,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -158.275}
-  m_SizeDelta: {x: 89.41, y: 0}
+  m_AnchoredPosition: {x: 300, y: -70}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9159478454696604727
 CanvasRenderer:
@@ -1512,8 +1512,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -248.38501}
-  m_SizeDelta: {x: 268.03, y: 0}
+  m_AnchoredPosition: {x: 300, y: -140}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2621288498064021947
 CanvasRenderer:
@@ -1738,7 +1738,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -124.81}
+  m_AnchoredPosition: {x: 300, y: -60}
   m_SizeDelta: {x: 113.63, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3308762951844842986
@@ -2213,8 +2213,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 300, y: -303.44}
-  m_SizeDelta: {x: 385.41, y: 30}
+  m_AnchoredPosition: {x: 300, y: -185}
+  m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1948767947724514725
 MonoBehaviour:

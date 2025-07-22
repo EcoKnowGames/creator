@@ -304,14 +304,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         public void OnEntityUpdated(int column, int row, int id)
         {
-            if (column < 0 || row < 0 || column >= columns || row >= rows)
-            {
-                Debug.LogError($"{LogChannel} Failed to update entities in Cell [{column}, {row}], location out of bounds!");
-                return;
-            }
-
             UpdateAllCells(); //We need to update all cells so that the proportional percentage reflects Harvest/Introduce changes
-            //cellList[column, row].UpdateEntityCount();
         }
 
         public void UpdateAllCells()
