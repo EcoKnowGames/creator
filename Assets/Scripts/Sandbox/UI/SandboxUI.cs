@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
+    public enum PlayerAction { NONE, INTRODUCE, HARVEST }; //SELL ?
+
     public class SandboxUI : MonoBehaviour
     {
         [SerializeField] private EntityPanel _entityPanel;
@@ -13,7 +15,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ObjectivePanel _objectivePanel;
         [SerializeField] private InventoryPanel _inventoryPanel;
         [SerializeField] private PlayerToolbar _playerToolbar;
+        [SerializeField] private ModifyCellModal _modifyCellModal;
         [SerializeField] private ResultsModal _resultsModal;
+
+        private int _selectedEntityIndex = 0;
+        private PlayerAction _currentAction = PlayerAction.NONE;
+
+        private const string LogChannel = "[SandboxUI]";
 
         #region Setup
         public void Init(Entity[] entities)
@@ -23,10 +31,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _objectivePanel?.Init();
             _inventoryPanel?.Init();
             _playerToolbar?.Init();
+            _modifyCellModal?.HideModal();
             _resultsModal?.HideModal();
 
             //Subscribe to UI events
             _entityPanel.onEntitySelected += OnEntitySelected;
+
+            SetCurrentAction(PlayerAction.NONE);
 
             //Force rebuild
             foreach (RectTransform child in this.GetComponentsInChildren<RectTransform>())
@@ -38,10 +49,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void OnEntitySelected(int entityIndex)
         {
-            //TODO(caspar): Open the toolbar with the requested entity type
-            _playerToolbar?.ShowToolbar(entityIndex);
+            //Forces reset
+            if (entityIndex != _selectedEntityIndex)
+            {
+                _modifyCellModal?.HideModal();
+            }
+
+            //Clamp just in case?
+            int maxIndex = 0;
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                maxIndex = SandboxManager.Instance.EntityManager.EntityTypeCount;
+            }
+
+            _selectedEntityIndex = Mathf.Clamp(entityIndex, 0, maxIndex);
+            _playerToolbar?.ShowToolbar(_selectedEntityIndex);
         }
 
+        #region Game Lifecycle
         public void OnGameEnded(SandboxManager.Result result)
         {
             _resultsModal?.ShowModal(result.ToString());
@@ -55,5 +80,97 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _inventoryPanel?.RefreshInventory();
             _playerToolbar?.UpdateActionsRemaining(actions);
         }
+        #endregion
+
+        #region Actions
+        public void OnHarvestSelected()
+        {
+            if (SandboxManager.CanPerformAction())
+            {
+                SetCurrentAction(PlayerAction.HARVEST);
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Cannot select action, no action points remaining!");
+            }
+        }
+
+        public void OnIntroduceSelected()
+        {
+            if (SandboxManager.CanPerformAction())
+            {
+                SetCurrentAction(PlayerAction.INTRODUCE);
+            }
+            else
+            {
+                Debug.LogError($"{LogChannel} Cannot select action, no action points remaining!");
+            }
+        }
+
+        private void SetCurrentAction(PlayerAction action)
+        {
+            _currentAction = action;
+
+            switch (_currentAction)
+            {
+                case (PlayerAction.HARVEST):
+                    {
+                        ShowHarvestModal(_selectedEntityIndex);
+                        break;
+                    }
+
+                case (PlayerAction.INTRODUCE):
+                    {
+                        ShowIntroduceModal(_selectedEntityIndex);
+                        break;
+                    }
+                case (PlayerAction.NONE):
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+
+            //TODO(caspar): We won't need this later, but useful for now
+            _playerToolbar?.SetActionText(_currentAction);
+        }
+
+        private void OnActionCancelled()
+        {
+            SetCurrentAction(PlayerAction.NONE);
+            _playerToolbar?.HideToolbar();
+        }
+        #endregion
+
+        #region Harvest
+        private void ShowHarvestModal(int entityIndex)
+        {
+            _modifyCellModal?.ShowModal(PlayerAction.HARVEST, entityIndex, OnHarvestConfirmed, OnActionCancelled);
+        }
+
+        protected void OnHarvestConfirmed(int index, int amount)
+        {
+            _modifyCellModal?.HideModal();
+
+            //TODO(caspar): Harvest logic
+        }
+        #endregion
+
+        #region Introduce
+        private void ShowIntroduceModal(int entityIndex)
+        {
+            _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnActionCancelled);
+        }
+
+        protected void OnIntroduceConfirmed(int index, int amount)
+        {
+            _modifyCellModal?.HideModal();
+
+            //TODO(caspar): Introduce logic
+        }
+        #endregion
     }
 }
