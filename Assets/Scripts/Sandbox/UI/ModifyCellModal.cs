@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Glitchers.EcoKnow.Sandbox.Grid;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Glitchers.EcoKnow.Sandbox.Grid;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -15,19 +16,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _selectedPopulation;
         [SerializeField] private TMP_Text _inventoryChange;
 
-        [Header("Entity")]
-        [SerializeField] private Transform _entityButtonContainer;
-        [SerializeField] private Button _entityButtonPrefab;
-
         [Header("Buttons")]
         [SerializeField] private Button _confirmButton;
 
         Action<int, int> onConfirmPressed;
+        Action onCancelPressed;
 
         private int _selectedEntity = 0;
+        private List<Cell> _selectedCells = new List<Cell>();
         private PlayerAction _actionType;
 
-        public void ShowModal(PlayerAction action, CellEntity[] entities, Action<int, int> onConfirm)
+        public void ShowModal(PlayerAction action, int entityIndex, Action<int, int> onConfirm, Action onCancelled)
         {
             SetTitle(action.ToString());
             _actionType = action;
@@ -38,7 +37,18 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             onConfirmPressed = onConfirm;
-            PopulateEntityOptions(entities);
+            onCancelPressed = onCancelled;
+
+            //Just in case we re-open the modal in a different mode?
+            //TODO(caspar): This will probably have a better solution once the real UI is in place
+            UnsubscribeFromEvents();
+            SubscribeToEvents();
+
+            //TODO(caspar): We are repeating ourselves -> maybe we just need to run Hide first?
+            ClearSelectedCells();
+
+            _selectedEntity = entityIndex;
+            RefreshEntityOptions();
 
             this.gameObject.SetActive(true);
         }
@@ -46,30 +56,79 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void HideModal()
         {
             this.gameObject.SetActive(false);
+
+            ClearSelectedCells();
+            UnsubscribeFromEvents();
         }
 
+        private void SubscribeToEvents()
+        {
+            if (SandboxManager.Instance.GridManager != null)
+            {
+                SandboxManager.Instance.GridManager.gridEvents.OnCellClicked += OnCellClicked;
+            }
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            if (SandboxManager.Instance.GridManager != null)
+            {
+                SandboxManager.Instance.GridManager.gridEvents.OnCellClicked -= OnCellClicked;
+            }
+        }
+
+
         #region Callbacks
+        public void OnCellClicked(Cell cell)
+        {
+            if (_selectedCells.Contains(cell))
+            {
+                _selectedCells.Remove(cell);
+                cell.ShowSelected(false);
+            }
+            else
+            {
+                _selectedCells.Add(cell);
+                cell.ShowSelected(true);
+            }
+
+            RefreshEntityOptions();
+        }
+
+
         public void OnConfirmPressed()
         {
             int modifyAmount = 1;
-
             if (_inputField != null)
             {
                 int.TryParse(_inputField.text, out modifyAmount);
             }
 
-            //Send data to the PlayerToolbar?
+            //Send data to the PlayerToolbar
             onConfirmPressed?.Invoke(_selectedEntity, modifyAmount);
         }
 
         public void OnCancelPressed()
         {
             HideModal();
+            onCancelPressed?.Invoke();
         }
 
         public void OnInputModified()
         {
-            UpdateInventoryChange(_selectedEntity);
+            RefreshEntityOptions();
+        }
+        #endregion
+
+        #region Cells and Entities
+        private void ClearSelectedCells()
+        {
+            foreach (Cell cell in _selectedCells)
+            {
+                cell.ShowSelected(false);
+            }
+
+            _selectedCells.Clear();
         }
         #endregion
 
@@ -90,43 +149,26 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
             }
         }
-        private void PopulateEntityOptions(CellEntity[] entities)
+        private void RefreshEntityOptions()
         {
-            _selectedEntity = 0;
-            
-            if ((_entityButtonPrefab == null) || (_entityButtonContainer == null) || (_selectedID == null) || (_selectedPopulation == null))
+            if ((_selectedID == null) || (_selectedPopulation == null) || (SandboxManager.Instance.EntityManager == null))
             {
                 return;
             }
 
-            _selectedID.text = string.Format($"Selected: {entities[_selectedEntity].ID}");
-            _selectedPopulation.text = string.Format($"Current Population: {entities[_selectedEntity].Population}");
-            UpdateInventoryChange(_selectedEntity);
-
-            foreach (Transform child in _entityButtonContainer)
+            Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(_selectedEntity);
+            if (entityType != null)
             {
-                Destroy(child.gameObject);
+                int totalPopulation = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(_selectedEntity);
+
+                _selectedID.text = string.Format($"Selected: {entityType.ID}");
+                _selectedPopulation.text = string.Format($"Current Population: {totalPopulation}");
+                UpdateInventoryChange(_selectedEntity);
             }
 
-            for (int i = 0; i < entities.Length; i++)
-            {
-                Button button = Instantiate(_entityButtonPrefab, _entityButtonContainer);
-
-                TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-                if (buttonText != null)
-                {
-                    buttonText.text = entities[i].ID;
-                }
-
-                int entityIndex = i;
-                button.onClick.AddListener( delegate {
-                    _selectedEntity = entityIndex;
-                    _selectedID.text = string.Format($"Selected: {entities[entityIndex].ID}");
-                    _selectedPopulation.text = string.Format($"Current Population: {entities[entityIndex].Population}");
-                    UpdateInventoryChange(entityIndex);
-                } );
-            }
-
+            //Refresh layout
+            //TODO(caspar): Do we still need to do this now that we don't have buttons?
+            //Might be useful for the new UI anyway
             if (this.GetComponent<RectTransform>() != null)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
@@ -137,6 +179,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if ((_inventoryChange == null) || (SandboxManager.Instance.EntityManager == null))
             {
+                //TODO(caspar): Error
+                return;
+            }
+
+            if (_selectedCells == null)
+            {
+                //TODO(caspar): Error
                 return;
             }
 
@@ -146,9 +195,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 int.TryParse(_inputField.text, out modifyAmount);
             }
 
+            modifyAmount *= _selectedCells.Count;
+
             string inventoryList = string.Empty;
             string inventoryPrefix = string.Empty;
-            
+
             //Figure out cost
             bool canPerformAction = true;
             Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(entityIndex);
@@ -172,14 +223,22 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
             }
 
-            //Sort out prefix now we know what the cost is
-            if (canPerformAction)
+
+            if (modifyAmount <= 0)
             {
-                inventoryPrefix = _actionType == PlayerAction.HARVEST ? "You will gain:\n" : "You will spend:\n";
+                inventoryPrefix = "<color=red\">No cells selected!</color>\n";
             }
             else
-            {
-                inventoryPrefix = "You cannot afford this action:\n";
+            { 
+                //Sort out prefix now we know what the cost is
+                if (canPerformAction)
+                {
+                    inventoryPrefix = _actionType == PlayerAction.HARVEST ? "You will gain:\n" : "You will spend:\n";
+                }
+                else
+                {
+                    inventoryPrefix = "You cannot afford this action:\n";
+                }
             }
 
 

@@ -127,7 +127,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 _entityManager.AddEntitiesToGrid(_gridManager);
 
                 //Set up all of our UI
-                _sandboxUI?.Init();
+                _sandboxUI?.Init(_entityManager.GetEntityTypeList());
 
                 StartNewRound();
             }

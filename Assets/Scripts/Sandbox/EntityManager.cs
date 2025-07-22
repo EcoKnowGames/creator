@@ -112,6 +112,17 @@ namespace Glitchers.EcoKnow.Sandbox
             return _entityTypeList[index];
         }
 
+        public Entity[] GetEntityTypeList()
+        {
+            if ((_entityTypeList == null) || (_entityTypeList.Length <= 0))
+            {
+                Debug.LogError($"{LogChannel} Failed to return Entity Type List, list is null or empty!");
+                return null;
+            }
+
+            return _entityTypeList;
+        }
+
         public CellEntity[] GetEntitiesForCell(int column, int row)
         {
             CellEntity[] entityCounts = new CellEntity[EntityTypeCount];
