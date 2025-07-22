@@ -245,5 +245,21 @@ namespace Glitchers.EcoKnow.Sandbox
             }
         }
         #endregion
+
+        #region Actions
+        public static bool CanPerformAction()
+        {
+            if (Instance != null)
+            {
+                PlayerInventory inventory = Instance.PlayerInventory;
+                if (inventory != null)
+                {
+                    return inventory.GetAmountHeld(PlayerInventory.ActionID) > 0;
+                }
+            }
+
+            return false;
+        }
+        #endregion
     }
 }
