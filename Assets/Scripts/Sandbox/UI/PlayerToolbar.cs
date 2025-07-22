@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using TMPro;
 using UnityEngine;
@@ -11,6 +11,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     public class PlayerToolbar : MonoBehaviour
     {
         private PlayerAction _currentAction = PlayerAction.NONE;
+        public PlayerAction CurrentAction => _currentAction;
 
         [Header("UI Elements")]
         [SerializeField] private TMP_Text _activeModeText;
@@ -21,17 +22,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Button _harvestButton;
         [SerializeField] private Button _introduceButton;
 
-        private Cell _selectedCell = null;
+        private int _selectedEntityIndex = 0;
 
         private const string LogChannel = "[Toolbar]";
 
         public void Init()
         {
-            if (SandboxManager.Instance.GridManager != null)
-            {
-                SandboxManager.Instance.GridManager.gridEvents.OnCellClicked += OnCellClicked;
-            }
-
             if (SandboxManager.Instance.EntityManager != null)
             {
                 SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityHarvested;
@@ -41,21 +37,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             SetCurrentAction(PlayerAction.NONE);
 
             _modifyCellModal?.HideModal();
+            HideToolbar();
         }
 
 
-        public void OnCellClicked(Cell cell)
+        public void ShowToolbar(int entityIndex)
         {
-            if (_currentAction == PlayerAction.HARVEST)
+            if (entityIndex != _selectedEntityIndex)
             {
-                _selectedCell = cell;
-                ShowHarvestModal(_selectedCell.GetCellEntities());
+                _modifyCellModal?.HideModal();
             }
-            else if (_currentAction == PlayerAction.INTRODUCE)
-            {
-                _selectedCell = cell;
-                ShowIntroduceModal(_selectedCell.GetCellEntities());
-            }
+
+            _selectedEntityIndex = entityIndex;
+            this.gameObject.SetActive(true);
+        }
+
+        public void HideToolbar()
+        {
+            this.gameObject.SetActive(false);
         }
 
         public void OnEntityHarvested(int column, int row, int id)
@@ -106,9 +105,19 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             switch (_currentAction)
             {
+                case (PlayerAction.HARVEST):
+                    {
+                        ShowHarvestModal(_selectedEntityIndex);
+                        break;
+                    }
+
+                case (PlayerAction.INTRODUCE):
+                    {
+                        ShowIntroduceModal(_selectedEntityIndex);
+                        break;
+                    }
                 case (PlayerAction.NONE):
                     {
-                        _selectedCell = null;
                         break;
                     }
                 default:
@@ -149,6 +158,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             UpdateActionsRemaining(actionsRemaining);
         }
 
+        private void OnActionCancelled()
+        {
+            SetCurrentAction(PlayerAction.NONE);
+            HideToolbar();
+        }
+
         public void UpdateActionsRemaining(int actions)
         {
             if (_actionsRemainingText != null)
@@ -172,55 +187,79 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #endregion
 
         #region Harvest
-        private void ShowHarvestModal(CellEntity[] cellEntities)
+        private void ShowHarvestModal(int entityIndex)
         {
-            _modifyCellModal?.ShowModal(PlayerAction.HARVEST, cellEntities, OnHarvestConfirmed);
+            _modifyCellModal?.ShowModal(PlayerAction.HARVEST, entityIndex, OnHarvestConfirmed, OnActionCancelled);
         }
 
         protected void OnHarvestConfirmed(int index, int amount)
         {
             _modifyCellModal?.HideModal();
 
-            if ((_selectedCell != null) && (SandboxManager.Instance.EntityManager != null))
+
+            /*if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
+            {
+                foreach(Cell cell in _selectedCells)
+                {
+                    //TODO(caspar): We might want to change this so that we return CanHarvest before harvesting all of the cells?
+                    bool success = false;
+                    success = SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, index, amount);
+                }
+            }*/
+
+
+
+            /*if ((_selectedCell != null) && (SandboxManager.Instance.EntityManager != null))
             {
                 //TODO(caspar): Rethink this -> Should we respond to an event rather than returning success?
                 bool success = false;
                 success = SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(_selectedCell.Column, _selectedCell.Row, index, amount);
 
-                /*if (success)
-                {
-                    SetCurrentAction(PlayerAction.NONE);
-                    OnActionSuccess();
-
-                    Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
-                }*/
-            }
+                //if (success)
+                //{
+                //    SetCurrentAction(PlayerAction.NONE);
+                //   OnActionSuccess();
+                //
+                //    Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
+                //}
+            }*/
         }
         #endregion
 
         #region Introduce
-        private void ShowIntroduceModal(CellEntity[] cellEntities)
+        private void ShowIntroduceModal(int entityIndex)
         {
-            _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, cellEntities, OnIntroduceConfirmed);
+            _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnActionCancelled);
         }
 
         protected void OnIntroduceConfirmed(int index, int amount)
         {
             _modifyCellModal?.HideModal();
 
-            if ((_selectedCell != null) && (SandboxManager.Instance.EntityManager != null))
+            /*if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
+            {
+                foreach (Cell cell in _selectedCells)
+                {
+                    //TODO(caspar): We might want to change this so that we return CanIntroduce before introducing to all of the cells?
+                    bool success = false;
+                    success = SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, index, amount);
+                }
+            }*/
+
+
+            /*if ((_selectedCell != null) && (SandboxManager.Instance.EntityManager != null))
             {
                 bool success = false;
                 success = SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(_selectedCell.Column, _selectedCell.Row, index, amount);
 
-                /*if (success)
-                {
-                    SetCurrentAction(PlayerAction.NONE);
-                    OnActionSuccess();
-
-                    Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
-                }*/
-            }
+                //if (success)
+                //{
+                //    SetCurrentAction(PlayerAction.NONE);
+                //    OnActionSuccess();
+                //
+                //    Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
+                //}
+            }*/
         }
         #endregion
     }
