@@ -6,23 +6,24 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-    public enum PlayerAction { NONE, INTRODUCE, HARVEST }; //SELL ?
+    //NOTE(caspar): Ideally we slim this down to UI elements only, with functionality/logic moved elsewhere
+    //This will become the expanded objectives panel, with some entity and win condition info and the HARVEST/INTRODUCE buttons
 
     public class PlayerToolbar : MonoBehaviour
     {
-        private PlayerAction _currentAction = PlayerAction.NONE;
-        public PlayerAction CurrentAction => _currentAction;
+        //private PlayerAction _currentAction = PlayerAction.NONE;
+        //public PlayerAction CurrentAction => _currentAction;
 
         [Header("UI Elements")]
         [SerializeField] private TMP_Text _activeModeText;
         [SerializeField] private TMP_Text _actionsRemainingText;
-        [SerializeField] private ModifyCellModal _modifyCellModal;
+        //[SerializeField] private ModifyCellModal _modifyCellModal;
 
         [Header("Buttons")]
         [SerializeField] private Button _harvestButton;
         [SerializeField] private Button _introduceButton;
 
-        private int _selectedEntityIndex = 0;
+        //private int _selectedEntityIndex = 0;
 
         private const string LogChannel = "[Toolbar]";
 
@@ -34,21 +35,21 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityIntroduced;
             }
 
-            SetCurrentAction(PlayerAction.NONE);
+            //SetCurrentAction(PlayerAction.NONE);
 
-            _modifyCellModal?.HideModal();
+            //_modifyCellModal?.HideModal();
             HideToolbar();
         }
 
 
         public void ShowToolbar(int entityIndex)
         {
-            if (entityIndex != _selectedEntityIndex)
+            /*if (entityIndex != _selectedEntityIndex)
             {
                 _modifyCellModal?.HideModal();
             }
 
-            _selectedEntityIndex = entityIndex;
+            _selectedEntityIndex = entityIndex;*/
             this.gameObject.SetActive(true);
         }
 
@@ -57,9 +58,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             this.gameObject.SetActive(false);
         }
 
+        public void SetActionText(PlayerAction action)
+        {
+            if (_activeModeText != null)
+            {
+                _activeModeText.text = action.ToString();
+            }
+        }
+
         public void OnEntityHarvested(int column, int row, int id)
         {
-            SetCurrentAction(PlayerAction.NONE);
+            //SetCurrentAction(PlayerAction.NONE);
             OnActionSuccess();
 
             Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
@@ -67,14 +76,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnEntityIntroduced(int column, int row, int id)
         {
-            SetCurrentAction(PlayerAction.NONE);
+            //SetCurrentAction(PlayerAction.NONE);
             OnActionSuccess();
 
             Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
         }
 
 
-        public void OnHarvestPressed()
+        /*public void OnHarvestPressed()
         {
             if (CanPerformAction())
             {
@@ -96,10 +105,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 Debug.LogError($"{LogChannel} Cannot select action, no action points remaining!");
             }
-        }
+        }*/
 
         #region Actions
-        private void SetCurrentAction(PlayerAction action)
+        /*private void SetCurrentAction(PlayerAction action)
         {
             _currentAction = action;
 
@@ -131,9 +140,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 _activeModeText.text = _currentAction.ToString();
             }
-        }
+        }*/
 
-        private bool CanPerformAction()
+        /*private bool CanPerformAction()
         {
             PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
             if (inventory != null)
@@ -142,7 +151,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             return false;
-        }
+        }*/
 
         private void OnActionSuccess()
         {
@@ -158,11 +167,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             UpdateActionsRemaining(actionsRemaining);
         }
 
-        private void OnActionCancelled()
+        /*private void OnActionCancelled()
         {
             SetCurrentAction(PlayerAction.NONE);
             HideToolbar();
-        }
+        }*/
 
         public void UpdateActionsRemaining(int actions)
         {
@@ -187,14 +196,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #endregion
 
         #region Harvest
-        private void ShowHarvestModal(int entityIndex)
+        /*private void ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(PlayerAction.HARVEST, entityIndex, OnHarvestConfirmed, OnActionCancelled);
         }
 
         protected void OnHarvestConfirmed(int index, int amount)
         {
-            _modifyCellModal?.HideModal();
+            _modifyCellModal?.HideModal();*/
 
 
             /*if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
@@ -223,18 +232,18 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 //    Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
                 //}
             }*/
-        }
+        //}
         #endregion
 
         #region Introduce
-        private void ShowIntroduceModal(int entityIndex)
+        /*private void ShowIntroduceModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnActionCancelled);
-        }
+        }*/
 
-        protected void OnIntroduceConfirmed(int index, int amount)
+        /*protected void OnIntroduceConfirmed(int index, int amount)
         {
-            _modifyCellModal?.HideModal();
+            _modifyCellModal?.HideModal();*/
 
             /*if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
             {
@@ -260,7 +269,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 //    Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
                 //}
             }*/
-        }
+        //}
         #endregion
     }
 }
