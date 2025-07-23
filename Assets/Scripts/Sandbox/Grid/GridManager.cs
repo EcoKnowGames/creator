@@ -8,11 +8,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 {
     public delegate void CellEvent(Cell inCell);
 
-    public class GridEvents
-    {
-        public CellEvent OnCellClicked;
-    }
-
     [System.Serializable]
     public class GridDef
     {
@@ -40,7 +35,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         [Header("Prefabs")]
         [SerializeField] protected GameObject cellPrefab;
 
-        public GridEvents gridEvents = new GridEvents();
+        //Events
+        public CellEvent OnCellClicked;
 
         private Cell[,] cellList;
 
@@ -182,7 +178,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 if (cell != null)
                 {
                     cell.OnClicked();
-                    gridEvents.OnCellClicked?.Invoke(cell);
+                    OnCellClicked?.Invoke(cell);
                 }
             }
         }
