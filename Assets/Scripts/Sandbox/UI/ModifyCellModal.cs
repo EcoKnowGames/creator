@@ -18,40 +18,57 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Buttons")]
         [SerializeField] private Button _confirmButton;
+        [SerializeField] private GameObject _unitTypeContainer;
 
-        Action<int, List<Cell>, int> onConfirmPressed;
+        Action<int, List<Cell>, UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
 
         private int _selectedEntityIndex = 0;
         private List<Cell> _selectedCells = new List<Cell>();
-        private PlayerAction _actionType;
+        private ModifyMode _modifyMode;
 
-        private int ModifyAmount
+        public enum UnitMode { DISCRETE, PERCENT };
+        private UnitMode _unitMode = UnitMode.DISCRETE;
+
+        private float InputValue
         {
             get
             {
-                int modifyAmount = 0;
+                float inputValue = 0f;
                 if (_inputField != null)
                 {
-                    int.TryParse(_inputField.text, out modifyAmount);
+                    float.TryParse(_inputField.text, out inputValue);
                 }
 
-                return modifyAmount;
+                //No negatives!
+                if (inputValue < 0f)
+                {
+                    inputValue = 0f;
+                }
+
+                return inputValue;
             }
         }
 
-        public void ShowModal(PlayerAction action, int entityIndex, Action<int, List<Cell>, int> onConfirm, Action onCancelled)
+        public void ShowModal(ModifyMode mode, int entityIndex, Action<int, List<Cell>, UnitMode, float> onConfirm, Action onCancelled)
         {
-            SetTitle(action.ToString());
-            _actionType = action;
+            SetTitle(mode.ToString());
+            _modifyMode = mode;
 
+            onConfirmPressed = onConfirm;
+            onCancelPressed = onCancelled;
+
+            if (_unitTypeContainer != null)
+            {
+                _unitTypeContainer.SetActive(_modifyMode == ModifyMode.HARVEST);
+            }
+
+            //Always start with Discrete mode
+            _unitMode = UnitMode.DISCRETE;
             if (_inputField != null)
             {
                 _inputField.text = "10";
             }
-
-            onConfirmPressed = onConfirm;
-            onCancelPressed = onCancelled;
 
             //Just in case we re-open the modal in a different mode?
             //TODO(caspar): This will probably have a better solution once the real UI is in place
@@ -81,7 +98,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (SandboxManager.Instance.GridManager != null)
             {
-                SandboxManager.Instance.GridManager.gridEvents.OnCellClicked += OnCellClicked;
+                SandboxManager.Instance.GridManager.OnCellClicked += OnCellClicked;
             }
         }
 
@@ -89,7 +106,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (SandboxManager.Instance.GridManager != null)
             {
-                SandboxManager.Instance.GridManager.gridEvents.OnCellClicked -= OnCellClicked;
+                SandboxManager.Instance.GridManager.OnCellClicked -= OnCellClicked;
             }
         }
 
@@ -116,7 +133,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             //Send data to the SandboxUI
             //Create new cell list just in case it gets modified at all during anims
-            onConfirmPressed?.Invoke(_selectedEntityIndex, new List<Cell>(_selectedCells), ModifyAmount);
+            onConfirmPressed?.Invoke(_selectedEntityIndex, new List<Cell>(_selectedCells), _unitMode, InputValue);
         }
 
         public void OnCancelPressed()
@@ -125,11 +142,64 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             onCancelPressed?.Invoke();
         }
 
+        public void OnPercentPressed()
+        {
+            //Failsafe -> No percentage unit mode in Introduce
+            if (_modifyMode == ModifyMode.INTRODUCE)
+            {
+                return;
+            }
+
+            _unitMode = UnitMode.PERCENT;
+            if (_inputField != null)
+            {
+                _inputField.contentType = TMP_InputField.ContentType.DecimalNumber;
+            }
+
+            OnInputModified();
+        }
+
+        public void OnDiscretePressed()
+        {
+            _unitMode = UnitMode.DISCRETE;
+            if (_inputField != null)
+            {
+                _inputField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            }
+
+            OnInputModified();
+        }
+
         public void OnInputModified()
         {
+            ValidateInput();
             UpdateModal();
         }
+
+        public void ValidateInput()
+        {
+            if (_unitMode == UnitMode.DISCRETE)
+            {
+                if (InputValue <= 0)
+                {
+                    if (_inputField != null)
+                    {
+                        _inputField.text = "0";
+                    }
+                }
+            }
+            else if (_unitMode == UnitMode.PERCENT)
+            {
+                float clampedInput = Mathf.Clamp(InputValue, 0f, 100f);
+                if (_inputField != null)
+                {
+                    _inputField.text = clampedInput.ToString();
+                }
+            }
+        }
         #endregion
+
+
 
         #region Cells and Entities
         private void ClearSelectedCells()
@@ -201,12 +271,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(_selectedEntityIndex);
                 if (entityType != null)
                 {
-                    Quantity[] requirements = _actionType == PlayerAction.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
+                    Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
                     if (requirements != null)
                     {
                         foreach (Quantity quantity in requirements)
                         {
-                            bool hasQuantity = _actionType == PlayerAction.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, Mathf.Abs(actualDifference)) : true;
+                            bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, Mathf.Abs(actualDifference)) : true;
                             if (!hasQuantity)
                             {
                                 canPerformAction = false;
@@ -241,19 +311,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //For HARVEST, This will depend on the amount of available entities in each cell
             //For INTRODUCE, this is just the amount * cellcount
             int actualDifference = 0;
-            if (_actionType == PlayerAction.HARVEST)
+            if (_modifyMode == ModifyMode.HARVEST)
             {
                 //Get actual change based on valid populations
                 foreach (Cell cell in _selectedCells)
                 {
                     int cellPopulation = SandboxManager.Instance.EntityManager.GetPopulationInCell(cell.Column, cell.Row, _selectedEntityIndex);
-                    int newPopulation = Mathf.Max(cellPopulation - ModifyAmount, 0);
+                    int modifyAmount = _unitMode == UnitMode.DISCRETE ? Mathf.FloorToInt(InputValue) : Mathf.FloorToInt(cellPopulation * (InputValue / 100f));
+                    int newPopulation = Mathf.Max(cellPopulation - modifyAmount, 0);
                     actualDifference += newPopulation - cellPopulation;
                 }
             }
-            else if (_actionType == PlayerAction.INTRODUCE)
+            else if (_modifyMode == ModifyMode.INTRODUCE)
             {
-                actualDifference = ModifyAmount * _selectedCells.Count;
+                actualDifference = Mathf.FloorToInt(InputValue) * _selectedCells.Count; //Discrete only in Introduce Mode
             }
 
             return actualDifference;

@@ -245,7 +245,6 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
-        //TODO(caspar): Move these to SandboxUI?
         #region Actions
         public static bool CanPerformAction()
         {
@@ -257,7 +256,7 @@ namespace Glitchers.EcoKnow.Sandbox
             return false;
         }
 
-        public static int SpendAction()
+        public static int SpendActionPoint()
         {
             int actionsRemaining = 0;
             if ((Instance != null) && (Instance.PlayerInventory != null))

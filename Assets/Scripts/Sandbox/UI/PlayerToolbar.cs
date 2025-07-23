@@ -34,7 +34,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             this.gameObject.SetActive(false);
         }
 
-        public void SetActionText(PlayerAction action)
+        public void SetModifyModeText(ModifyMode action)
         {
             if (_activeModeText != null)
             {
