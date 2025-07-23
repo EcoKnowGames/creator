@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-    public enum PlayerAction { NONE, INTRODUCE, HARVEST }; //SELL ?
+    //TODO(caspar): Maybe "Modify Mode" needs to live in a Modify handler script rather than at the top level of the SandboxUI
+    public enum ModifyMode { NONE, INTRODUCE, HARVEST };
 
     public class SandboxUI : MonoBehaviour
     {
@@ -19,7 +20,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ResultsModal _resultsModal;
 
         private int _selectedEntityIndex = 0;
-        private PlayerAction _currentAction = PlayerAction.NONE;
+        private ModifyMode _currentMode = ModifyMode.NONE;
 
         private const string LogChannel = "[SandboxUI]";
 
@@ -37,7 +38,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //Subscribe to UI events
             _entityPanel.onEntitySelected += OnEntitySelected;
 
-            SetCurrentAction(PlayerAction.NONE);
+            SetCurrentMode(ModifyMode.NONE);
 
             //Force rebuild
             foreach (RectTransform child in this.GetComponentsInChildren<RectTransform>())
@@ -82,12 +83,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         }
         #endregion
 
-        #region Actions
+        #region Harvest and Introduce
         public void OnHarvestSelected()
         {
             if (SandboxManager.CanPerformAction())
             {
-                SetCurrentAction(PlayerAction.HARVEST);
+                SetCurrentMode(ModifyMode.HARVEST);
             }
             else
             {
@@ -99,7 +100,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (SandboxManager.CanPerformAction())
             {
-                SetCurrentAction(PlayerAction.INTRODUCE);
+                SetCurrentMode(ModifyMode.INTRODUCE);
             }
             else
             {
@@ -107,24 +108,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private void SetCurrentAction(PlayerAction action)
+        private void SetCurrentMode(ModifyMode mode)
         {
-            _currentAction = action;
+            _currentMode = mode;
 
-            switch (_currentAction)
+            switch (_currentMode)
             {
-                case (PlayerAction.HARVEST):
+                case (ModifyMode.HARVEST):
                     {
                         ShowHarvestModal(_selectedEntityIndex);
                         break;
                     }
 
-                case (PlayerAction.INTRODUCE):
+                case (ModifyMode.INTRODUCE):
                     {
                         ShowIntroduceModal(_selectedEntityIndex);
                         break;
                     }
-                case (PlayerAction.NONE):
+                case (ModifyMode.NONE):
                     {
                         break;
                     }
@@ -135,30 +136,30 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             //TODO(caspar): We won't need this later, but useful for now
-            _playerToolbar?.SetActionText(_currentAction);
+            _playerToolbar?.SetModifyModeText(_currentMode);
         }
 
-        private void OnActionSuccess(PlayerAction actionType)
+        private void OnModifySuccess(ModifyMode modifyMode)
         {
-            SetCurrentAction(PlayerAction.NONE);
-            int actionsRemaining = SandboxManager.SpendAction();
+            SetCurrentMode(ModifyMode.NONE);
+            int actionsRemaining = SandboxManager.SpendActionPoint();
 
-            if (actionType == PlayerAction.HARVEST)
+            if (modifyMode == ModifyMode.HARVEST)
             {
                 Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
             }
-            else if (actionType == PlayerAction.INTRODUCE)
+            else if (modifyMode == ModifyMode.INTRODUCE)
             {
                 Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
             }
 
             //Update some UI elements
-            _playerToolbar.UpdateActionsRemaining(actionsRemaining);
+            _playerToolbar?.UpdateActionsRemaining(actionsRemaining);
         }
 
-        private void OnActionCancelled()
+        private void OnModifyCancelled()
         {
-            SetCurrentAction(PlayerAction.NONE);
+            SetCurrentMode(ModifyMode.NONE);
             _playerToolbar?.HideToolbar();
         }
         #endregion
@@ -166,10 +167,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Harvest
         private void ShowHarvestModal(int entityIndex)
         {
-            _modifyCellModal?.ShowModal(PlayerAction.HARVEST, entityIndex, OnHarvestConfirmed, OnActionCancelled);
+            _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnHarvestConfirmed, OnModifyCancelled);
         }
 
-        protected void OnHarvestConfirmed(int index, List<Cell> selectedCells, int amount)
+        protected void OnHarvestConfirmed(int index, List<Cell> selectedCells, ModifyCellModal.UnitMode unitMode, float amount)
         {
             _modifyCellModal?.HideModal();
 
@@ -178,7 +179,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 foreach(Cell cell in selectedCells)
                 {
-                    if (SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, index, amount))
+                    int currentPopulation = cell.GetCellEntities()[index].Population;
+                    int actualAmount = unitMode == ModifyCellModal.UnitMode.DISCRETE ? Mathf.FloorToInt(amount) : Mathf.FloorToInt(currentPopulation * (amount / 100f));
+                    if (SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, index, actualAmount))
                     {
                         successCount += 1;
                     }
@@ -187,11 +190,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (successCount > 0)
             {
-                OnActionSuccess(PlayerAction.HARVEST);
+                OnModifySuccess(ModifyMode.HARVEST);
             }
             else
             {
-                OnActionCancelled();
+                OnModifyCancelled();
             }
         }
         #endregion
@@ -199,10 +202,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Introduce
         private void ShowIntroduceModal(int entityIndex)
         {
-            _modifyCellModal?.ShowModal(PlayerAction.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnActionCancelled);
+            _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnIntroduceConfirmed, OnModifyCancelled);
         }
 
-        protected void OnIntroduceConfirmed(int index, List<Cell> selectedCells, int amount)
+        protected void OnIntroduceConfirmed(int index, List<Cell> selectedCells, ModifyCellModal.UnitMode unitMode, float amount)
         {
             _modifyCellModal?.HideModal();
 
@@ -211,7 +214,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 foreach (Cell cell in selectedCells)
                 {
-                    if (SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, index, amount))
+                    int actualAmount = Mathf.FloorToInt(amount);
+                    if (SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, index, actualAmount))
                     {
                         successCount += 1;
                     }
@@ -220,11 +224,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (successCount > 0)
             {
-                OnActionSuccess(PlayerAction.INTRODUCE);
+                OnModifySuccess(ModifyMode.INTRODUCE);
             }
             else
             {
-                OnActionCancelled();
+                OnModifyCancelled();
             }
         }
         #endregion
