@@ -51,8 +51,8 @@ namespace Glitchers.EcoKnow.Sandbox
         //X, Y, entityIndex
         private int[,,] _entityLookupTable;
 
-        public EntityEvent OnEntityHarvested;
-        public EntityEvent OnEntityIntroduced;
+        public EntityEvent onEntityHarvested;
+        public EntityEvent onEntityIntroduced;
 
         private const string LogChannel = "[EntityManager]";
 
@@ -277,7 +277,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.AddQuantities(type.HarvestQuantities, Math.Abs(difference));
                 Debug.Log($"{LogChannel} [HARVEST Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-                OnEntityHarvested?.Invoke(column, row, index);
+                onEntityHarvested?.Invoke(column, row, index);
 
                 return true;
             }
@@ -322,7 +322,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.PlayerInventory.RemoveQuantities(type.IntroduceQuantities, amount);
                 Debug.Log($"{LogChannel} [INTRODUCE Entity {index}] Current: {currentPopulation} / New: {newPopulation} / Difference: {difference}");
 
-                OnEntityIntroduced?.Invoke(column, row, index);
+                onEntityIntroduced?.Invoke(column, row, index);
 
                 return true;
             }
