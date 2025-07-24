@@ -10,14 +10,21 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     {
         [Header("Player Side Panel")]
         [SerializeField] private RoundIndicator _roundIndicator;
-        [SerializeField] private CurrencyPanel _currencyCounter;
+        [SerializeField] private CurrencyCounter _currencyCounter;
+        [SerializeField] private CurrencyCounter _actionPointCounter;
 
-
+        [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
         [SerializeField] private ObjectivePanel _objectivePanel;
-        [SerializeField] private InventoryPanel _inventoryPanel;
         [SerializeField] private PlayerToolbar _playerToolbar;
+
+        [Header("Modification Panels")]
         [SerializeField] private ModifyCellManager _modifyCellManager;
+
+        [Header("Inventory")]
+        [SerializeField] private InventoryPanel _inventoryPanel;
+
+        [Header("Results")]
         [SerializeField] private ResultsModal _resultsModal;
 
         private int _selectedEntityIndex = 0;
@@ -34,8 +41,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellManager?.Init();
             _resultsModal?.HideModal();
 
-            _currencyCounter?.Refresh();
-            _inventoryPanel?.RefreshInventory();
+            RefreshInventories();
 
             //Subscribe to UI events
             _entityPanel.onEntitySelected += OnEntitySelected;
@@ -82,9 +88,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
             _objectivePanel?.UpdatePopulations();
             _objectivePanel?.UpdateWinConditions();
-            _inventoryPanel?.RefreshInventory();
             _modifyCellManager?.ExitModifyMode();
             _playerToolbar?.UpdateActionsRemaining(actions);
+
+            RefreshInventories();
         }
         #endregion
 
@@ -111,14 +118,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnEntityUpdated(int column, int row, int id)
         {
             _objectivePanel?.OnEntityUpdated(column, row, id);
-            _inventoryPanel?.RefreshInventory();
         }
         #endregion
 
         #region Inventory
         private void OnInventoryUpdated(string id, int amount)
         {
-            _currencyCounter?.Refresh();
+            RefreshInventories();
+        }
+
+        private void RefreshInventories()
+        {
+            PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                _currencyCounter.SetCurrencyText(inventory.GetAmountHeld(PlayerInventory.CurrencyID));
+                _actionPointCounter?.SetCurrencyText(inventory.GetAmountHeld(PlayerInventory.ActionID));
+            }
+
             _inventoryPanel?.RefreshInventory();
         }
         #endregion
@@ -133,6 +150,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             int actionsRemaining = SandboxManager.GetAvailableActionPoints();
             _playerToolbar?.UpdateActionsRemaining(actionsRemaining);
+
+            RefreshInventories();
         }
 
         private void OnExitModifyMode()
