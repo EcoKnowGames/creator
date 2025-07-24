@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,33 +9,69 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class InventoryPanel : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _currency;
-        [SerializeField] private TMP_Text _inventoryList;
+        [Header("Item Widgets")]
+        [SerializeField] private int _widgetCount = 4;
+        [SerializeField] private Transform _widgetContainer;
+        [SerializeField] ItemWidget[] _enabledWidgets;
+        [SerializeField] ItemWidget[] _disabledWidgets;
 
+        /*[SerializeField] private TMP_Text _currency;
+        [SerializeField] private TMP_Text _inventoryList;
+        */
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         public void RefreshInventory()
         {
+            DisableWidgets();
+
+            if ((_enabledWidgets == null) || (_disabledWidgets == null)
+                || (_enabledWidgets.Count() <= 0) || (_disabledWidgets.Count() <= 0))
+            {
+                //TODO(caspar): error
+                return;
+            }
+
             PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
             if (inventory != null)
             {
-                _currency.text = string.Format($"£{inventory.GetAmountHeld(PlayerInventory.CurrencyID)}");
-    
+                List<Tuple<Item, int>> sortedInventory = inventory.GetItemInventory()
+                    .OrderByDescending(x => x.Item2)
+                    .Where(x => !x.Item1.ID.Equals(PlayerInventory.CurrencyID) && !x.Item1.ID.Equals(PlayerInventory.ActionID))
+                    .ToList();
 
-                _inventoryList.text = string.Empty;
-                foreach(Tuple<Item, int> item in inventory.GetItemInventory())
+                for (int i = 0; i < 4; i++)
                 {
-                    _inventoryList.text += string.Format($"{item.Item1.ID}: {item.Item2}\n");
+                    if (i < sortedInventory.Count)
+                    {
+                        Tuple<Item, int> item = sortedInventory[i];
+                        ItemWidget widget = _enabledWidgets[i];
+
+                        //Show our item in a widget
+                        widget.SetIcon(item.Item1.Icon);
+                        widget.SetQuantity(item.Item2);
+                        widget.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        //Activate a disabled widget
+                        ItemWidget widget = _disabledWidgets[i];
+                        widget.gameObject.SetActive(true);
+                    }
                 }
+
+                //todo
+            }
+        }
+
+        private void DisableWidgets()
+        {
+            foreach(ItemWidget widget in _enabledWidgets)
+            {
+                widget.gameObject.SetActive(false);
             }
 
-            //Temp -> This whole UI will be revamped in the future but this works for now to prevent issues with layouts
-            if (this.GetComponent<RectTransform>() != null)
+            foreach (ItemWidget widget in _disabledWidgets)
             {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
-            }
-            if (this.GetComponentInParent<RectTransform>() != null)
-            {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponentInParent<RectTransform>());
+                widget.gameObject.SetActive(false);
             }
         }
     }
