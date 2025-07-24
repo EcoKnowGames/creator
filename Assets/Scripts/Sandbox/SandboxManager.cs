@@ -96,6 +96,8 @@ namespace Glitchers.EcoKnow.Sandbox
                 Debug.Log($"Scenario Name is: {scenario.Name}");
                 Debug.Log($"Map Layout is: {scenario.Map.fileName}");
 
+                Cleanup();
+
                 //Setup Random
                 Random.InitState(scenario.Seed);
 
@@ -126,7 +128,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 _entityManager.AddEntitiesToGrid(_gridManager);
 
                 //Set up all of our UI
-                _sandboxUI?.Init(_entityManager.GetEntityTypeList());
+                _sandboxUI?.Init(_entityManager, _playerInventory);
 
                 StartNewRound();
             }
@@ -138,6 +140,13 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 StartNewGame(ScenarioLoader.Instance.LastPlayedScenario);
             }
+        }
+
+        private void Cleanup()
+        {
+            _gridManager?.Cleanup();
+            _playerInventory.Cleanup();
+            _sandboxUI.Cleanup();
         }
         #endregion
 

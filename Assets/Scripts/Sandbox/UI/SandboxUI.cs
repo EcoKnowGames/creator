@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-
-
     public class SandboxUI : MonoBehaviour
     {
-        [SerializeField] private EntityPanel _entityPanel;
+        [Header("Player Side Panel")]
         [SerializeField] private RoundIndicator _roundIndicator;
+        [SerializeField] private CurrencyPanel _currencyCounter;
+
+
+        [SerializeField] private EntityPanel _entityPanel;
         [SerializeField] private ObjectivePanel _objectivePanel;
         [SerializeField] private InventoryPanel _inventoryPanel;
         [SerializeField] private PlayerToolbar _playerToolbar;
@@ -24,15 +26,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private const string LogChannel = "[SandboxUI]";
 
         #region Setup
-        public void Init(Entity[] entities)
+        public void Init(EntityManager entityManager, PlayerInventory playerInventory)
         {
             //Initialise our components
-            _entityPanel?.Init(entities);
-            _objectivePanel?.Init();
-            _inventoryPanel?.Init();
+            _entityPanel?.Init(entityManager.GetEntityTypeList());
             _playerToolbar?.Init();
             _modifyCellManager?.Init();
             _resultsModal?.HideModal();
+
+            _currencyCounter?.Refresh();
+            _inventoryPanel?.RefreshInventory();
 
             //Subscribe to UI events
             _entityPanel.onEntitySelected += OnEntitySelected;
@@ -40,14 +43,52 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellManager.onExitModifyMode += OnExitModifyMode;
             _modifyCellManager.onModifySuccess += OnModifySuccess;
 
+            //Subscribe to other events
+            if (entityManager != null)
+            {
+                entityManager.onEntityHarvested += OnEntityUpdated;
+                entityManager.onEntityIntroduced += OnEntityUpdated;
+            }
+            if (playerInventory != null)
+            {
+                playerInventory.onItemSold += OnInventoryUpdated;
+            }
+
             //Force rebuild
             foreach (RectTransform child in this.GetComponentsInChildren<RectTransform>())
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(child);
             }
         }
+
+        public void Cleanup()
+        {
+            _entityPanel?.Cleanup();
+            _modifyCellManager?.Cleanup();
+
+            //TODO(caspar): We need to unsubscribe from the events as well
+            //They're set to null but I don't know if I want to do that
+        }
         #endregion
 
+        #region Game Lifecycle
+        public void OnGameEnded(SandboxManager.Result result)
+        {
+            _resultsModal?.ShowModal(result.ToString());
+        }
+
+        public void OnNewRoundStarted(int currentRound, int maxRounds, int actions)
+        {
+            _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
+            _objectivePanel?.UpdatePopulations();
+            _objectivePanel?.UpdateWinConditions();
+            _inventoryPanel?.RefreshInventory();
+            _modifyCellManager?.ExitModifyMode();
+            _playerToolbar?.UpdateActionsRemaining(actions);
+        }
+        #endregion
+
+        #region Entities
         private void OnEntitySelected(int entityIndex)
         {
             //Forces reset
@@ -67,26 +108,22 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _playerToolbar?.ShowToolbar(_selectedEntityIndex);
         }
 
-        #region Game Lifecycle
-        public void OnGameEnded(SandboxManager.Result result)
+        private void OnEntityUpdated(int column, int row, int id)
         {
-            _resultsModal?.ShowModal(result.ToString());
-        }
-
-        public void OnNewRoundStarted(int currentRound, int maxRounds, int actions)
-        {
-            _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
-            _objectivePanel?.UpdatePopulations();
-            _objectivePanel?.UpdateWinConditions();
+            _objectivePanel?.OnEntityUpdated(column, row, id);
             _inventoryPanel?.RefreshInventory();
-            _modifyCellManager?.ExitModifyMode();
-            _playerToolbar?.UpdateActionsRemaining(actions);
+        }
+        #endregion
+
+        #region Inventory
+        private void OnInventoryUpdated(string id, int amount)
+        {
+            _currencyCounter?.Refresh();
+            _inventoryPanel?.RefreshInventory();
         }
         #endregion
 
         #region Modify Mode
-        
-
         private void OnEnterModifyMode(ModifyMode mode)
         {
             _playerToolbar?.SetModifyModeText(mode);
