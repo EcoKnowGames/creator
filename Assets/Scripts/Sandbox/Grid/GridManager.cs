@@ -95,8 +95,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         {
             if (SandboxManager.Instance.EntityManager != null)
             {
-                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.onEntityHarvested += OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.onEntityIntroduced += OnEntityUpdated;
+            }
+        }
+
+        public void Cleanup()
+        {
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                SandboxManager.Instance.EntityManager.onEntityHarvested -= OnEntityUpdated;
+                SandboxManager.Instance.EntityManager.onEntityIntroduced -= OnEntityUpdated;
             }
         }
 
@@ -139,11 +148,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             }
 
             gridCamera.Init(this);
-        }
-
-        public void Cleanup()
-        {
-
         }
 
         public void EnableGrid()

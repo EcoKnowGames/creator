@@ -38,6 +38,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+        public void Cleanup()
+        {
+            ExitModifyMode();
+
+            onEnterModifyMode = null;
+            onModifySuccess = null;
+            onExitModifyMode = null;
+
+            if (SandboxManager.Instance.GridManager != null)
+            {
+                SandboxManager.Instance.GridManager.OnCellClicked -= OnCellClicked;
+            }
+        }
+
         #region Callbacks
         public void OnHarvestSelected()
         {

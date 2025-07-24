@@ -10,24 +10,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _currency;
         [SerializeField] private TMP_Text _inventoryList;
 
-
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        public void Init()
-        {
-            if (SandboxManager.Instance.EntityManager != null)
-            {
-                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityUpdated;
-            }
-
-            if (SandboxManager.Instance.PlayerInventory != null)
-            {
-                SandboxManager.Instance.PlayerInventory.OnItemSold += OnItemSold;
-            }
-
-            RefreshInventory();
-        }
-
         public void RefreshInventory()
         {
             PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
@@ -52,19 +35,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponentInParent<RectTransform>());
             }
-        }
-
-        public void OnEntityUpdated(int column, int row, int id)
-        {
-            RefreshInventory();
-        }
-
-        public void OnItemSold(string id, int amount)
-        {
-            RefreshInventory();
-
-            //TODO(caspar): Spend action point
-            Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
         }
     }
 }

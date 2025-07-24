@@ -8,24 +8,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _populationTotals;
         [SerializeField] private TMP_Text _winConditions;
 
-        public void Init()
-        {
-            if (SandboxManager.Instance.EntityManager != null)
-            {
-                SandboxManager.Instance.EntityManager.OnEntityHarvested += OnEntityUpdated;
-                SandboxManager.Instance.EntityManager.OnEntityIntroduced += OnEntityUpdated;
-            }
-        }
-
-        public void OnDestroy()
-        {
-            //if (SandboxManager.Instance.EntityManager != null)
-            //{
-                //SandboxManager.Instance.EntityManager.OnEntityHarvested -= OnEntityUpdated;
-                //SandboxManager.Instance.EntityManager.OnEntityIntroduced -= OnEntityUpdated;
-            //}
-        }
-
         public void UpdatePopulations()
         {
             if (_populationTotals == null)
@@ -76,7 +58,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        protected void OnEntityUpdated(int column, int row, int id)
+        public void OnEntityUpdated(int column, int row, int id)
         {
             UpdatePopulations();
             UpdateWinConditions();
