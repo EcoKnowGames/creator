@@ -20,11 +20,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Button _confirmButton;
         [SerializeField] private GameObject _unitTypeContainer;
 
-        Action<int, List<Cell>, UnitMode, float> onConfirmPressed;
+        Action<UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
+        Action onInputModified;
 
         private int _selectedEntityIndex = 0;
-        private List<Cell> _selectedCells = new List<Cell>();
         private ModifyMode _modifyMode;
 
         public enum UnitMode { DISCRETE, PERCENT };
@@ -50,11 +50,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void ShowModal(ModifyMode mode, int entityIndex, Action<int, List<Cell>, UnitMode, float> onConfirm, Action onCancelled)
+        public void ShowModal(ModifyMode mode, int entityIndex, Action onInput, Action<UnitMode, float> onConfirm, Action onCancelled)
         {
             SetTitle(mode.ToString());
             _modifyMode = mode;
 
+            onInputModified = onInput;
             onConfirmPressed = onConfirm;
             onCancelPressed = onCancelled;
 
@@ -70,18 +71,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _inputField.text = "10";
             }
 
-            //Just in case we re-open the modal in a different mode?
-            //TODO(caspar): This will probably have a better solution once the real UI is in place
-            UnsubscribeFromEvents();
-            SubscribeToEvents();
-
-            //TODO(caspar): We are repeating ourselves -> maybe we just need to run Hide first?
-            ClearSelectedCells();
-
             //Update entity info
             _selectedEntityIndex = entityIndex;
             SetEntityType(_selectedEntityIndex);
-            UpdateModal();
+            //UpdateModal();
 
             this.gameObject.SetActive(true);
         }
@@ -89,51 +82,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void HideModal()
         {
             this.gameObject.SetActive(false);
-
-            ClearSelectedCells();
-            UnsubscribeFromEvents();
         }
-
-        private void SubscribeToEvents()
-        {
-            if (SandboxManager.Instance.GridManager != null)
-            {
-                SandboxManager.Instance.GridManager.OnCellClicked += OnCellClicked;
-            }
-        }
-
-        private void UnsubscribeFromEvents()
-        {
-            if (SandboxManager.Instance.GridManager != null)
-            {
-                SandboxManager.Instance.GridManager.OnCellClicked -= OnCellClicked;
-            }
-        }
-
 
         #region Callbacks
-        public void OnCellClicked(Cell cell)
-        {
-            if (_selectedCells.Contains(cell))
-            {
-                _selectedCells.Remove(cell);
-                cell.ShowSelected(false);
-            }
-            else
-            {
-                _selectedCells.Add(cell);
-                cell.ShowSelected(true);
-            }
-
-            UpdateModal();
-        }
-
-
         public void OnConfirmPressed()
         {
-            //Send data to the SandboxUI
-            //Create new cell list just in case it gets modified at all during anims
-            onConfirmPressed?.Invoke(_selectedEntityIndex, new List<Cell>(_selectedCells), _unitMode, InputValue);
+            //Send data to the Manager
+            onConfirmPressed?.Invoke(_unitMode, InputValue);
         }
 
         public void OnCancelPressed()
@@ -173,7 +128,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void OnInputModified()
         {
             ValidateInput();
-            UpdateModal();
+            onInputModified.Invoke();
         }
 
         public void ValidateInput()
@@ -196,20 +151,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     _inputField.text = clampedInput.ToString();
                 }
             }
-        }
-        #endregion
-
-
-
-        #region Cells and Entities
-        private void ClearSelectedCells()
-        {
-            foreach (Cell cell in _selectedCells)
-            {
-                cell.ShowSelected(false);
-            }
-
-            _selectedCells.Clear();
         }
         #endregion
 
@@ -243,17 +184,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private void UpdateModal()
+        public void UpdateModal(int entityIndex, List<Cell> selectedCells)
         {
-            if ((SandboxManager.Instance.EntityManager == null) || (_selectedCells == null))
+            if ((SandboxManager.Instance.EntityManager == null) || (selectedCells == null))
             {
                 //TODO(caspar): error
                 return;
             }
 
             //Calculate difference
-            int actualDifference = GetActualDifference();
-            int totalPopulation = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(_selectedEntityIndex);
+            int actualDifference = GetActualDifference(selectedCells);
+            int totalPopulation = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(entityIndex);
             if (_selectedPopulation != null)
             {
                 _selectedPopulation.text = string.Format($"{totalPopulation} -> {totalPopulation + actualDifference}");
@@ -261,14 +202,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             //If we have no cells selected, automatically fail the perform check
             bool canPerformAction = true;
-            if (_selectedCells.Count <= 0)
+            if (selectedCells.Count <= 0)
             {
                 canPerformAction = false;
             }
             //If we have cells selected, check our inventory quantities before we accept an action as valid
             else
             {
-                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(_selectedEntityIndex);
+                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(entityIndex);
                 if (entityType != null)
                 {
                     Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
@@ -300,9 +241,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private int GetActualDifference()
+        private int GetActualDifference(List<Cell> selectedCells)
         {
-            if (_selectedCells.Count <= 0)
+            if (selectedCells.Count <= 0)
             {
                 return 0;
             }
@@ -314,7 +255,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if (_modifyMode == ModifyMode.HARVEST)
             {
                 //Get actual change based on valid populations
-                foreach (Cell cell in _selectedCells)
+                foreach (Cell cell in selectedCells)
                 {
                     int cellPopulation = SandboxManager.Instance.EntityManager.GetPopulationInCell(cell.Column, cell.Row, _selectedEntityIndex);
                     int modifyAmount = _unitMode == UnitMode.DISCRETE ? Mathf.FloorToInt(InputValue) : Mathf.FloorToInt(cellPopulation * (InputValue / 100f));
@@ -324,7 +265,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
             else if (_modifyMode == ModifyMode.INTRODUCE)
             {
-                actualDifference = Mathf.FloorToInt(InputValue) * _selectedCells.Count; //Discrete only in Introduce Mode
+                actualDifference = Mathf.FloorToInt(InputValue) * selectedCells.Count; //Discrete only in Introduce Mode
             }
 
             return actualDifference;

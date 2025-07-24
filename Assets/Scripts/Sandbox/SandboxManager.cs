@@ -266,6 +266,17 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return actionsRemaining;
         }
+
+        public static int GetAvailableActionPoints()
+        {
+            int actionsRemaining = 0;
+            if ((Instance != null) && (Instance.PlayerInventory != null))
+            {
+                actionsRemaining = Instance.PlayerInventory.GetAmountHeld(PlayerInventory.ActionID);
+            }
+
+            return actionsRemaining;
+        }
         #endregion
     }
 }
