@@ -7,11 +7,18 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     {
         [SerializeField] private TMP_Text _roundText;
 
+        [Header("Colours")]
+        [SerializeField] private Color _currentColour;
+        [SerializeField] private Color _maxColour;
+
         public void UpdateRoundCounter(int currentRound, int maxRounds)
         {
             if (_roundText != null)
             {
-                _roundText.text = string.Format($"Round {currentRound + 1}/{maxRounds}");
+                string currentStr = string.Format($"<color=#{ColorUtility.ToHtmlStringRGB(_currentColour)}>{currentRound + 1}</color>");
+                string maxStr = string.Format($"<color=#{ColorUtility.ToHtmlStringRGB(_maxColour)}>/{maxRounds}</color>");
+
+                _roundText.text = currentStr + maxStr;
             }
         }
     }

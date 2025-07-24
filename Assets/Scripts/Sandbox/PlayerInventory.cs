@@ -24,12 +24,17 @@ namespace Glitchers.EcoKnow.Sandbox
         public const string ActionID = "action"; //This currency is constant between all games and not dictated by a node
         private const string LogChannel = "[PlayerInventory]";
 
-        public InventoryEvent OnItemSold;
+        public InventoryEvent onItemSold;
 
         public void Init()
         {
             _itemDefs.Clear();
             _inventory.Clear();
+        }
+
+        public void Cleanup()
+        {
+            onItemSold = null;
         }
 
         public void RegisterItemDefinitions(List<Item> items)
@@ -114,7 +119,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     RemoveItem(id, amount);
                     AddItem(CurrencyID, def.Value * amount);
 
-                    OnItemSold?.Invoke(id, amount);
+                    onItemSold?.Invoke(id, amount);
 
                     return true;
                 }

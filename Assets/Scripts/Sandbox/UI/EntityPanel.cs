@@ -22,6 +22,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             SetupEntityList(entities);
         }
 
+        public void Cleanup()
+        {
+            onEntitySelected = null;
+        }
+
         private void SetupEntityList(Entity[] entities)
         {
             if ((_entityButtonPrefab == null) || (_entityButtonContainer == null))
