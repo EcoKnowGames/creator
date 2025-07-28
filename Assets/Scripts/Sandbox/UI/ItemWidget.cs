@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,9 +32,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (_quantityText != null)
             {
-                //TODO(caspar): Formatting for large numbers
-                _quantityText.text = quantity.ToString();
+                _quantityText.text = FormatQuantity(quantity);
             }
+        }
+
+        private string FormatQuantity(int quantity)
+        {
+            if (quantity >= 1000000)
+            {
+                float roundedQuantity = Mathf.Floor(((float)quantity / 100000f) * 10f) / 10f;
+                return roundedQuantity.ToString("0.#") + "M";
+            }
+            else if (quantity >= 1000)
+            {
+                float roundedQuantity = Mathf.Floor(((float)quantity / 1000f) * 10f) / 10f;
+                return roundedQuantity.ToString("0.#") + "k";
+            }
+
+            return quantity.ToString();
         }
     }
 }
