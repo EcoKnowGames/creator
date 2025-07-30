@@ -15,9 +15,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] ItemWidget[] _enabledWidgets;
         [SerializeField] ItemWidget[] _disabledWidgets;
 
-        /*[SerializeField] private TMP_Text _currency;
-        [SerializeField] private TMP_Text _inventoryList;
-        */
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         public void RefreshInventory()
         {
