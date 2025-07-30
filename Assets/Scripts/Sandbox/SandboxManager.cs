@@ -91,6 +91,11 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void StartNewGame(Scenario scenario)
         {
+            StartCoroutine(SetupAndRunScenario(scenario));
+        }
+
+        private IEnumerator SetupAndRunScenario(Scenario scenario)
+        {
             if (scenario != null)
             {
                 Debug.Log($"Scenario Name is: {scenario.Name}");
@@ -129,6 +134,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 //Set up all of our UI
                 _sandboxUI?.Init(_entityManager, _playerInventory);
+
+                yield return new WaitForEndOfFrame();
 
                 StartNewRound();
             }
