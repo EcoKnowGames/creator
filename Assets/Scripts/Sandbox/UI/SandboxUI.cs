@@ -27,8 +27,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Results")]
         [SerializeField] private ResultsModal _resultsModal;
 
-        private int _selectedEntityIndex = 0;
-        public int SelectedEntityIndex => _selectedEntityIndex;
+        public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
         private const string LogChannel = "[SandboxUI]";
 
@@ -45,6 +44,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             //Subscribe to UI events
             _entityPanel.onEntitySelected += OnEntitySelected;
+            _entityPanel.onEntityDeselected += OnEntityDeselected;
             _modifyCellManager.onEnterModifyMode += OnEnterModifyMode;
             _modifyCellManager.onExitModifyMode += OnExitModifyMode;
             _modifyCellManager.onModifySuccess += OnModifySuccess;
@@ -69,11 +69,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void Cleanup()
         {
+            //Unsubscribe
+            _entityPanel.onEntitySelected -= OnEntitySelected;
+            _entityPanel.onEntityDeselected -= OnEntityDeselected;
+            _modifyCellManager.onEnterModifyMode -= OnEnterModifyMode;
+            _modifyCellManager.onExitModifyMode -= OnExitModifyMode;
+            _modifyCellManager.onModifySuccess -= OnModifySuccess;
+
             _entityPanel?.Cleanup();
             _modifyCellManager?.Cleanup();
-
-            //TODO(caspar): We need to unsubscribe from the events as well
-            //They're set to null but I don't know if I want to do that
         }
         #endregion
 
@@ -88,6 +92,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
             _objectivePanel?.UpdatePopulations();
             _objectivePanel?.UpdateWinConditions();
+            _entityPanel?.UpdateAllWidgets();
             _modifyCellManager?.ExitModifyMode();
             _playerToolbar?.UpdateActionsRemaining(actions);
 
@@ -99,25 +104,28 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnEntitySelected(int entityIndex)
         {
             //Forces reset
-            if (entityIndex != _selectedEntityIndex)
+            if (_modifyCellManager.IsModifying)
             {
                 _modifyCellManager?.ExitModifyMode();
             }
 
-            //Clamp just in case?
-            int maxIndex = 0;
-            if (SandboxManager.Instance.EntityManager != null)
+            _playerToolbar?.ShowToolbar(entityIndex);
+        }
+
+        private void OnEntityDeselected()
+        {
+            if (_modifyCellManager.IsModifying)
             {
-                maxIndex = SandboxManager.Instance.EntityManager.EntityTypeCount;
+                _modifyCellManager?.ExitModifyMode();
             }
 
-            _selectedEntityIndex = Mathf.Clamp(entityIndex, 0, maxIndex);
-            _playerToolbar?.ShowToolbar(_selectedEntityIndex);
+            _playerToolbar?.HideToolbar();
         }
 
         private void OnEntityUpdated(int column, int row, int id)
         {
             _objectivePanel?.OnEntityUpdated(column, row, id);
+            _entityPanel?.OnEntityUpdated(column, row, id);
         }
         #endregion
 
@@ -152,11 +160,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _playerToolbar?.UpdateActionsRemaining(actionsRemaining);
 
             RefreshInventories();
+
+            _entityPanel.DeselectEntity();
         }
 
         private void OnExitModifyMode()
         {
-            _playerToolbar?.HideToolbar();
+            //_playerToolbar?.HideToolbar();
         }
         #endregion
     }
