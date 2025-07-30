@@ -90,10 +90,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void OnNewRoundStarted(int currentRound, int maxRounds, int actions)
         {
             _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
+
             _objectivePanel?.UpdatePopulations();
             _objectivePanel?.UpdateWinConditions();
+
+            _entityPanel?.DeselectEntity();
             _entityPanel?.UpdateAllWidgets();
+
             _modifyCellManager?.ExitModifyMode();
+
             _playerToolbar?.UpdateActionsRemaining(actions);
 
             RefreshInventories();

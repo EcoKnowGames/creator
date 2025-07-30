@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,7 +56,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     widget.SetEntity(entityIndex, entities[i]);
                 }
 
-                button.onClick.AddListener(delegate {
+                button.onClick.AddListener(delegate
+                {
                     if (_selectedEntityIndex == entityIndex)
                     {
                         //Deselect
@@ -110,31 +111,38 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     widget.UpdateQuantity();
                 }
             }
+
+            OrderWidgets();
         }
 
-        /*private void OrderWidgets()
+        private void OrderWidgets()
         {
             if (_entityButtonContainer != null)
             {
-
-                if (SandboxManager.Instance.EntityManager != null)
+                EntityWidget[] widgets = _entityButtonContainer.GetComponentsInChildren<EntityWidget>();
+                EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                if ((widgets != null) && (entityManager != null))
                 {
-                    int population = SandboxManager.Instance.EntityManager.getenti
-                    if (_quantityText != null)
+                    List<Tuple<int, int>> populationsByIndex = new List<Tuple<int, int>>();
+                    for (int i = 0; i < entityManager.EntityTypeCount; i++)
                     {
-                        _quantityText.text = FormatQuantity(population);
+                        int population = entityManager.GetTotalPopulationOfEntityType(i);
+                        populationsByIndex.Add(new Tuple<int, int>(i, population));
+                    }
+
+                    populationsByIndex = populationsByIndex.OrderByDescending(x => x.Item2).ThenBy(x => x.Item1).ToList();
+                    for (int j = 0; j < populationsByIndex.Count; j++)
+                    {
+                        EntityWidget widget = widgets.FirstOrDefault(x => x.EntityIndex == populationsByIndex[j].Item1);
+                        if (widget != null)
+                        {
+                            widget.transform.SetSiblingIndex(j);
+                            //Debug.Log($"Entity Widget with ID {widget.EntityIndex} and Population {populationsByIndex[j].Item2} at Position {j}");
+                        }
                     }
                 }
-
-
-                EntityWidget[] orderedEntities = _entityButtonContainer.GetComponentsInChildren<EntityWidget>().OrderByDescending(x => x.)
-                foreach (EntityWidget widget in _entityButtonContainer.GetComponentsInChildren<EntityWidget>())
-                {
-                    widget.UpdateQuantity();
-                }
             }
-        }*/
-
+        }
 
         private void SelectEntity(int index)
         {
@@ -176,6 +184,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 selected.UpdateQuantity();
             }
+
+            OrderWidgets();
         }
     }
 }
