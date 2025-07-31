@@ -12,6 +12,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private int _entityIndex; //Safety for selection/deselection, as we re-order the list
         public int EntityIndex => _entityIndex;
 
+        [SerializeField] private Button _button;
+        public Button Button => _button;
+
         [Header("UI Elements")]
         [SerializeField] private Image _entityIcon;
         [SerializeField] private Image _entityBackground;

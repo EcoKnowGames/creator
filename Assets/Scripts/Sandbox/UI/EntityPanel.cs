@@ -9,7 +9,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     public class EntityPanel : MonoBehaviour
     {
         [SerializeField] private Transform _entityButtonContainer;
-        [SerializeField] private Button _entityButtonPrefab;
+        [SerializeField] private EntityWidget _entityWidgetPrefab;
 
         private int _selectedEntityIndex = -1;
         public int SelectedEntityIndex => _selectedEntityIndex;
@@ -35,7 +35,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void SetupEntityList(Entity[] entities)
         {
-            if ((_entityButtonPrefab == null) || (_entityButtonContainer == null))
+            if ((_entityWidgetPrefab == null) || (_entityButtonContainer == null))
             {
                 return;
             }
@@ -49,26 +49,29 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 int entityIndex = i;
 
-                Button button = Instantiate(_entityButtonPrefab, _entityButtonContainer);
-                EntityWidget widget = button.GetComponent<EntityWidget>();
+                EntityWidget widget = Instantiate(_entityWidgetPrefab, _entityButtonContainer);
                 if (widget != null)
                 {
                     widget.SetEntity(entityIndex, entities[i]);
                 }
 
-                button.onClick.AddListener(delegate
+                Button button = widget.Button;
+                if (button != null)
                 {
-                    if (_selectedEntityIndex == entityIndex)
-                    {
+                    button.onClick.AddListener(delegate
+                  {
+                      if (_selectedEntityIndex == entityIndex)
+                      {
                         //Deselect
                         DeselectEntity();
-                    }
-                    else
-                    {
+                      }
+                      else
+                      {
                         //Select
                         SelectEntity(entityIndex);
-                    }
-                });
+                      }
+                  });
+                }
             }
 
             if (this.GetComponent<RectTransform>() != null)
