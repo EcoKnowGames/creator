@@ -48,7 +48,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         (
             string Title,
             bool Completed,
-            int Streak
+            Dictionary<int, string> Results
         );
 
     public record EventDataObject
