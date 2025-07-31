@@ -229,7 +229,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                     (
                         winCondition.title,
                         winCondition.Completed,
-                        winCondition.ConsecutiveSuccesses
+                        winCondition.GetRoundResults()
                     );
 
                 winConditionList.Add(data);

@@ -8,6 +8,10 @@ namespace Glitchers.EcoKnow.Sandbox
 {
     public class WinCondition
     {
+        public enum Result { NOT_STARTED, IN_RANGE, STREAK, GRACE, FAILED };
+        private List<Result> _resultCache;
+        public List<Result> Results => _resultCache;
+
         public string title { get; protected set; }
         public string description { get; protected set; }
 
@@ -16,12 +20,14 @@ namespace Glitchers.EcoKnow.Sandbox
         protected float lowerLimit;
         protected float upperLimit;
 
+        private int _graceRemaining = 1;
+
         public int requiredRounds { get; protected set; }
         private int _consecutiveSuccesses = 0;
         public int ConsecutiveSuccesses => _consecutiveSuccesses;
 
         private bool _completed;
-        public bool Completed => _completed;
+        public bool Completed => IsCurrentlyComplete();
 
         public void Init(WinConditionRecord record)
         {
@@ -35,23 +41,28 @@ namespace Glitchers.EcoKnow.Sandbox
             upperLimit = record.UpperLimit;
 
             requiredRounds = record.RequiredRounds <= 0 ? 1 : record.RequiredRounds;
+            _graceRemaining = 1;
+
+            _resultCache = new List<Result>();
         }
 
         public void OnNewRound()
         {
-            bool success = HasConditionBeenMet();
-            if (success)
+            if (GetPreviousResult() == Result.FAILED)
             {
-                _consecutiveSuccesses += 1;
-                if (_consecutiveSuccesses >= requiredRounds)
-                {
-                    SetComplete();
-                }
+                //No longer tracked
             }
             else
             {
-                _consecutiveSuccesses = 0;
-                SetIncomplete();
+                bool success = HasConditionBeenMet();
+                if (success)
+                {
+                    OnSuccessfulRound();
+                }
+                else
+                {
+                    OnFailedRound();
+                }
             }
         }
 
@@ -85,25 +96,90 @@ namespace Glitchers.EcoKnow.Sandbox
             return false;
         }
 
-        protected void SetComplete()
+        private void OnSuccessfulRound()
         {
-            if (_completed)
+            if (IsCurrentlyComplete())
             {
-                return;
+                PushResult(Result.STREAK);
             }
-
-            _completed = true;
+            else
+            {
+                PushResult(Result.IN_RANGE);
+            }
         }
 
-        protected void SetIncomplete()
+        private void OnFailedRound()
         {
-            if (!_completed)
+            if (GetPreviousResult() == Result.NOT_STARTED)
             {
-                return;
+                PushResult(Result.NOT_STARTED);
             }
-
-            _completed = false;
+            else
+            {
+                Result failResult = CanEnterGracePeriod() ? Result.GRACE : Result.FAILED;
+                PushResult(failResult);
+            }
         }
 
+
+        #region Result
+        private bool CanEnterGracePeriod()
+        {
+            return _graceRemaining > 0;
+        }
+
+        private bool IsCurrentlyComplete()
+        {
+            //Too early to start a STREAK
+            int startIndex = _resultCache.Count - requiredRounds;
+            if (startIndex < 0)
+            {
+                return false;
+            }
+
+            //If recentresults are all IN-RANGE or STREAK, we streak. otherwise we are in range
+            Result[] recentResults = _resultCache.GetRange(startIndex, requiredRounds).ToArray();
+            return recentResults.All(x => x == Result.IN_RANGE || x == Result.STREAK);
+        }
+        private void PushResult(Result result)
+        {
+            if (_resultCache == null)
+            {
+                _resultCache = new List<Result>();
+            }
+
+            if (result == Result.GRACE)
+            {
+                _graceRemaining -= 1;
+            }
+
+            _resultCache.Add(result);
+        }
+
+        private Result GetPreviousResult()
+        {
+            if ((_resultCache == null) || (_resultCache.Count == 0))
+            {
+                return Result.NOT_STARTED;
+            }
+
+            return _resultCache.Last();
+        }
+
+        public Dictionary<int, string> GetRoundResults()
+        {
+            Dictionary<int, string> results = new Dictionary<int, string>();
+            if (_resultCache != null)
+            {
+                for (int i = 0; i < _resultCache.Count; i++)
+                {
+                    //Match round number
+                    results.Add(i + 1, _resultCache[i].ToString());
+                }
+            }
+
+            return results;
+        }
+        #endregion
     }
 }

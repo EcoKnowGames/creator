@@ -51,8 +51,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     WinCondition winCondition = SandboxManager.Instance.WinConditions[i];
                     if (winCondition != null)
                     {
-                        string success = winCondition.Completed ? winCondition.Completed.ToString() : string.Format($"{winCondition.ConsecutiveSuccesses}/{winCondition.requiredRounds}"); 
-                        _winConditions.text += string.Format($"{winCondition.title} / Completed: {success}\n");
+                        //string success = winCondition.Completed ? winCondition.Completed.ToString() : string.Format($"{winCondition.ConsecutiveSuccesses}/{winCondition.requiredRounds}");
+
+                        string resultStr = string.Empty;
+                        foreach(WinCondition.Result result in winCondition.Results)
+                        {
+                            resultStr += result.ToString() + " / ";
+                        }
+
+                        _winConditions.text += string.Format($"{winCondition.title} / Results: {resultStr}\n");
                     }
                 }
             }
