@@ -149,6 +149,11 @@ namespace Glitchers.EcoKnow.Sandbox
             }
         }
 
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+
         private void Cleanup()
         {
             _gridManager?.Cleanup();
