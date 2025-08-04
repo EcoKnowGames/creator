@@ -3,10 +3,48 @@ using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
-    public class ObjectivePanel : MonoBehaviour
+    public class ObjectivesPanel : MonoBehaviour
     {
+        [Header("Widgets")]
+        [SerializeField] private ObjectiveWidget _widgetPrefab;
+        [SerializeField] private Transform _widgetContainer;
+
+        [Header("Old")]
         [SerializeField] private TMP_Text _populationTotals;
         [SerializeField] private TMP_Text _winConditions;
+
+        private const string LogChannel = "[ObjectivesPanel]";
+
+        public void Init(WinCondition[] winConditions, EntityManager entityManager)
+        {
+            if ((_widgetPrefab == null) || (_widgetContainer == null))
+            {
+                Debug.LogError($"{LogChannel} Failed setup, Widget prefab or Container is null!");
+                return;
+            }
+
+            //Remove old objectives
+            foreach (Transform child in _widgetContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            //Instantiate new ones
+            foreach (WinCondition condition in winConditions)
+            {
+                ObjectiveWidget widget = Instantiate(_widgetPrefab, _widgetContainer);
+                Entity entity = entityManager.GetEntityType(condition.EntityIndex);
+                if (entity != null)
+                {
+                    widget.SetEntity(entity);
+                }
+                else
+                {
+                    Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
+                    continue;
+                }
+            }
+        }
 
         public void UpdatePopulations()
         {

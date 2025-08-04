@@ -15,7 +15,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
-        [SerializeField] private ObjectivePanel _objectivePanel;
+        [SerializeField] private ObjectivesPanel _objectivePanel;
         [SerializeField] private PlayerToolbar _playerToolbar;
 
         [Header("Modification Panels")]
@@ -32,10 +32,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private const string LogChannel = "[SandboxUI]";
 
         #region Setup
-        public void Init(EntityManager entityManager, PlayerInventory playerInventory)
+        public void Init(EntityManager entityManager, WinCondition[] winConditions, PlayerInventory playerInventory)
         {
             //Initialise our components
             _entityPanel?.Init(entityManager.GetEntityTypeList());
+            _objectivePanel?.Init(winConditions, entityManager);
             _playerToolbar?.Init();
             _modifyCellManager?.Init();
             _resultsModal?.HideModal();
