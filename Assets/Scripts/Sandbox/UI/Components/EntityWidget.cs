@@ -30,6 +30,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Visuals
         public void SetEntity(int index, Entity entity)
         {
+            if (entity == null)
+            {
+                Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
+                return;
+            }
+
             _entityIndex = index;
 
             //Set icon

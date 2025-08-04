@@ -16,6 +16,7 @@ namespace Glitchers.EcoKnow.Sandbox
         public string description { get; protected set; }
 
         protected int entityIndex;
+        public int EntityIndex => entityIndex;
 
         protected float lowerLimit;
         protected float upperLimit;
