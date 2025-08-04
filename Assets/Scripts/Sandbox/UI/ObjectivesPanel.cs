@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -33,79 +34,62 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             foreach (WinCondition condition in winConditions)
             {
                 ObjectiveWidget widget = Instantiate(_widgetPrefab, _widgetContainer);
+
+                //Setup entity
                 Entity entity = entityManager.GetEntityType(condition.EntityIndex);
                 if (entity != null)
                 {
-                    widget.SetEntity(entity);
+                    widget.SetEntity(condition.EntityIndex, entity);
                 }
                 else
                 {
                     Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
                     continue;
                 }
-            }
-        }
 
-        public void UpdatePopulations()
-        {
-            if (_populationTotals == null)
-            {
-                return;
-            }
-
-            _populationTotals.text = string.Empty;
-
-            if (SandboxManager.Instance.EntityManager != null)
-            {
-                Entity[] entityList = SandboxManager.Instance.EntityManager.GetEntityTypeList();
-                if (entityList != null)
-                {
-                    for (int i = 0; i < entityList.Length; i++)
-                    {
-                        Entity entityType = entityList[i];
-                        if (entityType != null)
-                        {
-                            int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(i);
-                            _populationTotals.text += string.Format($"{population} / {entityType.ID}\n");
-                        }
-                    }
-                }
+                widget.SetRoundTarget(condition.requiredRounds);
+                widget.SetComplete(condition.Completed);
             }
         }
 
         public void UpdateWinConditions()
         {
-            if (_winConditions == null)
+            if (_widgetContainer == null)
             {
+                Debug.LogError($"{LogChannel} Failed to update Win Conditions, Widget Container is null!");
                 return;
             }
 
-            _winConditions.text = string.Empty;
-
             if (SandboxManager.Instance != null)
             {
-                for (int i = 0; i < SandboxManager.Instance.WinConditions.Count; i++)
+                foreach(WinCondition condition in SandboxManager.Instance.WinConditions)
                 {
-                    WinCondition winCondition = SandboxManager.Instance.WinConditions[i];
-                    if (winCondition != null)
+                    ObjectiveWidget widget = GetWidgetForEntity(condition.EntityIndex);
+                    if (widget != null)
                     {
-                        //string success = winCondition.Completed ? winCondition.Completed.ToString() : string.Format($"{winCondition.ConsecutiveSuccesses}/{winCondition.requiredRounds}");
-
-                        string resultStr = string.Empty;
-                        foreach(WinCondition.Result result in winCondition.Results)
-                        {
-                            resultStr += result.ToString() + " / ";
-                        }
-
-                        _winConditions.text += string.Format($"{winCondition.title} / Results: {resultStr}\n");
+                        widget.SetComplete(condition.Completed); //TODO(caspar): Rethink this function?
+                        //TODO(caspar): Update track
                     }
                 }
             }
         }
 
+        private ObjectiveWidget GetWidgetForEntity(int index)
+        {
+            if (_widgetContainer != null)
+            {
+                ObjectiveWidget[] widgets = _widgetContainer.GetComponentsInChildren<ObjectiveWidget>();
+                if ((widgets != null) && (widgets.Count() > 0))
+                {
+                    return widgets.FirstOrDefault(x => x.EntityIndex == index);
+                }
+            }
+
+            return null;
+        }
+
         public void OnEntityUpdated(int column, int row, int id)
         {
-            UpdatePopulations();
             UpdateWinConditions();
         }
     }
