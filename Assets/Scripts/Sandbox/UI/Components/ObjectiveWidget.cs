@@ -14,15 +14,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _roundTargetText;
         [SerializeField] private GameObject _roundTargetCheck;
 
+        private int _entityIndex; //Safety
+        public int EntityIndex => _entityIndex;
+
         private const string LogChannel = "[ObjectiveWidget]";
 
-        public void SetEntity(Entity entity)
+        public void SetEntity(int index, Entity entity)
         {
             if (entity == null)
             {
                 Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
                 return;
             }
+
+            _entityIndex = index;
 
             //Set icon
             if (_entityIcon != null)
@@ -44,6 +49,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 Color colour = Color.white;
                 ColorUtility.TryParseHtmlString("#" + entity.Colour, out colour);
                 _entityBackground.color = colour;
+            }
+        }
+
+        public void SetRoundTarget(int rounds)
+        {
+            if (_roundTargetText != null)
+            {
+                _roundTargetText.text = rounds.ToString();
+            }
+        }
+
+        //TODO(caspar): Would complete work here?
+        public void SetComplete(bool complete)
+        {
+            if (_roundTargetCheck != null)
+            {
+                _roundTargetCheck.SetActive(complete);
             }
         }
     }
