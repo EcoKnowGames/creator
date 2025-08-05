@@ -47,8 +47,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     continue;
                 }
 
-                widget.UpdateObjective(condition, -1, -1); //Not ideal but works for now
                 widget.ResetResultsTrack();
+                widget.UpdateObjective(condition, -1, -1); //Not ideal but works for now
             }
         }
 
@@ -90,7 +90,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void OnEntityUpdated(int column, int row, int id)
         {
             //TODO(caspar): Update active result widget with our current total
-            //UpdateWinConditions();
+            ObjectiveWidget widget = GetWidgetForEntity(id);
+            if (widget != null)
+            {
+                widget.UpdatePopulation();
+            }
         }
     }
 }
