@@ -92,7 +92,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
 
-            _objectivePanel?.UpdateWinConditions();
+            _objectivePanel?.UpdateWinConditions(currentRound, maxRounds);
 
             _entityPanel?.DeselectEntity();
             _entityPanel?.UpdateAllWidgets();
