@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private int _maxFutureRoundCount = 2;
 
         private ResultsWidget[] _resultWidgets => this.GetComponentsInChildren<ResultsWidget>();
+        public ResultsWidget ActiveWidget => _resultWidgets == null ? null : _resultWidgets.FirstOrDefault(x => x.IsActive);
 
         private int _entityIndex; //Safety
         public int EntityIndex => _entityIndex;
@@ -91,6 +93,22 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 UpdateResultsTrack(condition.Results, currentRound, maxRound);
             }
+
+            UpdatePopulation();
+        }
+
+        public void UpdatePopulation()
+        {
+            if (ActiveWidget != null)
+            {
+                if (SandboxManager.Instance.EntityManager != null)
+                {
+                    int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(EntityIndex);
+                    ActiveWidget.SetActiveQuantity(population);
+                }
+            }
+
+            StartCoroutine(RefreshLayout());
         }
 
         #region Overall State
@@ -145,7 +163,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             for (int i = 0; i < _maxResultsWidgets; i++)
             {
                 ResultsWidget widget = _resultWidgets[i];
-                widget.SetState((int)WinCondition.Result.NOT_STARTED);
+                widget.SetState(i == 0 ? (int)ResultsWidget.State.ACTIVE : (int)ResultsWidget.State.FUTURE);
             }
         }
 
@@ -169,7 +187,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 int futureRoundCount = Mathf.Min(roundsRemaining, _maxFutureRoundCount);
 
                 int displayedResultCount = Mathf.Clamp(_maxResultsWidgets - futureRoundCount, 0, results.Count);
-                Debug.Log("Displayed results: " + displayedResultCount);
+                //Debug.Log("Displayed results: " + displayedResultCount);
 
                 List<WinCondition.Result> trimmedResults = results.GetRange(results.Count - displayedResultCount, displayedResultCount);
 
@@ -182,10 +200,40 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     {
                         widget?.SetState((int)trimmedResults[i]);
                     }
+                    else if (i == displayedResultCount)
+                    {
+                        widget?.SetState((int)ResultsWidget.State.ACTIVE);
+                    }
                     else
                     {
-                        widget?.SetState((int)ResultsWidget.Result.FUTURE);
+                        widget?.SetState((int)ResultsWidget.State.FUTURE);
                     }
+                }
+            }
+        }
+
+        private IEnumerator RefreshLayout()
+        {
+            yield return new WaitForEndOfFrame();
+
+            //Now force update
+            for (int i = 0; i < _maxResultsWidgets; i++)
+            {
+                //Force update layout
+                ResultsWidget widget = _resultWidgets[i];
+                RectTransform widgetRect = widget.GetComponent<RectTransform>();
+                if (widgetRect != null)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(widgetRect);
+                }
+            }
+
+            if (_resultsContainer != null)
+            {
+                RectTransform resultsRect = _resultsContainer.GetComponent<RectTransform>();
+                if (resultsRect != null)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(resultsRect);
                 }
             }
         }
