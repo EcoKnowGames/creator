@@ -25,8 +25,8 @@ namespace Glitchers.EcoKnow.Sandbox
         protected int entityIndex;
         public int EntityIndex => entityIndex;
 
-        protected float lowerLimit;
-        protected float upperLimit;
+        public float lowerLimit { get; protected set; }
+        public float upperLimit { get; protected set; }
 
         private int _graceRemaining = 1;
 

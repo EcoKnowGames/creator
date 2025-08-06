@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
@@ -28,8 +29,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private GameObject _futureState;
 
         //TODO(caspar): Active range
-        [Header("Active")]
+        [Header("Active Text")]
         [SerializeField] private TMP_Text _activeText;
+        [SerializeField] private TMP_Text _rangeText;
+        [SerializeField] private Color _inRangeTextColour;
+        [SerializeField] private Color _outRangeTextColour;
+
+        [Header("Active Background")]
+        [SerializeField] private Image _activeBackground;
+        [SerializeField] private Color _inRangeColour;
+        [SerializeField] private Color _overRangeColour;
+        [SerializeField] private Color _underRangeColour;
 
         private State _currentState;
         public bool IsActive => _currentState == State.ACTIVE;
@@ -92,6 +102,45 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _futureState?.SetActive(false);
         }
 
+        public void SetRange(int currentPopulation, float min, float max)
+        {
+            string rangeStr = string.Empty;
+
+            if (max > min)
+            {
+                rangeStr = string.Format($"{FormatQuantity(min)} - {FormatQuantity(max)}");
+            }
+            else
+            {
+                rangeStr = string.Format($"> {FormatQuantity(min)}");
+            }
+
+            if (_rangeText != null)
+            {
+                _rangeText.text = rangeStr;
+            }
+
+            //Set BG colour
+            if ((_activeBackground != null) && (_rangeText != null))
+            {
+                if ((max > min) && (currentPopulation > max))
+                {
+                    _activeBackground.color = _overRangeColour;
+                    _activeText.color = _outRangeTextColour;
+                }
+                else if (currentPopulation < min)
+                {
+                    _activeBackground.color = _underRangeColour;
+                    _activeText.color = _outRangeTextColour;
+                }
+                else
+                {
+                    _activeBackground.color = _inRangeColour;
+                    _activeText.color = _inRangeTextColour;
+                }
+            }
+        }
+
         public void SetActiveQuantity(int quantity)
         {
             if (_activeText != null)
@@ -100,7 +149,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private string FormatQuantity(int quantity)
+        private string FormatQuantity(float quantity)
         {
             if (quantity >= 1000000)
             {
