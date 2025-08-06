@@ -11,10 +11,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class ModifyCellModal : MonoBehaviour
     {
+        [Header("Entity Info")]
+        [SerializeField] private TMP_Text _selectedEntityText;
+        [SerializeField] private EntityIcon _entityIcon;
+
         [Header("Text")]
         [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_InputField _inputField;
-        [SerializeField] private TMP_Text _selectedEntityText;
         [SerializeField] private TMP_Text _selectedPopulation;
         [SerializeField] private TMP_Text _inventoryChange;
 
@@ -182,7 +185,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(_selectedEntityIndex);
                 if (entityType != null)
                 {
-                    _selectedEntityText.text = string.Format($"Selected: {entityType.ID}");
+                    _selectedEntityText.text = string.Format($"{entityType.ID}");
+                    _entityIcon?.SetEntity(entityType);
                 }
             }
         }
