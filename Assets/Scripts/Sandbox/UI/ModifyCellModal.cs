@@ -14,11 +14,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Entity Info")]
         [SerializeField] private TMP_Text _selectedEntityText;
         [SerializeField] private EntityIcon _entityIcon;
+        [SerializeField] private TMP_Text _currentPopulationText;
+        [SerializeField] private TMP_Text _predictedPopulationText;
 
         [Header("Text")]
         [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_InputField _inputField;
-        [SerializeField] private TMP_Text _selectedPopulation;
         [SerializeField] private TMP_Text _inventoryChange;
 
         [Header("Buttons")]
@@ -213,9 +214,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //Calculate difference
             int actualDifference = GetActualDifference(selectedCells);
             int totalPopulation = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(entityIndex);
-            if (_selectedPopulation != null)
+            if (_currentPopulationText != null)
             {
-                _selectedPopulation.text = string.Format($"{totalPopulation} -> {totalPopulation + actualDifference}");
+                _currentPopulationText.text = totalPopulation.ToString("n0");
+            }
+
+            if (_predictedPopulationText.text != null)
+            {
+                _predictedPopulationText.text = (totalPopulation + actualDifference).ToString("n0");
             }
 
             //If we have no cells selected, automatically fail the perform check
