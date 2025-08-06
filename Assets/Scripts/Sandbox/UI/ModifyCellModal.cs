@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using TMPro;
 using UnityEngine;
@@ -77,6 +79,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //UpdateModal();
 
             this.gameObject.SetActive(true);
+            StartCoroutine(RefreshLayout());
         }
 
         public void HideModal()
@@ -159,7 +162,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (_title != null)
             {
-                _title.text = title;
+                _title.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower()); //Bit of a hack but works
             }
 
             if (_confirmButton != null)
@@ -181,6 +184,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 {
                     _selectedEntityText.text = string.Format($"Selected: {entityType.ID}");
                 }
+            }
+        }
+
+        private IEnumerator RefreshLayout()
+        {
+            yield return new WaitForEndOfFrame();
+
+            RectTransform rectTransform = this.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
             }
         }
 
