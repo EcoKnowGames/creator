@@ -48,7 +48,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
 
                 widget.ResetResultsTrack();
-                widget.UpdateObjective(condition, -1, -1); //Not ideal but works for now
+                widget.UpdateObjective(-1, -1); //Not ideal but works for now
             }
         }
 
@@ -67,7 +67,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     ObjectiveWidget widget = GetWidgetForEntity(condition.EntityIndex);
                     if (widget != null)
                     {
-                        widget.UpdateObjective(condition, currentRound, maxRounds);
+                        widget.UpdateObjective(currentRound, maxRounds);
                     }
                 }
             }
@@ -93,7 +93,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             ObjectiveWidget widget = GetWidgetForEntity(id);
             if (widget != null)
             {
-                widget.UpdatePopulation();
+                widget.OnEntityUpdated();
             }
         }
     }
