@@ -20,7 +20,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private GameObject _roundTargetCheck;
 
         [Header("Results Tracker")]
-        //[SerializeField] private ResultsWidget _resultsWidgetPrefab;
         [SerializeField] private Transform _resultsContainer;
         [SerializeField] private int _maxResultsWidgets = 10;
         [SerializeField] private int _maxFutureRoundCount = 2;
@@ -66,50 +65,81 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void UpdateObjective(WinCondition condition, int currentRound, int maxRound)
+        public void UpdateObjective(int currentRound, int maxRound)
         {
-            if (condition.Completed)
+            WinCondition condition = GetWinCondition();
+            if (condition != null)
             {
-                //Set Complete
-                SetComplete();
-            }
-            else
-            {
-                //Check for failure
-                if ((condition.Results != null) && (condition.Results.Count > 0))
+                if (condition.Completed)
                 {
-                    if (condition.Results.Last() == WinCondition.Result.FAILED)
+                    //Set Complete
+                    SetComplete();
+                }
+                else
+                {
+                    //Check for failure
+                    if ((condition.Results != null) && (condition.Results.Count > 0))
                     {
-                        SetFailed();
-                    }
-                    else
-                    {
-                        SetInProgress(condition.requiredRounds);
+                        if (condition.Results.Last() == WinCondition.Result.FAILED)
+                        {
+                            SetFailed();
+                        }
+                        else
+                        {
+                            SetInProgress(condition.requiredRounds);
+                        }
                     }
                 }
-            }
 
-            if ((condition.Results != null) && (condition.Results.Count > 0))
-            {
-                UpdateResultsTrack(condition.Results, currentRound, maxRound);
-            }
+                if ((condition.Results != null) && (condition.Results.Count > 0))
+                {
+                    UpdateResultsTrack(condition.Results, currentRound, maxRound);
+                }
 
-            UpdatePopulation();
+                UpdatePopulation(condition);
+            }
         }
 
-        public void UpdatePopulation()
+        public void OnEntityUpdated()
         {
+            WinCondition condition = GetWinCondition();
+            if (condition != null)
+            {
+                UpdatePopulation(condition);
+            }
+        }
+
+        public void UpdatePopulation(WinCondition condition)
+        {
+            if (condition.GetLatestResult() == WinCondition.Result.FAILED)
+            {
+                return;
+            }
+
             if (ActiveWidget != null)
             {
                 if (SandboxManager.Instance.EntityManager != null)
                 {
                     int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(EntityIndex);
                     ActiveWidget.SetActiveQuantity(population);
+                    ActiveWidget.SetRange(population, condition.lowerLimit, condition.upperLimit);
                 }
             }
 
             StartCoroutine(RefreshLayout());
         }
+
+
+        private WinCondition GetWinCondition()
+        {
+            if (SandboxManager.Instance.WinConditions != null)
+            {
+                return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.EntityIndex == EntityIndex);
+            }
+
+            return null;
+        }
+
 
         #region Overall State
         private void SetComplete()
@@ -177,14 +207,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (_resultWidgets != null)
             {
-                //Check failure
-                if (results.Last() == WinCondition.Result.FAILED)
-                {
-                    SetFailed();
-                }
+                bool failed = results.Contains(WinCondition.Result.FAILED);
 
                 int roundsRemaining = maxRounds - currentRound;
                 int futureRoundCount = Mathf.Min(roundsRemaining, _maxFutureRoundCount);
+                if (!failed)
+                {
+                    futureRoundCount += 1; //+1 for the Active Round
+                }
 
                 int displayedResultCount = Mathf.Clamp(_maxResultsWidgets - futureRoundCount, 0, results.Count);
                 //Debug.Log("Displayed results: " + displayedResultCount);
@@ -193,8 +223,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                 for (int i = 0; i < _maxResultsWidgets; i++)
                 {
-                    //WinCondition.Result previousResult = i > 0 ? results[i-1] : WinCondition.Result.NOT_STARTED;
-
                     ResultsWidget widget = _resultWidgets[i];
                     if (i < displayedResultCount)
                     {
@@ -202,7 +230,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     }
                     else if (i == displayedResultCount)
                     {
-                        widget?.SetState((int)ResultsWidget.State.ACTIVE);
+                        //Don't show active state if win condition has been failed
+                        if (!results.Contains(WinCondition.Result.FAILED))
+                        {
+                            widget?.SetState((int)ResultsWidget.State.ACTIVE);
+                        }
+                        else
+                        {
+                            widget?.SetState((int)ResultsWidget.State.FUTURE);
+                        }
                     }
                     else
                     {
