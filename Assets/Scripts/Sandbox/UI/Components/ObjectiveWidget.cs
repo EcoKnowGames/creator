@@ -12,8 +12,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private CanvasGroup _canvasGroup => this.GetComponent<CanvasGroup>();
 
         [Header("Entity")]
-        [SerializeField] private Image _entityBackground;
-        [SerializeField] private Image _entityIcon;
+        [SerializeField] private EntityIcon _entityIcon;
 
         [Header("Round Target")]
         [SerializeField] private TMP_Text _roundTargetText;
@@ -42,26 +41,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _entityIndex = index;
 
-            //Set icon
-            if (_entityIcon != null)
+           if (_entityIcon != null)
             {
-                Sprite resource = Resources.Load<Sprite>(entity.Icon);
-                if (resource != null)
-                {
-                    _entityIcon.sprite = resource;
-                }
-                else
-                {
-                    Debug.LogError($"{LogChannel} Failed to find icon for entity at path {entity.Icon}!");
-                }
-            }
-
-            //Set Colour
-            if (_entityBackground != null)
-            {
-                Color colour = Color.white;
-                ColorUtility.TryParseHtmlString("#" + entity.Colour, out colour);
-                _entityBackground.color = colour;
+                _entityIcon.SetEntity(entity);
             }
         }
 
@@ -88,6 +70,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                         {
                             SetInProgress(condition.requiredRounds);
                         }
+                    }
+                    else
+                    {
+                        SetInProgress(condition.requiredRounds);
                     }
                 }
 
