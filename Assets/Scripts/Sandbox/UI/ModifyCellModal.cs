@@ -20,6 +20,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Text")]
         [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_InputField _inputField;
+        [SerializeField] private TMP_Text _confirmText;
         [SerializeField] private TMP_Text _inventoryChange;
 
         [Header("Buttons")]
@@ -222,20 +223,29 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region UI
         private void SetTitle(string title)
         {
+            string modifyText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToString().ToLower()); //Bit of a hack but works
+
             if (_title != null)
             {
-                _title.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower()); //Bit of a hack but works
+                _title.text = modifyText;
             }
 
-            if (_confirmButton != null)
+            if (_confirmText != null)
             {
-                TMP_Text buttonText = _confirmButton.GetComponentInChildren<TMP_Text>();
-                if (buttonText != null)
-                {
-                    buttonText.text = title;
-                }
+                _confirmText.text = modifyText;
             }
         }
+
+        //TODO(caspar): Investigate Pluralizer properly
+        /*private void SetConfirmText()
+        {
+            if (_confirmText != null)
+            {
+                string modifyText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_modifyMode.ToString().ToLower()); //Bit of a hack but works
+                string entityPlural = PluralizationService.CreateService(CultureInfo.CurrentCulture).Pluralize("Fox");
+                _confirmText.text = string.Format($"{modifyText} {InputValue} {entityPlural}");
+            }
+        }*/
 
         private void SetEntityType(int entityIndex)
         {
@@ -284,7 +294,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             //If we have no cells selected, automatically fail the perform check
             bool canPerformAction = true;
-            if (selectedCells.Count <= 0)
+            if ((selectedCells.Count <= 0) || (InputValue <= 0))
             {
                 canPerformAction = false;
             }
