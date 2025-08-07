@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 6345871428025175543}
   - component: {fileID: 3500984635209694166}
   - component: {fileID: 2530772188604147235}
+  - component: {fileID: 2811092157720422377}
   m_Layer: 5
   m_Name: ItemWidget
   m_TagString: Untagged
@@ -209,6 +210,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemIcon: {fileID: 2048074005134975200}
   _quantityText: {fileID: 6001867201114706565}
+--- !u!114 &2811092157720422377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4193759679348496024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 62
+  m_PreferredHeight: 80
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &5484387635857020802
 GameObject:
   m_ObjectHideFlags: 0
