@@ -25,9 +25,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Buttons")]
         [SerializeField] private Button _confirmButton;
-        [SerializeField] private GameObject _unitTypeContainer;
         [SerializeField] private Button _decreaseButton;
         [SerializeField] private Button _increaseButton;
+        [SerializeField] private TMP_Dropdown _tileSelectDropdown;
+
+        [Header("Toggles")]
+        [SerializeField] private GameObject _unitTypeContainer;
+        [SerializeField] private Toggle _discreteToggle;
+        [SerializeField] private Toggle _percentToggle;
 
         Action<UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
@@ -73,8 +78,19 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _unitTypeContainer.SetActive(_modifyMode == ModifyMode.HARVEST);
             }
 
+            if (_tileSelectDropdown != null)
+            {
+                _tileSelectDropdown.value = 0;
+                _tileSelectDropdown.RefreshShownValue();
+            }
+
             //Always start with Discrete mode
             _unitMode = UnitMode.DISCRETE;
+            if (_discreteToggle != null)
+            {
+                _discreteToggle.isOn = true;
+            }
+
             if (_inputField != null)
             {
                 _inputField.text = "10";
@@ -268,6 +284,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if (rectTransform != null)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+            }
+
+            //Check the toggles
+            //These don't update until after the modal is set active,
+            //So we can't rely on this to work in ShowModal()
+            if (_unitMode == UnitMode.DISCRETE)
+            {
+                if (_discreteToggle != null)
+                {
+                    _discreteToggle.isOn = true;
+                }
+            }
+            else if (_unitMode == UnitMode.PERCENT)
+            {
+                if (_percentToggle != null)
+                {
+                    _percentToggle.isOn = true;
+                }
             }
         }
 
