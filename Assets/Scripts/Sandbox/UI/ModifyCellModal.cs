@@ -25,6 +25,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Buttons")]
         [SerializeField] private Button _confirmButton;
         [SerializeField] private GameObject _unitTypeContainer;
+        [SerializeField] private Button _decreaseButton;
+        [SerializeField] private Button _increaseButton;
 
         Action<UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
@@ -132,6 +134,26 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             OnInputModified();
         }
 
+        public void OnIncreasePressed()
+        {
+            if (_inputField != null)
+            {
+                _inputField.text = (InputValue + 10f).ToString();
+            }
+
+            OnInputModified();
+        }
+
+        public void OnDecreasePressed()
+        {
+            if (_inputField != null)
+            {
+                _inputField.text = (InputValue - 10f).ToString();
+            }
+
+            OnInputModified();
+        }
+
         public void OnInputModified()
         {
             ValidateInput();
@@ -140,6 +162,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void ValidateInput()
         {
+            //Ensure input field looks correct
             if (_unitMode == UnitMode.DISCRETE)
             {
                 if (InputValue <= 0)
@@ -158,6 +181,41 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     _inputField.text = clampedInput.ToString();
                 }
             }
+
+
+            //Enable/disable buttons
+            if (InputValue <= 0)
+            {
+                if (_decreaseButton != null)
+                {
+                    _decreaseButton.interactable = false;
+                }
+
+                if (_increaseButton != null)
+                {
+                    _increaseButton.interactable = true;
+                }
+            }
+            else
+            {
+                if (_decreaseButton != null)
+                {
+                    _decreaseButton.interactable = true;
+                }
+
+                if (_increaseButton != null)
+                {
+                    if ((_unitMode == UnitMode.PERCENT) && InputValue >= 100f)
+                    {
+                        _increaseButton.interactable = false;
+                    }
+                    else
+                    {
+                        _increaseButton.interactable = true;
+                    }
+                }
+            }
+
         }
         #endregion
 
