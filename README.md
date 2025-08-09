@@ -4,11 +4,10 @@
 EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or author a scenario (species, interaction matrix, map) and play on a grid where species populations change each round based on growth rates, a Lotka‑Volterra‑style interaction matrix, and probabilistic movement between neighboring cells. You spend limited actions to harvest or introduce species (using an inventory/currency), aiming to keep populations within target ranges for consecutive rounds to satisfy win conditions. Gameplay and state can be exported to JSON for analysis.
 
 ### Core concepts
-- **Grid ecosystem**: Cells display species tokens with state rings (extinct, vulnerable, stable, abundant) and per‑cell population indicators.
-- **Population dynamics**: Per‑species intrinsic growth, inter‑species interaction matrix, and movement to neighboring cells each round.
-- **Action economy**: Each round grants a limited number of actions to harvest or introduce species, consuming/earning resources.
+- **Grid ecosystem**: Species tokens in each cell with state rings (extinct, vulnerable, stable, abundant) and population indicators.
+- **Population dynamics**: Intrinsic growth, inter‑species interaction matrix, and per‑round movement to neighboring cells.
+- **Action economy**: Limited actions per round to harvest/introduce species, consuming/earning resources.
 - **Win conditions**: Keep target species totals within thresholds for required consecutive rounds (with a grace allowance).
-- **Scenario authoring**: Create scenarios in a node‑based editor and export to JSON; or load JSON at runtime.
 
 ### Project layout (key paths)
 - **Scene**: `Assets/Scenes/scene_Sandbox.unity`
@@ -35,27 +34,41 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **com.unity.nuget.newtonsoft-json**: MIT — JSON serialization (Newtonsoft.Json via Unity NuGet bridge).
 - **Unity official packages** (e.g., `com.unity.ugui`, `com.unity.feature.2d`, `com.unity.timeline`, `com.unity.test-framework`, `com.unity.visualscripting`, editor integrations, and `com.unity.modules.*`): Licensed by Unity (typically under the Unity Companion License and/or Unity Terms). See each package’s License entry in the Unity Package Manager for details.
 
-### Running the sandbox
-- On Play, a file dialog prompts you to load a Scenario JSON.
-- If you cancel (in the Unity Editor), the game will fall back to using the currently assigned `ScenarioNodeGraph` asset to start a scenario.
-- Each round:
-  - Populations and movement are simulated.
-  - You receive action points to interact (harvest/introduce) via the UI.
-  - Win conditions are evaluated and progress is shown in the UI.
+### Art and icon assets
+- **Microsoft Fluent 3 Emoji (Fluent Emoji/Fluent 3D Emoji)**: MIT — Open-source emoji/icon set by Microsoft. Source: [Fluent Emoji GitHub repository](https://github.com/microsoft/fluentui-emoji).
+- Icons included in this project live under `Assets/_EcoKnow/Resources/Icons/` (high-contrast PNG variants are used in UI).
+- When creating scenarios, please only reference icons from this provided set to ensure licensing compliance and that assets are available in builds.
 
 ### Scenario authoring (Graph Editor)
 - Author scenarios using the node graph system (xNode-based): assets live under `Assets/_EcoKnow/Scenario Editor/`.
 - A scenario includes: name, rounds, actions per round, start currency, seed, Entities, Items, Win Conditions, Matrix, and Map Layout.
-- Export a scenario to JSON from the graph (Editor context command provided by the graph script). The exported JSON can be loaded at runtime.
+
+### CREATING YOUR FIRST SCENARIO
+- Scenarios are saved in the `Assets/_EcoKnow/Scenario Editor/` folder.
+- Right click -> Create -> Scenario Node Graph.
+- Double‑click the new asset to open it in xNode.
+- Right‑click in the canvas to add nodes.
+- Node options:
+  - (see image attached)
+- When you’re ready, you can either:
+  - Export your Scenario via right click -> Export JSON (ensure you used only icons from the provided set), or
+  - Replace the default Scenario loaded in the `scene_Sandbox` scene (GameObject: `ScenarioLoader TEMP`) with your new Graph.
+
+### PLAYING A SCENARIO
+- Inside Unity: Press Play. A file dialog appears to load a Scenario JSON. Cancelling uses the `ScenarioLoader TEMP` graph.
+- You can also select a JSON exported from the graph to load that scenario at runtime.
+- Navigation: WASD moves the board; +/- zooms the camera (planned update: drag + middle mouse/pinch).
+- If you can’t introduce an item, you likely lack the required resources. Check the Scenario Graph for costs/rules.
+- When a session ends, you can export a JSON data file. See the Data export section below.
 
 ### Data export
 - The game records events each round, including: total populations by species, inventory, per‑cell populations, and win condition results.
-- Press `P` during play to export the current session data as JSON to Unity's `persistentDataPath` (platform‑specific). The project also provides a save dialog method that can be invoked from UI to choose a destination.
+- Press `P` during play to export the current session data as JSON to Unity's `persistentDataPath`. A save‑as dialog variant is also available from UI.
 
 ### Controls and tips
 - Use the UI entity list to select a species for actions.
-- Advance the round using the on‑screen control. Action points are replenished each round.
-- Token borders and colors indicate per‑cell species state; totals are shown in the side panel.
+- Advance the round using the on‑screen control; action points are replenished each round.
+- Token borders/colors indicate per‑cell species state; totals are shown in the side panel.
 
 ### Troubleshooting
 - If Git-based packages fail to resolve, ensure you have network access and that Unity Hub/Editor can access Git URLs.
