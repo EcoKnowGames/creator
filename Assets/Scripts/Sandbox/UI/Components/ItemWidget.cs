@@ -9,8 +9,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     {
         [SerializeField] private Image _itemIcon;
         [SerializeField] private TMP_Text _quantityText;
+        [SerializeField] private Image _quantityPanelBackground;
+
+        [Header("Colours")]
+        [SerializeField] private Color _validColour;
+        [SerializeField] private Color _invalidColour;
+
+        private bool _showSign = false;
 
         private const string LogChannel = "[ItemWidget]";
+
+        public void Awake()
+        {
+            SetValid(true);
+        }
 
         public void SetIcon(string spritePath)
         {
@@ -28,11 +40,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void SetQuantity(int quantity)
+        public void SetQuantity(int quantity, bool forceShowSign = false)
         {
             if (_quantityText != null)
             {
-                _quantityText.text = FormatQuantity(quantity);
+                string quantityStr = FormatQuantity(quantity);
+                if ((forceShowSign) && (quantity > 0))
+                {
+                    quantityStr = "+ " + quantityStr;
+                }
+
+                _quantityText.text = quantityStr;
             }
         }
 
@@ -50,6 +68,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             return quantity.ToString();
+        }
+
+        public void SetValid(bool value)
+        {
+            if (_quantityPanelBackground != null)
+            {
+                _quantityPanelBackground.color = value == true ? _validColour : _invalidColour;
+            }
         }
     }
 }

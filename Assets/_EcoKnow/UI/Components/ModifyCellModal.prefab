@@ -1766,12 +1766,16 @@ MonoBehaviour:
   _confirmText: {fileID: 7764641537680220584}
   _inventoryChange: {fileID: 1633251322335693143}
   _confirmButton: {fileID: 1781040475974549757}
-  _unitTypeContainer: {fileID: 9102079036927441113}
   _decreaseButton: {fileID: 3505827488586334162}
   _increaseButton: {fileID: 746431557650721260}
   _tileSelectDropdown: {fileID: 5408271829602373281}
+  _unitTypeContainer: {fileID: 9102079036927441113}
   _discreteToggle: {fileID: 4878841927376008418}
   _percentToggle: {fileID: 6852039575555913249}
+  _itemChangeContainer: {fileID: 1436490706431886317}
+  _itemChangeTitleText: {fileID: 5456698618284492000}
+  _itemWidgetPrefab: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+  _itemWidgetContainer: {fileID: 5855545699028185451}
 --- !u!222 &1127611514552361285
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4184,7 +4188,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 6461436391138797704}
   m_TextViewport: {fileID: 3992041694238932303}
   m_TextComponent: {fileID: 2896341517332915820}
   m_Placeholder: {fileID: 3594396766330783597}

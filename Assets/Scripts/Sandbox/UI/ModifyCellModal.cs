@@ -34,6 +34,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Toggle _discreteToggle;
         [SerializeField] private Toggle _percentToggle;
 
+        [Header("Items")]
+        [SerializeField] private GameObject _itemChangeContainer;
+        [SerializeField] private TMP_Text _itemChangeTitleText;
+        [SerializeField] private ItemWidget _itemWidgetPrefab;
+        [SerializeField] private Transform _itemWidgetContainer;
+
         Action<UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
         Action onInputModified;
@@ -99,7 +105,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //Update entity info
             _selectedEntityIndex = entityIndex;
             SetEntityType(_selectedEntityIndex);
-            //UpdateModal();
+
+            //Update items
+            if (_itemChangeTitleText != null)
+            {
+                _itemChangeTitleText.text = _modifyMode == ModifyMode.HARVEST ? "Rewards" : "Cost";
+            }
 
             this.gameObject.SetActive(true);
             StartCoroutine(RefreshLayout());
@@ -252,17 +263,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        //TODO(caspar): Investigate Pluralizer properly
-        /*private void SetConfirmText()
-        {
-            if (_confirmText != null)
-            {
-                string modifyText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_modifyMode.ToString().ToLower()); //Bit of a hack but works
-                string entityPlural = PluralizationService.CreateService(CultureInfo.CurrentCulture).Pluralize("Fox");
-                _confirmText.text = string.Format($"{modifyText} {InputValue} {entityPlural}");
-            }
-        }*/
-
         private void SetEntityType(int entityIndex)
         {
             if (_selectedEntityText != null)
@@ -272,6 +272,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 {
                     _selectedEntityText.text = string.Format($"{entityType.ID}");
                     _entityIcon?.SetEntity(entityType);
+
+                    Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
+                    InstantiateItemWidgets(requirements);
                 }
             }
         }
@@ -331,6 +334,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if ((selectedCells.Count <= 0) || (InputValue <= 0))
             {
                 canPerformAction = false;
+                SetItemWidgetsVisibile(false);
             }
             //If we have cells selected, check our inventory quantities before we accept an action as valid
             else
@@ -341,6 +345,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
                     if (requirements != null)
                     {
+                        SetItemWidgetsVisibile(true);
+                        UpdateItemWidgets(requirements, actualDifference);
                         foreach (Quantity quantity in requirements)
                         {
                             bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, Mathf.Abs(actualDifference)) : true;
@@ -397,79 +403,70 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             return actualDifference;
         }
 
-        /*private void UpdateInventoryPanel()
+        public void SetItemWidgetsVisibile(bool value)
         {
-
+            _itemChangeContainer?.SetActive(value);
         }
 
-        private void UpdateInventoryChange(bool canPerformAction, int entityIndex)
+        private void InstantiateItemWidgets(Quantity[] quantities)
         {
-            if ((_inventoryChange == null) || (SandboxManager.Instance.EntityManager == null))
+            if ((_itemWidgetContainer == null) || (_itemWidgetPrefab == null))
             {
-                //TODO(caspar): Error
                 return;
             }
 
-            if (_selectedCells == null)
+            //Remove old objectives
+            foreach (Transform child in _itemWidgetContainer)
             {
-                //TODO(caspar): Error
-                return;
+                Destroy(child.gameObject);
             }
 
-            int modifyAmount = 0;
-            if (_inputField != null)
+            //Instantiate necessary number of widgets
+            PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
+            if (inventory != null)
             {
-                int.TryParse(_inputField.text, out modifyAmount);
-            }
-
-            modifyAmount *= _selectedCells.Count;
-
-            string inventoryList = string.Empty;
-            string inventoryPrefix = string.Empty;
-
-            //Figure out cost
-            Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(entityIndex);
-            if (entityType != null)
-            {
-                Quantity[] requirements = _actionType == PlayerAction.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
-                if (requirements != null)
+                foreach (Quantity quantity in quantities)
                 {
-                    foreach (Quantity quantity in requirements)
+                    ItemWidget widget = Instantiate(_itemWidgetPrefab, _itemWidgetContainer);
+                }
+            }
+        }
+
+        private void UpdateItemWidgets(Quantity[] quantities, int modifyAmount)
+        {
+            if ((_itemWidgetContainer == null) || (_itemWidgetPrefab == null))
+            {
+                return;
+            }
+
+            PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                ItemWidget[] widgets = _itemWidgetContainer.GetComponentsInChildren<ItemWidget>();
+                for (int i = 0; i < quantities.Length; i++)
+                {
+                    if (i >= widgets.Length)
                     {
-                        bool hasRequirement = _actionType == PlayerAction.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, modifyAmount) : true;
-                        string ownedAmount = SandboxManager.Instance.PlayerInventory.GetAmountHeld(quantity.ID).ToString();
-                        string changeAmount = _actionType == PlayerAction.INTRODUCE ? string.Format($"Required {quantity.Value * modifyAmount}") : string.Format($"{quantity.Value * modifyAmount}");
-                        inventoryList += string.Format($"<color={(hasRequirement ? "black" : "red")}>{quantity.ID}: {changeAmount} (Owned {ownedAmount})</color>\n");
+                        //TODO(caspar): We should never reach this point
+                        //Spawn new widget? Just in case?
+                    }
+                    else
+                    {
+                        Item item = inventory.GetItemDef(quantities[i].ID);
+                        if (item != null)
+                        {
+                            widgets[i].SetIcon(item.Icon);
+
+                            int quantity = -1 * (quantities[i].Value * modifyAmount); //Invert to account for modifyAmount being the signed difference in Entity Population
+                            widgets[i].SetQuantity(quantity, true);
+
+                            bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantities[i] }, Mathf.Abs(modifyAmount)) : true;
+                            widgets[i].SetValid(hasQuantity);
+                        }
                     }
                 }
             }
-
-
-            if (_selectedCells.Count <= 0)
-            {
-                inventoryPrefix = "<color=red\">No cells selected!</color>\n";
-            }
-            else
-            { 
-                //Sort out prefix now we know what the cost is
-                if (canPerformAction)
-                {
-                    inventoryPrefix = _actionType == PlayerAction.HARVEST ? "You will gain:\n" : "You will spend:\n";
-                }
-                else
-                {
-                    inventoryPrefix = "You cannot afford this action:\n";
-                }
-            }
-
-
-            _inventoryChange.text = inventoryPrefix + inventoryList;
-
-            if (_inventoryChange.GetComponent<RectTransform>() != null)
-            {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(_inventoryChange.GetComponent<RectTransform>());
-            }
-        }*/
+        }
         #endregion
     }
 }

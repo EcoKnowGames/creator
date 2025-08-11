@@ -52,6 +52,30 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _validColour.b
+      value: 0.7607844
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _validColour.g
+      value: 0.7607844
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _validColour.r
+      value: 0.7607844
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _invalidColour.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _invalidColour.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530772188604147235, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
+      propertyPath: _invalidColour.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4193759679348496024, guid: 7b75fa422e721814bb647df78baf73bc, type: 3}
       propertyPath: m_Name
       value: ItemWidget_Disabled
