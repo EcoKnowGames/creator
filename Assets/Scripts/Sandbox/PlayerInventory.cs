@@ -42,6 +42,11 @@ namespace Glitchers.EcoKnow.Sandbox
             _itemDefs = items;
         }
 
+        public Item GetItemDef(string id)
+        {
+            return _itemDefs.FirstOrDefault(x => x.ID.Equals(id, StringComparison.OrdinalIgnoreCase));
+        }
+
         #region Add/Remove by Item ID
         public int AddItem(string id, int amount)
         {
