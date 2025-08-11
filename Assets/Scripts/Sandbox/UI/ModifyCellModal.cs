@@ -459,6 +459,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                             iconPath = item.Icon;
                         }
 
+                        widgets[i].SetTitle(quantities[i].ID);
+
                         widgets[i].SetIcon(iconPath);
 
                         int quantity = -1 * (quantities[i].Value * modifyAmount); //Invert to account for modifyAmount being the signed difference in Entity Population

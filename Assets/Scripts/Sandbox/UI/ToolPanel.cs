@@ -63,14 +63,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void SetButtonsInteractable(bool canHarvest, bool canIntroduce)
         {
+            bool hasActionsRemaining = SandboxManager.CanPerformAction();
+
             if (_harvestButton != null)
             {
-                _harvestButton.interactable = canHarvest;
+                _harvestButton.interactable = hasActionsRemaining && canHarvest;
             }
 
             if (_introduceButton != null)
             {
-                _introduceButton.interactable = canIntroduce;
+                _introduceButton.interactable = hasActionsRemaining && canIntroduce;
             }
         }
 
