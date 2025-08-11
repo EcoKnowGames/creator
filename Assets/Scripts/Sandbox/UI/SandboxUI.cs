@@ -115,7 +115,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _modifyCellManager?.ExitModifyMode();
             }
 
-            _toolPanel?.ShowToolbar(entityIndex);
+            _toolPanel?.ShowToolbar(entityIndex, _entityPanel.GetWidgetForEntity(entityIndex));
         }
 
         private void OnEntityDeselected()
