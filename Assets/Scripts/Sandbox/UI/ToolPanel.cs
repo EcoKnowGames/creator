@@ -14,6 +14,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Button _harvestButton;
         [SerializeField] private Button _introduceButton;
 
+        [Header("Positioning")]
+        [SerializeField] private float entityWidgetXOffset = -70f;
+
         private const string LogChannel = "[ToolPanel]";
 
         public void Init()
@@ -22,10 +25,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         }
 
 
-        public void ShowToolbar(int entityIndex)
+        public void ShowToolbar(int entityIndex, EntityWidget anchoredWidget)
         {
             SetEntity(entityIndex);
             this.gameObject.SetActive(true);
+
+            AnchorToPosition(anchoredWidget.transform.position, entityWidgetXOffset);
         }
 
         public void HideToolbar()
@@ -67,6 +72,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 _introduceButton.interactable = canIntroduce;
             }
+        }
+
+        private void AnchorToPosition(Vector3 position, float xOffset = 0f)
+        {
+            Vector3 finalPosition = position;
+            finalPosition.x += xOffset;
+
+            this.transform.position = finalPosition;
         }
     }
 }
