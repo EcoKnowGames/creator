@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class ItemWidget : MonoBehaviour
     {
+        [Header("Item Info")]
+        [SerializeField] private TMP_Text _itemTitle;
         [SerializeField] private Image _itemIcon;
         [SerializeField] private Image _currencyIcon;
         [SerializeField] private TMP_Text _quantityText;
@@ -24,6 +27,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             SetValid(true);
             ShowItemIcon();
+            ShowTitle(false);
+        }
+
+        public void SetTitle(string title)
+        {
+            if (_itemTitle != null)
+            {
+                _itemTitle.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToString().ToLower());
+                ShowTitle(true);
+            }
+        }
+
+        private void ShowTitle(bool visible)
+        {
+            if (_itemTitle != null)
+            {
+                _itemTitle.gameObject.SetActive(visible);
+            }
         }
 
         public void SetIcon(string spritePath)
@@ -109,6 +130,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if (_quantityPanelBackground != null)
             {
                 _quantityPanelBackground.color = value == true ? _validColour : _invalidColour;
+            }
+
+            if (_itemTitle != null)
+            {
+                _itemTitle.color = value == true ? _validColour : _invalidColour;
             }
         }
     }
