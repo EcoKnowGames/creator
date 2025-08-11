@@ -275,6 +275,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnInputModified, OnHarvestConfirmed, OnModifyCancelled);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnHarvestConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -310,6 +311,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void ShowIntroduceModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnInputModified, OnIntroduceConfirmed, OnModifyCancelled);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnIntroduceConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
