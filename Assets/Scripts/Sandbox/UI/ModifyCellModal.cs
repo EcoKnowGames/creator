@@ -452,17 +452,20 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     }
                     else
                     {
+                        string iconPath = quantities[i].ID;
                         Item item = inventory.GetItemDef(quantities[i].ID);
                         if (item != null)
                         {
-                            widgets[i].SetIcon(item.Icon);
-
-                            int quantity = -1 * (quantities[i].Value * modifyAmount); //Invert to account for modifyAmount being the signed difference in Entity Population
-                            widgets[i].SetQuantity(quantity, true);
-
-                            bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantities[i] }, Mathf.Abs(modifyAmount)) : true;
-                            widgets[i].SetValid(hasQuantity);
+                            iconPath = item.Icon;
                         }
+
+                        widgets[i].SetIcon(iconPath);
+
+                        int quantity = -1 * (quantities[i].Value * modifyAmount); //Invert to account for modifyAmount being the signed difference in Entity Population
+                        widgets[i].SetQuantity(quantity, true);
+
+                        bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantities[i] }, Mathf.Abs(modifyAmount)) : true;
+                        widgets[i].SetValid(hasQuantity);               
                     }
                 }
             }
