@@ -8,6 +8,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     public class ItemWidget : MonoBehaviour
     {
         [SerializeField] private Image _itemIcon;
+        [SerializeField] private Image _currencyIcon;
         [SerializeField] private TMP_Text _quantityText;
         [SerializeField] private Image _quantityPanelBackground;
 
@@ -22,21 +23,54 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void Awake()
         {
             SetValid(true);
+            ShowItemIcon();
         }
 
         public void SetIcon(string spritePath)
         {
-            if ((_itemIcon != null) && !string.IsNullOrEmpty(spritePath))
+            if (spritePath.Equals(PlayerInventory.CurrencyID))
             {
-                Sprite resource = Resources.Load<Sprite>(spritePath);
-                if (resource != null)
+                ShowCurrencyIcon();
+            }
+            else
+            {
+                ShowItemIcon();
+                if ((_itemIcon != null) && !string.IsNullOrEmpty(spritePath))
                 {
-                    _itemIcon.sprite = resource;
+                    Sprite resource = Resources.Load<Sprite>(spritePath);
+                    if (resource != null)
+                    {
+                        _itemIcon.sprite = resource;
+                    }
+                    else
+                    {
+                        Debug.LogError($"{LogChannel} Failed to find icon for item at path {spritePath}!");
+                    }
                 }
-                else
-                {
-                    Debug.LogError($"{LogChannel} Failed to find icon for item at path {spritePath}!");
-                }
+            }
+        }
+
+        private void ShowCurrencyIcon()
+        {
+            if (_itemIcon != null)
+            {
+                _itemIcon.gameObject.SetActive(false);
+            }
+            if (_currencyIcon != null)
+            {
+                _currencyIcon.gameObject.SetActive(true);
+            }
+        }
+
+        private void ShowItemIcon()
+        {
+            if (_itemIcon != null)
+            {
+                _itemIcon.gameObject.SetActive(true);
+            }
+            if (_currencyIcon != null)
+            {
+                _currencyIcon.gameObject.SetActive(false);
             }
         }
 
