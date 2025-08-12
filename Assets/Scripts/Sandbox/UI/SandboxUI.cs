@@ -16,7 +16,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
         [SerializeField] private ObjectivesPanel _objectivePanel;
-        [SerializeField] private PlayerToolbar _playerToolbar;
+        //[SerializeField] private PlayerToolbar _playerToolbar;
+        [SerializeField] private ToolPanel _toolPanel;
 
         [Header("Modification Panels")]
         [SerializeField] private ModifyCellManager _modifyCellManager;
@@ -37,7 +38,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //Initialise our components
             _entityPanel?.Init(entityManager.GetEntityTypeList());
             _objectivePanel?.Init(winConditions, entityManager);
-            _playerToolbar?.Init();
+            _toolPanel?.Init();
             _modifyCellManager?.Init();
             _resultsModal?.HideModal();
 
@@ -92,14 +93,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             _roundIndicator?.UpdateRoundCounter(currentRound, maxRounds);
 
-            _objectivePanel?.UpdateWinConditions();
+            _objectivePanel?.UpdateWinConditions(currentRound, maxRounds);
 
             _entityPanel?.DeselectEntity();
             _entityPanel?.UpdateAllWidgets();
 
             _modifyCellManager?.ExitModifyMode();
 
-            _playerToolbar?.UpdateActionsRemaining(actions);
+            //_playerToolbar?.UpdateActionsRemaining(actions);
 
             RefreshInventories();
         }
@@ -114,7 +115,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _modifyCellManager?.ExitModifyMode();
             }
 
-            _playerToolbar?.ShowToolbar(entityIndex);
+            _toolPanel?.ShowToolbar(entityIndex, _entityPanel.GetWidgetForEntity(entityIndex));
         }
 
         private void OnEntityDeselected()
@@ -124,7 +125,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _modifyCellManager?.ExitModifyMode();
             }
 
-            _playerToolbar?.HideToolbar();
+            _toolPanel?.HideToolbar();
         }
 
         private void OnEntityUpdated(int column, int row, int id)
@@ -156,13 +157,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Modify Mode
         private void OnEnterModifyMode(ModifyMode mode)
         {
-            _playerToolbar?.SetModifyModeText(mode);
+            //_playerToolbar?.SetModifyModeText(mode);
         }
 
         private void OnModifySuccess()
         {
             int actionsRemaining = SandboxManager.GetAvailableActionPoints();
-            _playerToolbar?.UpdateActionsRemaining(actionsRemaining);
+            //_playerToolbar?.UpdateActionsRemaining(actionsRemaining);
 
             RefreshInventories();
 

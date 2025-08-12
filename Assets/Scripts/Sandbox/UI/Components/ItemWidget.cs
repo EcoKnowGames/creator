@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,32 +8,104 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class ItemWidget : MonoBehaviour
     {
+        [Header("Item Info")]
+        [SerializeField] private TMP_Text _itemTitle;
         [SerializeField] private Image _itemIcon;
+        [SerializeField] private Image _currencyIcon;
         [SerializeField] private TMP_Text _quantityText;
+        [SerializeField] private Image _quantityPanelBackground;
+
+        [Header("Colours")]
+        [SerializeField] private Color _validColour;
+        [SerializeField] private Color _invalidColour;
+
+        private bool _showSign = false;
 
         private const string LogChannel = "[ItemWidget]";
 
+        public void Awake()
+        {
+            SetValid(true);
+            ShowItemIcon();
+            ShowTitle(false);
+        }
+
+        public void SetTitle(string title)
+        {
+            if (_itemTitle != null)
+            {
+                _itemTitle.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToString().ToLower());
+                ShowTitle(true);
+            }
+        }
+
+        private void ShowTitle(bool visible)
+        {
+            if (_itemTitle != null)
+            {
+                _itemTitle.gameObject.SetActive(visible);
+            }
+        }
+
         public void SetIcon(string spritePath)
         {
-            if ((_itemIcon != null) && !string.IsNullOrEmpty(spritePath))
+            if (spritePath.Equals(PlayerInventory.CurrencyID))
             {
-                Sprite resource = Resources.Load<Sprite>(spritePath);
-                if (resource != null)
+                ShowCurrencyIcon();
+            }
+            else
+            {
+                ShowItemIcon();
+                if ((_itemIcon != null) && !string.IsNullOrEmpty(spritePath))
                 {
-                    _itemIcon.sprite = resource;
-                }
-                else
-                {
-                    Debug.LogError($"{LogChannel} Failed to find icon for item at path {spritePath}!");
+                    Sprite resource = Resources.Load<Sprite>(spritePath);
+                    if (resource != null)
+                    {
+                        _itemIcon.sprite = resource;
+                    }
+                    else
+                    {
+                        Debug.LogError($"{LogChannel} Failed to find icon for item at path {spritePath}!");
+                    }
                 }
             }
         }
 
-        public void SetQuantity(int quantity)
+        private void ShowCurrencyIcon()
+        {
+            if (_itemIcon != null)
+            {
+                _itemIcon.gameObject.SetActive(false);
+            }
+            if (_currencyIcon != null)
+            {
+                _currencyIcon.gameObject.SetActive(true);
+            }
+        }
+
+        private void ShowItemIcon()
+        {
+            if (_itemIcon != null)
+            {
+                _itemIcon.gameObject.SetActive(true);
+            }
+            if (_currencyIcon != null)
+            {
+                _currencyIcon.gameObject.SetActive(false);
+            }
+        }
+
+        public void SetQuantity(int quantity, bool forceShowSign = false)
         {
             if (_quantityText != null)
             {
-                _quantityText.text = FormatQuantity(quantity);
+                string quantityStr = FormatQuantity(quantity);
+                if ((forceShowSign) && (quantity > 0))
+                {
+                    quantityStr = "+ " + quantityStr;
+                }
+
+                _quantityText.text = quantityStr;
             }
         }
 
@@ -50,6 +123,19 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             return quantity.ToString();
+        }
+
+        public void SetValid(bool value)
+        {
+            if (_quantityPanelBackground != null)
+            {
+                _quantityPanelBackground.color = value == true ? _validColour : _invalidColour;
+            }
+
+            if (_itemTitle != null)
+            {
+                _itemTitle.color = value == true ? _validColour : _invalidColour;
+            }
         }
     }
 }
