@@ -47,12 +47,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     continue;
                 }
 
-                widget.SetRoundTarget(condition.requiredRounds);
-                widget.SetComplete(condition.Completed);
+                widget.ResetResultsTrack();
+                widget.UpdateObjective(-1, -1); //Not ideal but works for now
             }
         }
 
-        public void UpdateWinConditions()
+        public void UpdateWinConditions(int currentRound, int maxRounds)
         {
             if (_widgetContainer == null)
             {
@@ -67,8 +67,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     ObjectiveWidget widget = GetWidgetForEntity(condition.EntityIndex);
                     if (widget != null)
                     {
-                        widget.SetComplete(condition.Completed); //TODO(caspar): Rethink this function?
-                        //TODO(caspar): Update track
+                        widget.UpdateObjective(currentRound, maxRounds);
                     }
                 }
             }
@@ -90,7 +89,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnEntityUpdated(int column, int row, int id)
         {
-            UpdateWinConditions();
+            //TODO(caspar): Update active result widget with our current total
+            ObjectiveWidget widget = GetWidgetForEntity(id);
+            if (widget != null)
+            {
+                widget.OnEntityUpdated();
+            }
         }
     }
 }
