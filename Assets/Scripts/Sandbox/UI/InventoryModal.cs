@@ -19,6 +19,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _profitText;
         [SerializeField] private Button _cancelButton;
 
+        public Action onSellSuccess;
+
         private InventoryRow[] _inventoryRowList => _inventoryRowContainer == null ? null : _inventoryRowContainer.GetComponentsInChildren<InventoryRow>();
 
         private void Start()
@@ -41,11 +43,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnSellPressed()
         {
+            if (!SandboxManager.CanPerformAction())
+            {
+                return;
+            }
+
             if (_inventoryRowList != null)
             {
-                if (_inventoryRowList.Count() > 0)
+                InventoryRow[] selectedRows = _inventoryRowList.Where(x => x.IsSelectedForSell).ToArray();
+                if ((selectedRows != null) && (selectedRows.Count() > 0))
                 {
-                    foreach (InventoryRow row in _inventoryRowList)
+                    foreach (InventoryRow row in selectedRows)
                     {
                         SandboxManager.Instance.PlayerInventory?.SellItem(row.ItemID, row.SelectedUnits);
                         row.ClearSelection();
@@ -53,6 +61,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                     RefreshInventory();
                     OnUnitsAdjusted();
+
+                    onSellSuccess?.Invoke();
                 }
             }
         }
@@ -88,7 +98,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (_sellButton != null)
             {
-                _sellButton.interactable = anySelected;
+                _sellButton.interactable = anySelected && SandboxManager.CanPerformAction();
             }
 
             if (_unitText != null)
