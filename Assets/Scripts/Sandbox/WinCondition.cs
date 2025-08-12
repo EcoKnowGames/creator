@@ -8,7 +8,14 @@ namespace Glitchers.EcoKnow.Sandbox
 {
     public class WinCondition
     {
-        public enum Result { NOT_STARTED, IN_RANGE, STREAK, GRACE, FAILED };
+        //This matches the states in ResultsWidget
+        public enum Result {
+            NOT_STARTED = 0,
+            IN_RANGE = 1,
+            STREAK = 2,
+            GRACE = 3,
+            FAILED = 4
+        };
         private List<Result> _resultCache;
         public List<Result> Results => _resultCache;
 
@@ -18,8 +25,8 @@ namespace Glitchers.EcoKnow.Sandbox
         protected int entityIndex;
         public int EntityIndex => entityIndex;
 
-        protected float lowerLimit;
-        protected float upperLimit;
+        public float lowerLimit { get; protected set; }
+        public float upperLimit { get; protected set; }
 
         private int _graceRemaining = 1;
 
@@ -49,7 +56,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void OnNewRound()
         {
-            if (GetPreviousResult() == Result.FAILED)
+            if (GetLatestResult() == Result.FAILED)
             {
                 //No longer tracked
             }
@@ -111,7 +118,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void OnFailedRound()
         {
-            if (GetPreviousResult() == Result.NOT_STARTED)
+            if (GetLatestResult() == Result.NOT_STARTED)
             {
                 PushResult(Result.NOT_STARTED);
             }
@@ -157,7 +164,7 @@ namespace Glitchers.EcoKnow.Sandbox
             _resultCache.Add(result);
         }
 
-        private Result GetPreviousResult()
+        public Result GetLatestResult()
         {
             if ((_resultCache == null) || (_resultCache.Count == 0))
             {

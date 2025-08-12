@@ -1,11 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public enum ModifyMode { NONE, INTRODUCE, HARVEST };
+    public enum TileSelectMode
+    {
+        SELECTED = 0,
+        SELECT_ALL = 1,
+        ABUNDANT = 2,
+        VULNERABLE = 3,
+        DESELECT_ALL = 4
+    }
 
     public class ModifyCellManager : MonoBehaviour
     {
@@ -77,6 +87,37 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+        public void OnTileSelectOptionChanged(int change)
+        {
+            Debug.Log(change);
+
+            if (IsModifying)
+            {
+                if (change == (int)TileSelectMode.SELECTED)
+                {
+                    //do nothing
+                }
+                else if (change == (int)TileSelectMode.SELECT_ALL)
+                {
+                    SelectAllCells();
+                }
+                else if (change == (int)TileSelectMode.ABUNDANT)
+                {
+                    SelectAllCellsInState(CellEntity.State.ABUNDANT);
+                }
+                else if (change == (int)TileSelectMode.VULNERABLE)
+                {
+                    SelectAllCellsInState(CellEntity.State.VULNERABLE);
+                }
+                else if (change == (int)TileSelectMode.DESELECT_ALL)
+                {
+                    ClearSelectedCells();
+                }
+
+                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
+            }
+        }
+
         public void OnInputModified()
         {
             _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
@@ -101,8 +142,62 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private void ClearSelectedCells()
+        public void SelectAllCells()
         {
+            GridManager gridManager = SandboxManager.Instance.GridManager;
+            if (gridManager != null)
+            {
+                Vector2 gridSize = gridManager.GridSize;
+                for (int row = 0; row < gridSize.y; row++)
+                {
+                    for (int column = 0; column < gridSize.x; column++)
+                    {
+                        Cell cell = gridManager.FindCellAtPosition(column, row);
+                        if ((cell != null) && (!_selectedCells.Contains(cell)))
+                        {
+                            _selectedCells.Add(cell);
+                            cell.ShowSelected(true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SelectAllCellsInState(CellEntity.State state)
+        {
+            ClearSelectedCells();
+
+            GridManager gridManager = SandboxManager.Instance.GridManager;
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+            if ((gridManager != null) && (entityManager != null))
+            {
+                Vector2 gridSize = gridManager.GridSize;
+                for (int row = 0; row < gridSize.y; row++)
+                {
+                    for (int column = 0; column < gridSize.x; column++)
+                    {
+                        CellEntity cellEntity = entityManager.GetEntitiesForCell(column, row).FirstOrDefault(x => x.Index == SelectedEntityIndex);
+                        if ((cellEntity != null) && (cellEntity.CurrentState == state))
+                        {
+                            Cell cell = gridManager.FindCellAtPosition(column, row);
+                            if ((cell != null) && (!_selectedCells.Contains(cell)))
+                            {
+                                _selectedCells.Add(cell);
+                                cell.ShowSelected(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ClearSelectedCells()
+        {
+            if (_selectedCells == null)
+            {
+                return;
+            }
+
             foreach (Cell cell in _selectedCells)
             {
                 cell.ShowSelected(false);
@@ -180,6 +275,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnInputModified, OnHarvestConfirmed, OnModifyCancelled);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnHarvestConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -215,6 +311,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void ShowIntroduceModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnInputModified, OnIntroduceConfirmed, OnModifyCancelled);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnIntroduceConfirmed(ModifyCellModal.UnitMode unitMode, float amount)

@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 00763804f7869f340867d9d48897d272
+guid: d0015bf5fa68d01499564c0842957296
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3976851279594783805
-    second: Rounded Square - 10px Radius_0
+      213: 2886171100861976631
+    second: Graph_0
+  - first:
+      213: 1694580842839180115
+    second: Graph_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,45 +116,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rounded Square - 10px Radius_0
+      name: Graph_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 50
-        height: 97
+        width: 57
+        height: 53
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 16, y: 16, z: 0, w: 16}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3cbf13bd4d26fc8c0800000000000000
-      internalID: -3976851279594783805
+      spriteID: 73050eb135dbd0820800000000000000
+      internalID: 2886171100861976631
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rounded Square - 10px Radius_Half_0
+      name: Graph_1
       rect:
         serializedVersion: 2
-        x: 50
-        y: 0
-        width: 47
-        height: 97
+        x: 8
+        y: 13
+        width: 50
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
-      border: {x: 0, y: 16, z: 16, w: 16}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0bed37ee2426dac409652d89e411219d
-      internalID: -1304947300
+      spriteID: 3538c9c5c4c548710800000000000000
+      internalID: 1694580842839180115
       vertices: []
       indices: 
       edges: []
@@ -160,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 14deaf11f0a4f9a4789d0fabd56d2fb6
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -170,8 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Rounded Square - 10px Radius_0: -3976851279594783805
-      Rounded Square - 10px Radius_Half_0: -1304947300
+      Graph_0: 2886171100861976631
+      Graph_1: 1694580842839180115
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

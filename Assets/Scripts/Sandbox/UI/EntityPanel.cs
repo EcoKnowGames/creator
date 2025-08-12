@@ -80,7 +80,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private EntityWidget GetWidgetForEntity(int index)
+        public EntityWidget GetWidgetForEntity(int index)
         {
             if (_entityButtonContainer != null)
             {
