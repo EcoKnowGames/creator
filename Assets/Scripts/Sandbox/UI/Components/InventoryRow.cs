@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,6 +36,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private int maxUnits = 0;
 
+        private UnityAction OnUnitsAdjusted;
+
         public bool IsSelectedForSell => SelectedUnits > 0;
         public int SelectedUnits
         {
@@ -43,7 +46,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 int inputValue = 0;
                 if (_inputField != null)
                 {
-                    int.TryParse(_inputField.text, out inputValue);
+                    int.TryParse(_inputField.text, System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.CurrentCulture, out inputValue);
                 }
 
                 //No negatives!
@@ -76,12 +79,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (_itemQuantity != null)
             {
-                _itemQuantity.text = amount.ToString();
+                _itemQuantity.text = amount.ToString("n0");
             }
 
             if (_itemCost != null)
             {
-                _itemCost.text = item.Value.ToString();
+                _itemCost.text = item.Value.ToString("n0");
             }
 
             if (_inputField != null)
@@ -89,15 +92,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _inputField.text = "0";
             }
 
-            //Set buttons
-            if (_decreaseButton != null)
-            {
-                _decreaseButton.onClick.AddListener(onUnitsAdjusted);
-            }
-            if (_increaseButton != null)
-            { 
-                _increaseButton.onClick.AddListener(onUnitsAdjusted);
-            }
+            OnUnitsAdjusted = onUnitsAdjusted;
 
             UpdateSelectedState();
         }
@@ -151,6 +146,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             ValidateInput();
             UpdateSelectedState();
+            OnUnitsAdjusted?.Invoke();
         }
 
         public void ValidateInput()
@@ -181,7 +177,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 int clampedInput = Mathf.Clamp(SelectedUnits, 0, maxUnits);
                 if (_inputField != null)
                 {
-                    _inputField.text = clampedInput.ToString();
+                    _inputField.text = clampedInput.ToString("n0");
                 }
 
                 //Sort out buttons
