@@ -24,6 +24,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Inventory")]
         [SerializeField] private InventoryPanel _inventoryPanel;
+        [SerializeField] private InventoryModal _inventoryModal;
 
         [Header("Results")]
         [SerializeField] private ResultsModal _resultsModal;
@@ -50,6 +51,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellManager.onEnterModifyMode += OnEnterModifyMode;
             _modifyCellManager.onExitModifyMode += OnExitModifyMode;
             _modifyCellManager.onModifySuccess += OnModifySuccess;
+            _inventoryModal.onSellSuccess += OnSellSuccess;
 
             //Subscribe to other events
             if (entityManager != null)
@@ -152,6 +154,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _inventoryPanel?.RefreshInventory();
         }
+
+        private void OnSellSuccess()
+        {
+            SandboxManager.SpendActionPoint();
+            RefreshInventories();
+            Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
+        }
         #endregion
 
         #region Modify Mode
@@ -162,11 +171,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void OnModifySuccess()
         {
-            int actionsRemaining = SandboxManager.GetAvailableActionPoints();
-            //_playerToolbar?.UpdateActionsRemaining(actionsRemaining);
-
             RefreshInventories();
-
             _entityPanel.DeselectEntity();
         }
 

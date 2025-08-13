@@ -119,7 +119,7 @@ namespace Glitchers.EcoKnow.Sandbox
             if (foundItem && (amountHeld >= amount))
             {
                 Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
-                if (def != null)
+                if ((def != null) && (def.CanSell))
                 {
                     //Adjust inventory
                     RemoveItem(id, amount);
