@@ -103,12 +103,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (_unitText != null)
             {
-                _unitText.text = string.Format($"Sell {totalUnits} Units for ");
+                _unitText.text = string.Format($"Sell {totalUnits.ToString("n0")} Units for ");
             }
 
             if (_profitText != null)
             {
-                _profitText.text = totalProfit.ToString();
+                _profitText.text = totalProfit.ToString("n0");
             }
         }
 
