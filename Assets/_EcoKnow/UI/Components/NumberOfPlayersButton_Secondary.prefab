@@ -104,9 +104,13 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 4914088485981423713, guid: 64e0c52a5e8410542a276232980697b6, type: 3}
+      propertyPath: m_text
+      value: Player 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5003423012427040188, guid: 64e0c52a5e8410542a276232980697b6, type: 3}
       propertyPath: m_Name
-      value: NumberOfPlayersButton_Primary Variant
+      value: NumberOfPlayersButton_Secondary
       objectReference: {fileID: 0}
     - target: {fileID: 5266430288446363043, guid: 64e0c52a5e8410542a276232980697b6, type: 3}
       propertyPath: m_text
@@ -344,7 +348,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1069352619968318717, guid: cd368e9ddddb4a54dba5b24a80892914, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -32.9125
+      value: -37.800003
       objectReference: {fileID: 0}
     - target: {fileID: 1069352619968318717, guid: cd368e9ddddb4a54dba5b24a80892914, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
