@@ -1,6 +1,8 @@
+using Glitchers.EcoKnow.Sandbox.Data;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using XCharts.Runtime;
-using Glitchers.EcoKnow.Sandbox.Data;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -11,8 +13,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public bool IsVisible => _graphContainer != null ? _graphContainer.gameObject.activeSelf : false;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private void Start()
+        {
+            HideGraph();
+        }
+
+        public void Init()
         {
             HideGraph();
         }
@@ -41,6 +47,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             //TODO(caspar): Setup here
+            SetupGraph();
 
             if (_lineChart != null)
             {
@@ -59,26 +66,61 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void SetXAxis_Rounds(int rounds)
         {
             //TODO
+            if (_lineChart != null)
+            {
+                XAxis xAxis = _lineChart.GetChartComponent<XAxis>();
+                if (xAxis != null)
+                {
+                    xAxis.ClearData();
+
+                    for (int i = 0; i < rounds; i++)
+                    {
+                        xAxis.AddData(i.ToString());
+                    }
+                }
+            }
         }
 
-        private void SetYAxis_Population(int maxPopulation)
+        //NOTE(caspar): The LineChart automatically figures out a good max Y Value for the axis
+        /*private void SetYAxis_Population(int maxPopulation)
         {
             //TODO
-        }
-        #endregion
+        }*/
 
-        #region Data Manipulation
-        private void GatherData() //TODO(caspar): Better func name
+        private void SetupGraph()
         {
             DataManager dataManager = DataManager.Instance;
-            if (dataManager != null)
-            {
-                //dataManager.
+            SandboxManager sandboxManager = SandboxManager.Instance;
+            if ((dataManager != null) && (sandboxManager != null) && (_lineChart != null))
+            {                
+                //sandboxManager.WinConditions;
 
-                //get initial point (game _start)
-                //then get (round_end)
-                //whittle down to the population numbers
-                //divide into entity types
+                List<EventDataObject> eventData = dataManager.FetchDataPoints( new Data.EventType[]{ Data.EventType.GAME_START, Data.EventType.ROUND_END } );
+                if (eventData != null)
+                {
+                    SetXAxis_Rounds(eventData.Count); //TODO(caspar): We probably need total rounds + 1 rather than eventCount
+
+                    _lineChart.ClearSerieData();
+
+                    EntityManager entityManager = sandboxManager.EntityManager;
+                    if (entityManager != null)
+                    {
+                        //Get our entity types
+                        Entity[] entityTypes = entityManager.GetEntityTypeList();
+
+                        foreach(Entity entity in entityTypes)
+                        {
+                            //Create array of populations from the event data that match entity type id
+                            int[] populations = eventData.Where(x => x.Populations.ContainsKey(entity.ID)).Select(x => x.Populations[entity.ID]).ToArray();
+                            Line line = _lineChart.AddSerie<Line>(entity.ID);
+                            for (int i = 0; i < populations.Count(); i++)
+                            {
+                                line.AddXYData(i, populations[i]);
+                            }
+                        }
+
+                    }
+                }
 
                 //TODO(caspar): Later
                 //Calculate Harvest/Introduce changes per round

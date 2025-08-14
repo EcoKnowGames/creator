@@ -41,6 +41,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _objectivePanel?.Init(winConditions, entityManager);
             _toolPanel?.Init();
             _modifyCellManager?.Init();
+            _populationGraph?.Init();
             _resultsModal?.HideModal();
 
             RefreshInventories();
