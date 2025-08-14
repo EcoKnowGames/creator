@@ -1,5 +1,6 @@
 using UnityEngine;
 using XCharts.Runtime;
+using Glitchers.EcoKnow.Sandbox.Data;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -31,12 +32,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+        #region Graph Control
         public void ShowGraph()
         {
             if (_graphContainer != null)
             {
                 _graphContainer.gameObject.SetActive(true);
             }
+
+            //TODO(caspar): Setup here
 
             if (_lineChart != null)
             {
@@ -51,5 +55,37 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _graphContainer.gameObject.SetActive(false);
             }
         }
+
+        private void SetXAxis_Rounds(int rounds)
+        {
+            //TODO
+        }
+
+        private void SetYAxis_Population(int maxPopulation)
+        {
+            //TODO
+        }
+        #endregion
+
+        #region Data Manipulation
+        private void GatherData() //TODO(caspar): Better func name
+        {
+            DataManager dataManager = DataManager.Instance;
+            if (dataManager != null)
+            {
+                //dataManager.
+
+                //get initial point (game _start)
+                //then get (round_end)
+                //whittle down to the population numbers
+                //divide into entity types
+
+                //TODO(caspar): Later
+                //Calculate Harvest/Introduce changes per round
+                //Look for HARVEST and INTRODUCE event types
+            }
+        }
+        #endregion
+
     }
 }
