@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a99177a9028f5fd4db4478ea85795f29
+guid: 86793dfd4fccf8444a702a153d800bc7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7040290662958891321
-    second: Stroke Rounded Square - 4pxR_0
+      213: -2751710099151588564
+    second: Square - No Rounding_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -53,7 +53,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Stroke Rounded Square - 4pxR_0
+      name: Square - No Rounding_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 96
-        height: 96
+        width: 31
+        height: 30
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 16, y: 16, z: 16, w: 16}
+      border: {x: 4, y: 4, z: 4, w: 4}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9310a219e0324b160800000000000000
-      internalID: 7040290662958891321
+      spriteID: c23f6377e36ffc9d0800000000000000
+      internalID: -2751710099151588564
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 1643872b2c323c24eb0355b18e0dbc76
+    spriteID: 2456971217b240a4fbc4885850dfdb74
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Stroke Rounded Square - 4pxR_0: 7040290662958891321
+      Square - No Rounding_0: -2751710099151588564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
