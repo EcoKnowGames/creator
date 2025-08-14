@@ -1883,7 +1883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currency: {fileID: 0}
-  _inventoryRowPrefab: {fileID: 5655358155576372856}
+  _inventoryRowPrefab: {fileID: 4566735596635189403, guid: a95afaa0defe1c249adf35837713703d, type: 3}
   _inventoryRowContainer: {fileID: 684580558784250403}
   _sellButton: {fileID: 2390014176054534306}
   _unitText: {fileID: 5934903785439789559}
@@ -6001,17 +6001,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a95afaa0defe1c249adf35837713703d, type: 3}
---- !u!114 &5655358155576372856 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4566735596635189403, guid: a95afaa0defe1c249adf35837713703d, type: 3}
-  m_PrefabInstance: {fileID: 8150270210900664035}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cda79aeba2b3b1479425df1bd10cb12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &8751908539332518073 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 607587794443959898, guid: a95afaa0defe1c249adf35837713703d, type: 3}

@@ -136,6 +136,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7097170872176299864, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7097170872176299864, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.6901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 7097170872176299864, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.59607846
+      objectReference: {fileID: 0}
     - target: {fileID: 7524574335573052184, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
       propertyPath: m_Name
       value: Button_Nested_Secondary
