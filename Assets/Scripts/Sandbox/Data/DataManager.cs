@@ -106,6 +106,11 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
         }
 
+        public void ClearData()
+        {
+            _eventLog?.Clear();
+        }
+
         #region Export Data
         private void ExportData(string filePath = null)
         {
