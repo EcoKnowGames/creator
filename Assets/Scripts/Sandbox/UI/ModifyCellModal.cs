@@ -304,7 +304,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 if (_percentToggle != null)
                 {
                     _percentToggle.isOn = true;
+              
                 }
+
             }
         }
 
