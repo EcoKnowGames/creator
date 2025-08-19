@@ -224,10 +224,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                     }
                 }
-
-                //TODO(caspar): Later
-                //Calculate Harvest/Introduce changes per round
-                //Look for HARVEST and INTRODUCE event types
             }
 
             //Refresh everything just in case
@@ -251,7 +247,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             line.itemStyle.color = colour;
             line.symbol.color = colour;
 
-            line.symbol.type = SymbolType.None; //SymbolType.Circle; //TODO(caspar): Would be nice if we had templates to copy from
+            line.symbol.type = SymbolType.None; //TODO(caspar): Would be nice if we had templates to copy from
 
             return line;
         }
@@ -326,60 +322,77 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Graph Events
         private void OnLegendClick(Legend legend, int index, string serieName, bool selected)
         {
-            //Not working because this calls for every legend item, so it overrides the calls to SetSerieActive
+            //NOTE: This is called for every item in the legend even if only one button is clicked
 
-            if (selected)
+            if (_lineChart != null)
             {
-                if (index == _lastLegendIndexClicked)
-                {
-                    _lastLegendIndexClicked = -1;
+                bool allActive = _lineChart.series.All(x => x.show == true);
+                bool showAll = false;
 
-                    if (_lineChart != null)
+                if (index == _lineChart.series.Count - 1)
+                {
+                    //We have reached the final series and can now process the result of the click interaction
+                    for (int i = 0; i < _lineChart.series.Count; i++)
                     {
+                        Serie serie = _lineChart.series[i];
+                        if (!allActive && serie.show)
+                        {
+                            if (i == _lastLegendIndexClicked)
+                            {
+                                showAll = true;
+                            }
+                        }
+                    }
+
+                    //Re-enable all series
+                    if (showAll)
+                    {
+                        _lastLegendIndexClicked = -1;
+                        HideMarkArea();
+
                         foreach (Serie serie in _lineChart.series)
                         {
                             _lineChart.SetSerieActive(serie, true);
+                            serie.symbol.type = SymbolType.None;
                         }
                     }
-                }
-                else
-                {
-                    _lastLegendIndexClicked = index;
-
-                    //Show Symbols
-                    if (_lineChart != null)
+                    //Only display our focused series
+                    else
                     {
-                        Line line = (Line)_lineChart.GetSerie(serieName);
-                        if (line != null)
+                        Line activeSerie = (Line)_lineChart.series.FirstOrDefault(x => x.show == true); //Currently active
+                        _lastLegendIndexClicked = activeSerie.index;
+
+                        //Show Symbols
+                        if (activeSerie != null)
                         {
-                            line.symbol.type = SymbolType.Circle;
+                            activeSerie.symbol.type = SymbolType.Circle;
                         }
-                    }
 
-                    //Setup Mark Area
-                    SandboxManager sandboxManager = SandboxManager.Instance;
-                    if (sandboxManager != null)
-                    {
-                        EntityManager entityManager = SandboxManager.Instance.EntityManager;
-                        if (entityManager != null)
+                        //Setup Mark Area
+                        SandboxManager sandboxManager = SandboxManager.Instance;
+                        if (sandboxManager != null)
                         {
-                            Entity entityType = entityManager.GetEntityTypeList().FirstOrDefault(x => x.ID.Equals(serieName, System.StringComparison.OrdinalIgnoreCase));
-                            if (entityType != null)
+                            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                            if (entityManager != null)
                             {
-                                WinCondition winCondition = sandboxManager.WinConditions.FirstOrDefault(x => x.EntityIndex == index);
-                                if (winCondition != null)
+                                Entity entityType = entityManager.GetEntityTypeList().FirstOrDefault(x => x.ID.Equals(activeSerie.serieName, System.StringComparison.OrdinalIgnoreCase));
+                                if (entityType != null)
                                 {
-                                    ShowMarkArea(index, entityType, winCondition.lowerLimit, winCondition.upperLimit);
-                                }
-                                else
-                                {
-                                    HideMarkArea();
+                                    WinCondition winCondition = sandboxManager.WinConditions.FirstOrDefault(x => x.EntityIndex == activeSerie.index);
+                                    if (winCondition != null)
+                                    {
+                                        ShowMarkArea(activeSerie.index, entityType, winCondition.lowerLimit, winCondition.upperLimit);
+                                    }
+                                    else
+                                    {
+                                        HideMarkArea();
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
+            }         
         }
         #endregion
     }
