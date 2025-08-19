@@ -11,8 +11,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private GameObject _graphContainer;
         [SerializeField] private LineChart _lineChart;
 
-        //TODO(caspar): Template Graph to copy style from?
+        private int _lastLegendIndexClicked = -1;
 
+        //TODO(caspar): Template Graph to copy style from?
         public bool IsVisible => _graphContainer != null ? _graphContainer.gameObject.activeSelf : false;
 
         private const string LogChannel = "[PopulationGraph]";
@@ -55,12 +56,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _graphContainer.gameObject.SetActive(true);
             }
 
-            //TODO(caspar): Setup here
             SetupGraph();
+            HideMarkArea();
 
             if (_lineChart != null)
             {
                 _lineChart.AnimationFadeIn();
+                _lineChart.onLegendClick = OnLegendClick;
             }
         }
 
@@ -69,6 +71,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if (_graphContainer != null)
             {
                 _graphContainer.gameObject.SetActive(false);
+            }
+
+            if (_lineChart != null)
+            {
+                _lineChart.onLegendClick = null;
             }
         }
 
@@ -86,7 +93,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void SetXAxis_Rounds(int rounds)
         {
-            //TODO
             if (_lineChart != null)
             {
                 XAxis xAxis = _lineChart.GetChartComponent<XAxis>();
@@ -108,11 +114,29 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        //NOTE(caspar): The LineChart automatically figures out a good max Y Value for the axis
-        /*private void SetYAxis_Population(int maxPopulation)
+        //NOTE: The LineChart automatically figures out a good max Y Value for the axis
+        //But we want to control it so that players can "focus" on series without the graph resizing
+        private void SetYAxis_Population(int maxPopulation)
         {
             //TODO
-        }*/
+            if (_lineChart != null)
+            {
+                YAxis yAxis = _lineChart.GetChartComponent<YAxis>();
+                if (yAxis != null)
+                {
+                    int units = 1000;
+                    /*if (maxPopulation >= 10000)
+                    {
+                        units = 10000;
+                    }*/
+
+                    int highest = maxPopulation + (units - (maxPopulation % units));
+
+                    yAxis.min = 0;
+                    yAxis.max = highest;
+                }
+            }
+        }
 
         private void ClearLegendEntries()
         {
@@ -155,17 +179,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             SandboxManager sandboxManager = SandboxManager.Instance;
             if ((dataManager != null) && (sandboxManager != null) && (_lineChart != null))
             {                
-                //sandboxManager.WinConditions;
-
                 List<EventDataObject> eventData = dataManager.FetchDataPoints( new Data.EventType[]{ Data.EventType.GAME_START, Data.EventType.ROUND_END } );
                 if (eventData != null)
                 {
-                    SetXAxis_Rounds(eventData.Count); //TODO(caspar): We probably need total rounds + 1 rather than eventCount
-
-                    //_lineChart.ClearSerieData();
+                    //Clear old data
                     _lineChart.RemoveAllSerie();
                     ClearLegendEntries();
 
+                    //Max number of rounds
+                    SetXAxis_Rounds(sandboxManager.MaxRounds + 1); //Include "START" data point
+
+                    //Max chart height
+                    int highestPopulation = eventData.Max(x => x.Populations.Values.Max());
+                    int highestWinCondition = (int)sandboxManager.WinConditions.Max(x => x.upperLimit);
+                    int chartMax = highestPopulation > highestWinCondition ? highestPopulation : highestWinCondition;
+                    SetYAxis_Population(chartMax);
+
+                    //Now set up line series
                     EntityManager entityManager = sandboxManager.EntityManager;
                     if (entityManager != null)
                     {
@@ -199,34 +229,158 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 //Calculate Harvest/Introduce changes per round
                 //Look for HARVEST and INTRODUCE event types
             }
+
+            //Refresh everything just in case
+            if (_lineChart != null)
+            {
+                _lineChart.RefreshAllComponent();
+            }
         }
 
         private Line AddNewLineSerie(string serieName, Color colour)
         {
             if (_lineChart == null)
             {
-                //TODO(caspar): Error
+                Debug.LogError($"{LogChannel} Failed to add new LineSerie, _lineChart is null!");
                 return null;
             }
 
             Line line = _lineChart.AddSerie<Line>(serieName);
 
-            /*if (_defaultLine != null)
-            {
-                line.lineStyle = _defaultLine.lineStyle;
-                line.itemStyle = _defaultLine.itemStyle;
-                line.symbol = _defaultLine.symbol;
-            }*/
-
             line.lineStyle.color = colour;
             line.itemStyle.color = colour;
             line.symbol.color = colour;
 
-            line.symbol.type = SymbolType.Circle; //TODO(caspar): Would be nice if we had templates to copy from
+            line.symbol.type = SymbolType.None; //SymbolType.Circle; //TODO(caspar): Would be nice if we had templates to copy from
 
             return line;
         }
+
+        private void ShowMarkArea(int index, Entity entityType, float min, float max)
+        {
+            if (_lineChart != null)
+            {
+                YAxis yAxis = _lineChart.GetChartComponent<YAxis>();
+                MarkArea markArea = _lineChart.GetChartComponent<MarkArea>();
+                MarkLine markLine = _lineChart.GetChartComponent<MarkLine>();
+                if ((markArea != null) && (markLine != null) && (yAxis != null))
+                {
+                    int markMax = (int)(max > min ? max : yAxis.max);
+
+                    markArea.serieIndex = index;
+                    markArea.start.yValue = markMax;
+                    markArea.end.yValue = min;
+                    markArea.show = true;
+                    markArea.label.show = true;
+
+                    markLine.serieIndex = index;
+                    markLine.show = true;
+
+                    //Setup markLines
+                    for (int i = 0; i < 2; i++)
+                    {
+                        MarkLineData data = null;
+                        if (i < markLine.data.Count)
+                        {
+                            data = markLine.data[i];
+                        }
+                        else
+                        {
+                            data = new MarkLineData();
+                            markLine.data.Add(new MarkLineData());
+                        }
+
+                        if (data != null)
+                        {
+                            data.startSymbol.show = false;
+                            data.endSymbol.show = false;
+                            data.lineStyle.type = LineStyle.Type.Dashed;
+                            data.yValue = i == 0 ? min : markMax;
+                        }
+                    }
+                }
+
+                _lineChart.RefreshAllComponent();
+            }
+        }
+
+        private void HideMarkArea()
+        {
+            if (_lineChart != null)
+            {
+                MarkArea markArea = _lineChart.GetChartComponent<MarkArea>();
+                MarkLine markLine = _lineChart.GetChartComponent<MarkLine>();
+                if ((markArea != null) && (markLine != null))
+                {
+                    markArea.show = false;
+                    markLine.show = false;
+                    markArea.label.show = false;
+                }
+
+                _lineChart.RefreshAllComponent();
+            }
+        }
+
         #endregion
 
+        #region Graph Events
+        private void OnLegendClick(Legend legend, int index, string serieName, bool selected)
+        {
+            //Not working because this calls for every legend item, so it overrides the calls to SetSerieActive
+
+            if (selected)
+            {
+                if (index == _lastLegendIndexClicked)
+                {
+                    _lastLegendIndexClicked = -1;
+
+                    if (_lineChart != null)
+                    {
+                        foreach (Serie serie in _lineChart.series)
+                        {
+                            _lineChart.SetSerieActive(serie, true);
+                        }
+                    }
+                }
+                else
+                {
+                    _lastLegendIndexClicked = index;
+
+                    //Show Symbols
+                    if (_lineChart != null)
+                    {
+                        Line line = (Line)_lineChart.GetSerie(serieName);
+                        if (line != null)
+                        {
+                            line.symbol.type = SymbolType.Circle;
+                        }
+                    }
+
+                    //Setup Mark Area
+                    SandboxManager sandboxManager = SandboxManager.Instance;
+                    if (sandboxManager != null)
+                    {
+                        EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                        if (entityManager != null)
+                        {
+                            Entity entityType = entityManager.GetEntityTypeList().FirstOrDefault(x => x.ID.Equals(serieName, System.StringComparison.OrdinalIgnoreCase));
+                            if (entityType != null)
+                            {
+                                WinCondition winCondition = sandboxManager.WinConditions.FirstOrDefault(x => x.EntityIndex == index);
+                                if (winCondition != null)
+                                {
+                                    ShowMarkArea(index, entityType, winCondition.lowerLimit, winCondition.upperLimit);
+                                }
+                                else
+                                {
+                                    HideMarkArea();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
