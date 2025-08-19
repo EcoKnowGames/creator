@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 18, y: -18}
-  m_SizeDelta: {x: 410, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &9123039104497201610
 MonoBehaviour:
@@ -573,6 +573,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2566847460214124768, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2566847460214124768, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -691,6 +695,38 @@ PrefabInstance:
     - target: {fileID: 4087943452186113138, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_text
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_fontSize
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_overflowMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4337471042065148459, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5017570762326498626, guid: 587d9ed8fad752f48aa160c67f8482d1, type: 3}
       propertyPath: m_AnchorMax.y
