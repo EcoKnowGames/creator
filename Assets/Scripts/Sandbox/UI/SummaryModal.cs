@@ -12,6 +12,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ObjectiveResultWidget _objectiveWidgetPrefab;
         [SerializeField] private Transform _objectiveContainer;
 
+        [Header("Score")]
+        [SerializeField] private TMP_Text _scoreText;
+
         private const string LogChannel = "[SummaryModal]";
 
         public void ShowModal()
@@ -70,8 +73,19 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     widget.Init(condition);
                 }
             }
+
+            SetupScore();
         }
 
+        private void SetupScore()
+        {
+            int totalScore = SandboxManager.Instance.WinConditions == null ? 0 : SandboxManager.Instance.WinConditions.Sum(x => x.Score);
+
+            if (_scoreText != null)
+            {
+                _scoreText.text = totalScore.ToString();
+            }
+        }
         #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Objective Info")]
         [SerializeField] private TMP_Text _objectiveTitle;
         [SerializeField] private TMP_Text _objectiveDescription;
-
+        [SerializeField] private TMP_Text _scoreText;
 
         [Header("Results Tracker")]
         [SerializeField] private ResultsTracker _resultsTracker;
@@ -69,6 +69,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if (_objectiveDescription != null)
             {
                 _objectiveDescription.text = condition.description;
+            }
+
+            SetScore(condition.Score);
+        }
+
+        private void SetScore(int score)
+        {
+            if (_scoreText != null)
+            {
+                _scoreText.text = score.ToString();
             }
         }
 
