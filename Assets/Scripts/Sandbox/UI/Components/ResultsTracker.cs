@@ -77,6 +77,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+
+        public void UpdateActiveWidget(int population, float lowerLimit, float upperLimit)
+        {
+            if (ActiveWidget != null)
+            {
+                ActiveWidget.SetActiveQuantity(population);
+                ActiveWidget.SetRange(population, lowerLimit, upperLimit);
+            }
+
+            RefreshTracker();
+        }
+
+        public void RefreshTracker()
+        {
+            StartCoroutine(RefreshLayout());
+        }
+
         private IEnumerator RefreshLayout()
         {
             yield return new WaitForEndOfFrame();

@@ -47,7 +47,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     continue;
                 }
 
-                widget.ResetResultsTrack();
+                widget.ResultsTracker.ResetResultsTrack();
                 widget.UpdateObjective(-1, -1); //Not ideal but works for now
             }
         }
