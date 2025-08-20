@@ -5,12 +5,10 @@ using Glitchers.EcoKnow.Sandbox;
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
 
-    public class ResultsModal : MonoBehaviour
+    public class SummaryModal : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _resultsText;
-        public void ShowModal(string result)
+        public void ShowModal()
         {
-            _resultsText.text = string.Format($"You {result}!");
             this.gameObject.SetActive(true);
         }
 
