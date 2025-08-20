@@ -27,7 +27,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private InventoryModal _inventoryModal;
 
         [Header("Results")]
-        [SerializeField] private ResultsModal _resultsModal;
+        [SerializeField] private SummaryModal _summaryModal;
 
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
@@ -41,7 +41,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _objectivePanel?.Init(winConditions, entityManager);
             _toolPanel?.Init();
             _modifyCellManager?.Init();
-            _resultsModal?.HideModal();
+            _summaryModal?.HideModal();
 
             RefreshInventories();
 
@@ -88,7 +88,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Game Lifecycle
         public void OnGameEnded(SandboxManager.Result result)
         {
-            _resultsModal?.ShowModal(result.ToString());
+            _summaryModal?.ShowModal();
         }
 
         public void OnNewRoundStarted(int currentRound, int maxRounds, int actions)
