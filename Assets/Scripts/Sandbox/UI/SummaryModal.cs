@@ -8,6 +8,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class SummaryModal : MonoBehaviour
     {
+        [Header("Scenario Info")]
+        [SerializeField] private TMP_Text _scenarioTitle;
+
         [Header("Objective Results")]
         [SerializeField] private ObjectiveResultWidget _objectiveWidgetPrefab;
         [SerializeField] private Transform _objectiveContainer;
@@ -48,6 +51,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         }
 
         #region Win Conditions
+        private void SetupTitle()
+        {
+            string title = ScenarioLoader.Instance.LastPlayedScenario == null ? "Scenario Results" : ScenarioLoader.Instance.LastPlayedScenario.Name;
+            if (_scenarioTitle != null)
+            {
+                _scenarioTitle.text = title;
+            }
+        }
+
         private void SetupResults()
         {
             if ((_objectiveWidgetPrefab == null) || (_objectiveContainer == null))
@@ -74,6 +86,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
             }
 
+            SetupTitle();
             SetupScore();
         }
 
