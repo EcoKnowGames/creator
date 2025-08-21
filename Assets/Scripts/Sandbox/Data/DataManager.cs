@@ -106,6 +106,12 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
         }
 
+        public void ClearData()
+        {
+            _eventLog?.Clear();
+        }
+
+        #region Export Data
         private void ExportData(string filePath = null)
         {
             GameDataObject data = new GameDataObject
@@ -166,6 +172,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             "Export Game Data"
             );
         }
+        #endregion
 
         #region Data Gathering
         private MapDataObject GetMapPopulations()
@@ -236,6 +243,23 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
 
             return winConditionList;
+        }
+        #endregion
+
+        #region Data Fetch
+        public List<EventDataObject> FetchDataPoints(EventType[] types)
+        {
+            List<EventDataObject> eventObjects = new List<EventDataObject>();
+
+            foreach(EventDataObject evt in _eventLog)
+            {
+                if (types.Contains(evt.Type))
+                {
+                    eventObjects.Add(evt);
+                }
+            }
+
+            return eventObjects;
         }
         #endregion
 
