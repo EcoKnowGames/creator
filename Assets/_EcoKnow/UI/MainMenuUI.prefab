@@ -365,6 +365,7 @@ MonoBehaviour:
   _toolPanel: {fileID: 0}
   _modifyCellManager: {fileID: 0}
   _inventoryPanel: {fileID: 0}
+  _inventoryModal: {fileID: 0}
   _resultsModal: {fileID: 0}
 --- !u!1 &5421727977407970792
 GameObject:
@@ -1154,6 +1155,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2620717121247979006}
     m_Modifications:
+    - target: {fileID: 213969366513395143, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1164,19 +1169,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1416291186271536116, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1250,8 +1255,25 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.7535714
       objectReference: {fileID: 0}
+    - target: {fileID: 9059958107538831173, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059958107538831173, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059958107538831173, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059958107538831173, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 518
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 213969366513395143, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07df3eb39c9cd5342a4950a2c8da840c, type: 3}
