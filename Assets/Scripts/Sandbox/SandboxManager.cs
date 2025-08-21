@@ -67,6 +67,8 @@ namespace Glitchers.EcoKnow.Sandbox
         private int _maxRounds = 1;
         private int _currentRound = -1;
 
+        public int MaxRounds => _maxRounds;
+
         private int _maxActionsPerRound = 1;
 
         private int _defaultRounds = 2;

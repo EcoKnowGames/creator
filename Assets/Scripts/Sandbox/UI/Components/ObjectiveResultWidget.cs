@@ -41,6 +41,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 SetFailed();
             }
+
+            _resultsTracker?.UpdateResultsTrack(winCondition.Results, SandboxManager.Instance.MaxRounds, SandboxManager.Instance.MaxRounds);
         }
 
         private void SetEntity(int index, Entity entity)
