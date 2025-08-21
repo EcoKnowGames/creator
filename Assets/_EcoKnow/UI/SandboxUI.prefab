@@ -5562,6 +5562,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3176326044563321892}
     m_Modifications:
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5228009807665607886}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTileSelectOptionChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Glitchers.EcoKnow.Sandbox.UI.ModifyCellManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 205134764398864284, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 285129822490539583, guid: b3cc92102653e1a43a9d43318713407e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
