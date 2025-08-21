@@ -11,6 +11,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Entity")]
         [SerializeField] private EntityIcon _entityIcon;
 
+        [Header("Check")]
+        [SerializeField] private GameObject _checkIcon;
+        [SerializeField] private GameObject _crossIcon;
+
         [Header("Objective Info")]
         [SerializeField] private TMP_Text _objectiveTitle;
         [SerializeField] private TMP_Text _objectiveDescription;
@@ -40,6 +44,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if ((winCondition.GetLatestResult() != WinCondition.Result.STREAK) && (winCondition.GetLatestResult() != WinCondition.Result.IN_RANGE))
             {
                 SetFailed();
+            }
+            else
+            {
+                SetSuccess();
             }
 
             _resultsTracker?.Init(winCondition.Results, SandboxManager.Instance.MaxRounds, SandboxManager.Instance.MaxRounds);
@@ -84,12 +92,26 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+        private void SetSuccess()
+        {
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = 1.0f;
+            }
+
+            _checkIcon?.SetActive(true);
+            _crossIcon?.SetActive(false);
+        }
+
         private void SetFailed()
         {
             if (_canvasGroup != null)
             {
                 _canvasGroup.alpha = 0.4f;
-            }       
+            }
+
+            _checkIcon?.SetActive(false);
+            _crossIcon?.SetActive(true);
         }
     }
 }
