@@ -33,6 +33,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private GameObject _unitTypeContainer;
         [SerializeField] private Toggle _discreteToggle;
         [SerializeField] private Toggle _percentToggle;
+        [SerializeField] private GameObject _percentUnitSuffix;
+        [SerializeField] private TMP_Text _discreteFocusText;
+        [SerializeField] private TMP_Text _percentFocusText;
 
         [Header("Items")]
         [SerializeField] private GameObject _itemChangeContainer;
@@ -210,6 +213,22 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
             }
 
+            //Quick fix for toggle text
+            if (_percentFocusText != null)
+            {
+                _percentFocusText.gameObject.SetActive(_unitMode == UnitMode.PERCENT);
+            }
+
+            if (_discreteFocusText != null)
+            {
+                _discreteFocusText.gameObject.SetActive(_unitMode == UnitMode.DISCRETE);
+            }
+
+            //Unit indicator
+            /*if (_percentUnitSuffix != null)
+            {
+                _percentUnitSuffix.SetActive(_unitMode == UnitMode.PERCENT);
+            }*/
 
             //Enable/disable buttons
             if (InputValue <= 0)
