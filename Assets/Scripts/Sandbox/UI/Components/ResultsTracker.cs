@@ -12,6 +12,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private int _maxResultsWidgets = 10;
         [SerializeField] private int _maxFutureRoundCount = 2;
 
+        [SerializeField] private bool _displayActive = true;
+
         private ResultsWidget[] _resultWidgets => this.GetComponentsInChildren<ResultsWidget>();
         public ResultsWidget ActiveWidget => _resultWidgets == null ? null : _resultWidgets.FirstOrDefault(x => x.IsActive);
 
@@ -40,7 +42,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                 int roundsRemaining = maxRounds - currentRound;
                 int futureRoundCount = Mathf.Min(roundsRemaining, _maxFutureRoundCount);
-                if (!failed)
+                if (!failed && _displayActive)
                 {
                     futureRoundCount += 1; //+1 for the Active Round
                 }
