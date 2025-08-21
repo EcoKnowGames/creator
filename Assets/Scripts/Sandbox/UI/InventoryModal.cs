@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -8,7 +11,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
     {
         [SerializeField] private TMPro.TMP_Text _currency;
         [SerializeField] private InventoryRow _inventoryRowPrefab;
-        [SerializeField] private RectTransform _inventoryListContent;
+        [SerializeField] private RectTransform _inventoryRowContainer;
+
+        [Header("Buttons")]
+        [SerializeField] private Button _sellButton;
+        [SerializeField] private TMP_Text _unitText;
+        [SerializeField] private TMP_Text _profitText;
+        [SerializeField] private Button _cancelButton;
+
+        public Action onSellSuccess;
+
+        private InventoryRow[] _inventoryRowList => _inventoryRowContainer == null ? null : _inventoryRowContainer.GetComponentsInChildren<InventoryRow>();
 
         private void Start()
         {
@@ -19,24 +32,90 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             this.gameObject.SetActive(true);
             RefreshInventory();
+            OnUnitsAdjusted();
         }
 
         public void HideModal()
         {
+            OnCancelPressed();
             this.gameObject.SetActive(false);
         }
 
-        public void OnSellPressed(string id)
+        public void OnSellPressed()
         {
-            //Sell 1 for amount
-            SandboxManager.Instance.PlayerInventory?.SellItem(id, 1);
-            RefreshInventory();
+            if (!SandboxManager.CanPerformAction())
+            {
+                return;
+            }
+
+            if (_inventoryRowList != null)
+            {
+                InventoryRow[] selectedRows = _inventoryRowList.Where(x => x.IsSelectedForSell).ToArray();
+                if ((selectedRows != null) && (selectedRows.Count() > 0))
+                {
+                    foreach (InventoryRow row in selectedRows)
+                    {
+                        SandboxManager.Instance.PlayerInventory?.SellItem(row.ItemID, row.SelectedUnits);
+                        row.ClearSelection();
+                    }
+
+                    RefreshInventory();
+                    OnUnitsAdjusted();
+
+                    onSellSuccess?.Invoke();
+                }
+            }
+        }
+
+        public void OnCancelPressed()
+        {
+            if (_inventoryRowList != null)
+            {
+                foreach (InventoryRow row in _inventoryRowList)
+                {
+                    row.ClearSelection();
+                }
+
+                RefreshInventory();
+                OnUnitsAdjusted();
+            }
+        }
+
+        public void OnUnitsAdjusted()
+        {
+            bool anySelected = false;
+            int totalUnits = 0;
+            int totalProfit = 0;
+            foreach (InventoryRow row in _inventoryRowList)
+            {
+                if (row.IsSelectedForSell)
+                {
+                    anySelected = true;
+                    totalUnits += row.SelectedUnits;
+                    totalProfit += (row.SelectedUnits * row.ItemValue);
+                }
+            }
+
+            if (_sellButton != null)
+            {
+                _sellButton.interactable = anySelected && SandboxManager.CanPerformAction();
+            }
+
+            if (_unitText != null)
+            {
+                _unitText.text = string.Format($"Sell {totalUnits.ToString("n0")} Units for ");
+            }
+
+            if (_profitText != null)
+            {
+                _profitText.text = totalProfit.ToString("n0");
+            }
         }
 
         private void RefreshInventory()
         {
 
-            foreach(InventoryRow child in _inventoryListContent.GetComponentsInChildren<InventoryRow>())
+            foreach(InventoryRow child in _inventoryRowContainer.GetComponentsInChildren<InventoryRow>())
             {
                 Destroy(child.gameObject);
             }
@@ -58,10 +137,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 //Items
                 foreach (Tuple<Item, int> item in inventory.GetItemInventory())
                 {
-                    InventoryRow row = Instantiate(_inventoryRowPrefab, _inventoryListContent);
+                    InventoryRow row = Instantiate(_inventoryRowPrefab, _inventoryRowContainer);
                     if (row != null)
                     {
-                        row.Init(item.Item1, item.Item2, delegate { OnSellPressed(item.Item1.ID); } );
+                        row.Init(item.Item1, item.Item2, delegate { OnUnitsAdjusted(); } );
                     }
                 }
             }
