@@ -2059,7 +2059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2215709532851008821, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 210
+      value: 209.99997
       objectReference: {fileID: 0}
     - target: {fileID: 2222832887833812438, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2956,6 +2956,22 @@ PrefabInstance:
     - target: {fileID: 3785547011904964179, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855538431628246748, guid: 7e6c54541030070478be700254c255b8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1517755417}
+    - target: {fileID: 3855538431628246748, guid: 7e6c54541030070478be700254c255b8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnAdvanceRoundPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855538431628246748, guid: 7e6c54541030070478be700254c255b8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Glitchers.EcoKnow.Sandbox.SandboxManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855538431628246748, guid: 7e6c54541030070478be700254c255b8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3944874513988157796, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchorMax.y
