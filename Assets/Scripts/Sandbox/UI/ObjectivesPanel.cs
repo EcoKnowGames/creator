@@ -34,6 +34,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             foreach (WinCondition condition in winConditions)
             {
                 ObjectiveWidget widget = Instantiate(_widgetPrefab, _widgetContainer);
+                widget.ResultsTracker.Init(null, -1, -1); //Not ideal but works for now
 
                 //Setup entity
                 Entity entity = entityManager.GetEntityType(condition.EntityIndex);
@@ -46,9 +47,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
                     continue;
                 }
-
-                widget.ResultsTracker.ResetResultsTrack();
-                widget.UpdateObjective(-1, -1); //Not ideal but works for now
             }
         }
 
