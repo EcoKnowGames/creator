@@ -40,7 +40,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             //Check how many widgets to display
-            if (_displayAllResults || (_maxResultsWidgets <= 0))
+            if (_displayAllResults || (_maxResultsWidgets <= 0) || (_maxResultsWidgets > SandboxManager.Instance.MaxRounds))
             {
                 _maxResultsWidgets = SandboxManager.Instance.MaxRounds;
             }
