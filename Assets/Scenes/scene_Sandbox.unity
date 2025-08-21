@@ -198,17 +198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a946f5c7db35e2f4baceb6acc5a485d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &195835479 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6306790424330076906, guid: 7e6c54541030070478be700254c255b8, type: 3}
-  m_PrefabInstance: {fileID: 7178649755407536697}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &451632252
 GameObject:
   m_ObjectHideFlags: 0
@@ -2740,7 +2729,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2215709532851008821, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 209.99982
+      value: 209.99998
       objectReference: {fileID: 0}
     - target: {fileID: 2222832887833812438, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4071,21 +4060,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3816681311131731329, guid: 7e6c54541030070478be700254c255b8, type: 3}
-      propertyPath: _percentToggle
+      propertyPath: _decreaseButton
       value: 
-      objectReference: {fileID: 7178649755407536702}
+      objectReference: {fileID: 0}
     - target: {fileID: 3816681311131731329, guid: 7e6c54541030070478be700254c255b8, type: 3}
-      propertyPath: _discreteToggle
+      propertyPath: _increaseButton
       value: 
-      objectReference: {fileID: 7178649755407536703}
-    - target: {fileID: 3816681311131731329, guid: 7e6c54541030070478be700254c255b8, type: 3}
-      propertyPath: _unitTypeContainer
-      value: 
-      objectReference: {fileID: 7178649755407536704}
-    - target: {fileID: 3816681311131731329, guid: 7e6c54541030070478be700254c255b8, type: 3}
-      propertyPath: _tileSelectDropdown
-      value: 
-      objectReference: {fileID: 195835479}
+      objectReference: {fileID: 0}
     - target: {fileID: 3816681311131731329, guid: 7e6c54541030070478be700254c255b8, type: 3}
       propertyPath: _percentSymbolToggle
       value: 
@@ -8116,33 +8097,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a277bfeef312a114fa4a48f036b9ad60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7178649755407536702 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7624963872633983563, guid: 7e6c54541030070478be700254c255b8, type: 3}
-  m_PrefabInstance: {fileID: 7178649755407536697}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7178649755407536703 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8463149273882808456, guid: 7e6c54541030070478be700254c255b8, type: 3}
-  m_PrefabInstance: {fileID: 7178649755407536697}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &7178649755407536704 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6067866525293387376, guid: 7e6c54541030070478be700254c255b8, type: 3}
-  m_PrefabInstance: {fileID: 7178649755407536697}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
