@@ -19,8 +19,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void ShowModal()
         {
-            SetupResults();
             this.gameObject.SetActive(true);
+            SetupResults();
         }
 
         public void HideModal()
