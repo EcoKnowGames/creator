@@ -49,6 +49,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void SetIcon(string spritePath)
         {
+            if (spritePath == null)
+            {
+                //Debug.LogError($"{LogChannel} Spritepath is null, aborting icon setup");
+                return;
+            }
+
             if (spritePath.Equals(PlayerInventory.CurrencyID))
             {
                 ShowCurrencyIcon();
