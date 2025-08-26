@@ -73,7 +73,7 @@ namespace Glitchers.EcoKnow.Sandbox
             _entityTypeList = entityRecords.OrderBy(x => Array.IndexOf(_entityMatrix.entityIDs, x.ID)).ToArray();
         }
 
-        public void AddEntitiesToGrid(GridManager gridManager)
+        public void AddEntitiesToGrid(GridDef gridDef, GridManager gridManager)
         {
             if (gridManager == null)
             {
@@ -90,7 +90,13 @@ namespace Glitchers.EcoKnow.Sandbox
                 {
                     for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        int startPopulation = _entityTypeList[i].AutoPlace == true ? 100 : 0;
+                        int population = 0;
+                        if ((gridDef.tilePopulations[column, row] != null) && (i < gridDef.tilePopulations[column, row].Length))
+                        {
+                            population = gridDef.tilePopulations[column, row][i];
+                        }
+
+                        int startPopulation = _entityTypeList[i].AutoPlace == true ? population : 0;
                         _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? startPopulation : -1;
                     }
                 }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,6 +16,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int rows;
         public int columns;
         public int[,] tileIDs;
+        public int[,][] tilePopulations;
     }
 
 
@@ -58,12 +61,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             string rawCSV = mapCSV.text;
             rawCSV = rawCSV.Trim(' ', '\n', '\r');
 
-            string[] IDs = rawCSV.Replace("\r", string.Empty).Replace("\n", ",").Split(',');
+            var regex = @",(?![^[]*\])"; //Look ahead, ignore commas within [] parentheses
+            string[] IDs = Regex.Split(rawCSV.Replace("\r", string.Empty).Replace("\n", ","), regex);
 
             def.rows = rawCSV.Split('\n').Length;
             def.columns = IDs.Length / def.rows;
 
             def.tileIDs = new int[def.columns, def.rows];
+            def.tilePopulations = new int[def.columns, def.rows][];
 
 
             int tileIndex = 0;
@@ -71,9 +76,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             {
                 for (int x = 0; x < def.columns; x++)
                 {
+                    string[] tileDef = IDs[tileIndex].Replace("]", string.Empty).Split('[');
+
                     int tileID = -1;
                     int.TryParse(IDs[tileIndex], out tileID);
 
+                    int[] populations = tileDef.Length > 1 ? Array.ConvertAll(tileDef[1].Split(','), int.Parse) : null;
+
+                    def.tilePopulations[x, y] = populations;
                     def.tileIDs[x, y] = tileID;
                     tileIndex++;
                 }
