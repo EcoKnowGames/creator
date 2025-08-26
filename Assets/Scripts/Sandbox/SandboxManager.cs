@@ -158,6 +158,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void Cleanup()
         {
+            DataManager.Instance?.ClearData();
+
             _gridManager?.Cleanup();
             _playerInventory.Cleanup();
             _sandboxUI.Cleanup();
