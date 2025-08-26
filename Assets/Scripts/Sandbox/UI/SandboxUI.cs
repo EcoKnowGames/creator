@@ -27,6 +27,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private InventoryModal _inventoryModal;
 
         [Header("Results")]
+        [SerializeField] private PopulationGraph _populationGraph;
         [SerializeField] private ResultsModal _resultsModal;
 
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
@@ -41,6 +42,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _objectivePanel?.Init(winConditions, entityManager);
             _toolPanel?.Init();
             _modifyCellManager?.Init();
+            _populationGraph?.Init();
             _resultsModal?.HideModal();
 
             RefreshInventories();
