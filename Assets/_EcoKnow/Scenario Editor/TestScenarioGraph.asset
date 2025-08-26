@@ -256,7 +256,7 @@ MonoBehaviour:
   _movementRate: 0
   _vulnerable: 0
   _abundance: 200
-  _autoPlace: 0
+  _autoPlace: 1
   _canHarvest: 0
   _canIntroduce: 1
 --- !u!114 &-1515369370903765867
@@ -627,12 +627,12 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  mapCSV: {fileID: 4900000, guid: 7eb01f0b5ff58f24187e4ade4ef7299b, type: 3}
+  mapCSV: {fileID: 4900000, guid: 52a2001293d4268458a26f5312c0b3b1, type: 3}
   map:
-    fileName: Level 1
+    fileName: Map_PopulationTest
     gridDef:
-      rows: 6
-      columns: 12
+      rows: 10
+      columns: 10
 --- !u!114 &4452621898610726545
 MonoBehaviour:
   m_ObjectHideFlags: 0
