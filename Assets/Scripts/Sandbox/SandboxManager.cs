@@ -228,6 +228,9 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void EndGame()
         {
+            //NOTE: Refreshes all of the UI to prevent errors appearing behind the Summary Modal
+            _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, 0);
+
             bool playerWins = AreWinConditionsMet();
             _sandboxUI?.OnGameEnded(playerWins == true ? Result.WIN : Result.LOSE);
             Data.DataManager.Instance.RecordEvent(Data.EventType.GAME_END);
