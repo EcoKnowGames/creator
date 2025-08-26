@@ -28,7 +28,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Results")]
         [SerializeField] private PopulationGraph _populationGraph;
-        [SerializeField] private ResultsModal _resultsModal;
+        [SerializeField] private SummaryModal _summaryModal;
 
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
@@ -43,7 +43,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _toolPanel?.Init();
             _modifyCellManager?.Init();
             _populationGraph?.Init();
-            _resultsModal?.HideModal();
+            _summaryModal?.HideModal();
 
             RefreshInventories();
 
@@ -90,7 +90,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Game Lifecycle
         public void OnGameEnded(SandboxManager.Result result)
         {
-            _resultsModal?.ShowModal(result.ToString());
+            _summaryModal?.ShowModal();
         }
 
         public void OnNewRoundStarted(int currentRound, int maxRounds, int actions)

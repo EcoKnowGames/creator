@@ -22,6 +22,9 @@ namespace Glitchers.EcoKnow.Sandbox
         public string title { get; protected set; }
         public string description { get; protected set; }
 
+        private int completionScore = 10; //{ get; protected set; }
+        public int Score => Completed ? completionScore : 0;
+
         protected int entityIndex;
         public int EntityIndex => entityIndex;
 
