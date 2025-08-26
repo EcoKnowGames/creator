@@ -123,6 +123,11 @@ namespace Glitchers.EcoKnow.Sandbox
             return _entityTypeList;
         }
 
+        public int GetEntityIndex(Entity type)
+        {
+            return Array.IndexOf(_entityTypeList, type);
+        }
+
         public CellEntity[] GetEntitiesForCell(int column, int row)
         {
             CellEntity[] entityCounts = new CellEntity[EntityTypeCount];
