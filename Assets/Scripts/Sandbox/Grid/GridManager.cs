@@ -68,7 +68,9 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             def.columns = IDs.Length / def.rows;
 
             def.tileIDs = new int[def.columns, def.rows];
-            def.tilePopulations = new int[def.columns, def.rows][];
+
+            bool hasPopulations = rawCSV.Contains('[');
+            def.tilePopulations = hasPopulations ? new int[def.columns, def.rows][] : null;
 
 
             int tileIndex = 0;
@@ -81,9 +83,12 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     int tileID = -1;
                     int.TryParse(IDs[tileIndex], out tileID);
 
-                    int[] populations = tileDef.Length > 1 ? Array.ConvertAll(tileDef[1].Split(','), int.Parse) : null;
+                    if (def.tilePopulations != null)
+                    {
+                        int[] populations = tileDef.Length > 1 ? Array.ConvertAll(tileDef[1].Split(','), int.Parse) : null;
+                        def.tilePopulations[x, y] = populations;
+                    }
 
-                    def.tilePopulations[x, y] = populations;
                     def.tileIDs[x, y] = tileID;
                     tileIndex++;
                 }

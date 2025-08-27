@@ -167,7 +167,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
                 else
                 {
-                    if (config.Scenario.Map == null)
+                    if ((config.Scenario.Map == null) || (config.Scenario.Map.gridDef == null) || (config.Scenario.Map.gridDef.tileIDs == null)) //Check for tileIDs as well
                     {
                         Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Map Layout is null! Scenario must have a valid Map Layout");
                         return null;
