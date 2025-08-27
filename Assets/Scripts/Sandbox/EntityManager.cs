@@ -90,8 +90,9 @@ namespace Glitchers.EcoKnow.Sandbox
                 {
                     for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        int population = 0;
-                        if ((gridDef.tilePopulations[column, row] != null) && (i < gridDef.tilePopulations[column, row].Length))
+                        //TODO(caspar): Tidy up a bit
+                        int population = gridDef.tilePopulations == null ? 100 : 0;
+                        if ((gridDef.tilePopulations != null) && (gridDef.tilePopulations[column, row] != null) && (i < gridDef.tilePopulations[column, row].Length)) //TODO(caspar): Can we tidy this up?
                         {
                             population = gridDef.tilePopulations[column, row][i];
                         }
