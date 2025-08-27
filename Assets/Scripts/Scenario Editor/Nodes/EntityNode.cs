@@ -124,6 +124,23 @@ public class EntityNode : Node
         return false;
     }
 
+    public bool CanAutoPlace()
+    {
+        if (IsConnected())
+        {
+            if (graph is ScenarioNodeGraph scenarioGraph)
+            {
+                ScenarioNode scenarioNode = scenarioGraph.GetScenarioNode();
+                if ((scenarioNode != null) && (scenarioNode.MapLayout != null) && (scenarioNode.MapLayout.gridDef != null))
+                {
+                    return !scenarioNode.MapLayout.gridDef.HasPopulations();
+                }
+            }
+        }
+
+        return true;
+    }
+
     public override void OnCreateConnection(NodePort from, NodePort to)
     {
         base.OnCreateConnection(from, to);

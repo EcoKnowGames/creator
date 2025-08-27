@@ -17,6 +17,28 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int columns;
         public int[,] tileIDs;
         public int[,][] tilePopulations;
+
+        public bool HasPopulations()
+        {
+            return tilePopulations != null;
+        }
+
+        public int GetPopulation(int column, int row, int entityIndex)
+        {
+            int population = 0;
+            if (tilePopulations != null)
+            {
+                if ((column < tilePopulations.GetLongLength(0)) && (row < tilePopulations.GetLongLength(1)))
+                {
+                    if ((tilePopulations[column, row] != null) && (entityIndex < tilePopulations[column, row].Length))
+                    {
+                        population = tilePopulations[column, row][entityIndex];
+                    }
+                }
+            }
+
+            return population;
+        }
     }
 
 
