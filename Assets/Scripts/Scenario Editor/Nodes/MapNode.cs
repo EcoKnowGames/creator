@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using UnityEngine;
 using XNode;
-
+using static XNode.Node;
 
 [System.Serializable]
 public class MapLayout
@@ -20,7 +20,7 @@ public class MapLayout
     }
 }
 
-
+[NodeWidth(300)]
 public class MapNode : Node
 {
     [SerializeField] private TextAsset mapCSV;
@@ -52,6 +52,16 @@ public class MapNode : Node
         {
             return null;
         }
+    }
+
+    public int GetValidEntityCount()
+    {
+        if ((map != null) && (map.gridDef != null))
+        {
+            return map.gridDef.GetValidEntityCount();
+        }
+
+        return -1;
     }
 }
 
