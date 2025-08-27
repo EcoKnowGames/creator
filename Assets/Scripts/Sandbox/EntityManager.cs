@@ -77,7 +77,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void AddEntitiesToGrid(GridDef gridDef, GridManager gridManager)
         {
-            if (gridManager == null)
+            if ((gridDef == null) || (gridManager == null))
             {
                 return;
             }
