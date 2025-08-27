@@ -23,6 +23,22 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             return tilePopulations != null;
         }
 
+        public int GetValidEntityCount()
+        {
+            if (HasPopulations())
+            {
+                foreach(int[] list in tilePopulations)
+                {
+                    if (list != null)
+                    {
+                        return list.Length;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
         public int GetPopulation(int column, int row, int entityIndex)
         {
             int population = 0;
