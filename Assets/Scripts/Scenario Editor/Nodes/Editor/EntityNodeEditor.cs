@@ -124,7 +124,15 @@ public class EntityNodeEditor : NodeEditor
 
             // Placement & Harvesting Options
             EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
+
+            if (!_entityNode.CanAutoPlace())
+            {
+                EditorGUILayout.HelpBox("Tile Populations have been defined in the Map CSV - Auto Place will have no effect", MessageType.Warning);
+                GUI.enabled = false;
+            }
             _entityNode.AutoPlace = EditorGUILayout.Toggle("Auto Place?", _entityNode.AutoPlace);
+
+            GUI.enabled = true;
 
             _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
             if (_entityNode.CanHarvest)

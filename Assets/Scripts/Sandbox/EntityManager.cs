@@ -90,14 +90,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 {
                     for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        //TODO(caspar): Tidy up a bit
-                        int population = gridDef.tilePopulations == null ? 100 : 0;
-                        if ((gridDef.tilePopulations != null) && (gridDef.tilePopulations[column, row] != null) && (i < gridDef.tilePopulations[column, row].Length)) //TODO(caspar): Can we tidy this up?
-                        {
-                            population = gridDef.tilePopulations[column, row][i];
-                        }
-
-                        int startPopulation = _entityTypeList[i].AutoPlace == true ? population : 0;
+                        int startPopulation = gridDef.HasPopulations() ? gridDef.GetPopulation(column, row, i) : _entityTypeList[i].AutoPlace == true ? 100 : 0;
                         _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? startPopulation : -1;
                     }
                 }
