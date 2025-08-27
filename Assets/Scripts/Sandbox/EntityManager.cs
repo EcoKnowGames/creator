@@ -21,6 +21,8 @@ namespace Glitchers.EcoKnow.Sandbox
         float AbundanceThreshold,
 
         bool AutoPlace,
+        int StartPopulation,
+
         bool CanHarvest,
         bool CanIntroduce,
 
@@ -90,7 +92,9 @@ namespace Glitchers.EcoKnow.Sandbox
                 {
                     for (int i = 0; i < EntityTypeCount; i++)
                     {
-                        int startPopulation = gridDef.HasPopulations() ? gridDef.GetPopulation(column, row, i) : _entityTypeList[i].AutoPlace == true ? 100 : 0;
+                        Entity entityType = GetEntityType(i);
+
+                        int startPopulation = gridDef.HasPopulations() ? gridDef.GetPopulation(column, row, i) : entityType.AutoPlace == true ? entityType.StartPopulation : 0;
                         _entityLookupTable[column, row, i] = gridManager.FindCellAtPosition(column, row) != null ? startPopulation : -1;
                     }
                 }

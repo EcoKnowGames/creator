@@ -45,6 +45,8 @@ public class EntityNode : Node
     [SerializeField] private bool _autoPlace;
     public bool AutoPlace { get { return _autoPlace; } set { _autoPlace = value; } }
 
+    [SerializeField] private int _startPopulation = 100;
+
     [SerializeField] private bool _canHarvest;
     public bool CanHarvest { get { return _canHarvest; } set { _canHarvest = value; } }
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _harvestQuantity;
@@ -77,7 +79,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities());
     }
 
     private string GetColourFromIndex()
