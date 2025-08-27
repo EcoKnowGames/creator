@@ -131,8 +131,15 @@ public class EntityNodeEditor : NodeEditor
                 GUI.enabled = false;
             }
             _entityNode.AutoPlace = EditorGUILayout.Toggle("Auto Place?", _entityNode.AutoPlace);
+            if (_entityNode.AutoPlace)
+            {
+                EditorGUILayout.HelpBox("Start Population applies to each tile", MessageType.Info);
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_startPopulation"));
+            }
 
             GUI.enabled = true;
+
+            EditorGUILayout.Space();
 
             _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
             if (_entityNode.CanHarvest)
