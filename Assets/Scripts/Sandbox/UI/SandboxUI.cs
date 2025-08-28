@@ -32,6 +32,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         [Header("Multiplayer")]
         [SerializeField] private MultiplayerBorder _multiplayerBorder;
+        [SerializeField] private MultiplayerModal _multiplayerModal;
 
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
@@ -194,6 +195,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             _multiplayerBorder?.SetPlayer(currentPlayer);
             _multiplayerBorder.SetBorderVisible(isMultiplayer);
+
+            if (isMultiplayer)
+            {
+                _multiplayerModal?.ShowModal(currentPlayer);
+            }
+            else
+            {
+                _multiplayerModal.HideModal();
+            }
         }
         #endregion
     }
