@@ -292,7 +292,7 @@ namespace Glitchers.EcoKnow.Sandbox
             if (nextPlayer >= _maxPlayers)
             {
                 nextPlayer = 0;
-                shouldAutoAdvance = true;
+                shouldAutoAdvance = GetAvailableActionPoints() <= 0; //Cater for situations where action points are higher than players (e.g. 2 players 4 action points)
             }
             else if (nextPlayer < 0) // Just in case
             {
