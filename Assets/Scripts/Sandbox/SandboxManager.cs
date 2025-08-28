@@ -62,6 +62,12 @@ namespace Glitchers.EcoKnow.Sandbox
         [Header("UI")]
         [SerializeField] private SandboxUI _sandboxUI;
 
+        //TODO(caspar): Should multiplayer be handled elsewhere as well? Custom script?
+        //Yes because we want players to be able to rename themselves and for something to control the maxPlayers and colours
+        private int _maxPlayers = 4;//1;
+        private int _currentPlayerIndex = -1;
+        public int CurrentPlayerIndex => _currentPlayerIndex;
+        public bool IsMultiplayer => _maxPlayers > 1;
 
         //TODO(caspar): Should rounds and win conditions be handled in another location?
         private int _maxRounds = 1;
@@ -112,6 +118,8 @@ namespace Glitchers.EcoKnow.Sandbox
                 _currentRound = -1;
                 _maxRounds = scenario.Rounds <= 0 ? _defaultRounds : scenario.Rounds;
                 _maxActionsPerRound = scenario.ActionsPerRound <= 0 ? _defaultActionsPerRound : scenario.ActionsPerRound;
+
+                _currentPlayerIndex = -1;
 
                 InitWinConditions(scenario.WinConditions.ToList());
 
@@ -206,6 +214,7 @@ namespace Glitchers.EcoKnow.Sandbox
         public void StartNewRound()
         {
             _currentRound += 1;
+            _currentPlayerIndex = 0; //Reset
 
             //Update actions
             int actionsHeld = 0;
@@ -218,6 +227,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
             //Update UI
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
+            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, IsMultiplayer);
 
             if (_currentRound == 0)
             {
@@ -273,7 +283,45 @@ namespace Glitchers.EcoKnow.Sandbox
         }
         #endregion
 
+        #region Multiplayer
+        private void IncrementCurrentPlayer()
+        {
+            bool shouldAutoAdvance = false;
+
+            int nextPlayer = _currentPlayerIndex += 1;
+            if (nextPlayer >= _maxPlayers)
+            {
+                nextPlayer = 0;
+                shouldAutoAdvance = true;
+            }
+            else if (nextPlayer < 0) // Just in case
+            {
+                nextPlayer = 0;
+            }
+
+            _currentPlayerIndex = nextPlayer;
+            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, IsMultiplayer);
+
+            //Doesn't make sense for the players to have to press Next Round in multiplayer situations
+            if (shouldAutoAdvance)
+            {
+                OnAdvanceRoundPressed();
+            }
+        }
+        #endregion
+
         #region Actions
+        public static void OnActionCompleted()
+        {
+            if (Instance != null)
+            {
+                if (Instance.IsMultiplayer)
+                {
+                    Instance.IncrementCurrentPlayer();
+                }
+            }
+        }
+
         public static bool CanPerformAction()
         {
             if ((Instance != null) && (Instance.PlayerInventory != null))

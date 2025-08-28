@@ -30,6 +30,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private PopulationGraph _populationGraph;
         [SerializeField] private SummaryModal _summaryModal;
 
+        [Header("Multiplayer")]
+        [SerializeField] private MultiplayerBorder _multiplayerBorder;
+
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
         private const string LogChannel = "[SandboxUI]";
@@ -104,6 +107,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _modifyCellManager?.ExitModifyMode();
 
+            _inventoryModal?.HideModal();
+
             //_playerToolbar?.UpdateActionsRemaining(actions);
 
             RefreshInventories();
@@ -162,6 +167,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             SandboxManager.SpendActionPoint();
             RefreshInventories();
             Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
+            SandboxManager.OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
         }
         #endregion
 
@@ -180,6 +186,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnExitModifyMode()
         {
             //_playerToolbar?.HideToolbar();
+        }
+        #endregion
+
+        #region Multiplayer
+        public void UpdateMultiplayer(int currentPlayer, bool isMultiplayer = false)
+        {
+            _multiplayerBorder?.SetPlayer(currentPlayer);
+            _multiplayerBorder.SetBorderVisible(isMultiplayer);
         }
         #endregion
     }
