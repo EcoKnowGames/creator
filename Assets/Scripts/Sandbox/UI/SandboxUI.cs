@@ -191,14 +191,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #endregion
 
         #region Multiplayer
-        public void UpdateMultiplayer(int currentPlayer, bool isMultiplayer = false)
+        public void UpdateMultiplayer(int currentPlayer, bool isNewRound = false, bool isMultiplayer = false)
         {
             _multiplayerBorder?.SetPlayer(currentPlayer);
             _multiplayerBorder.SetBorderVisible(isMultiplayer);
 
             if (isMultiplayer)
             {
-                _multiplayerModal?.ShowModal(currentPlayer);
+                _multiplayerModal?.ShowModal(currentPlayer, isNewRound);
             }
             else
             {
