@@ -247,9 +247,9 @@ namespace Glitchers.EcoKnow.Sandbox.Data
 
         private int GetPlayer()
         {
-            if (SandboxManager.Instance != null)
+            if (MultiplayerManager.Instance != null)
             {
-                return SandboxManager.Instance.CurrentPlayerIndex + 1; //Account for 0
+                return MultiplayerManager.Instance.CurrentPlayerIndex + 1; //Account for 0
             }
 
             return 1;
