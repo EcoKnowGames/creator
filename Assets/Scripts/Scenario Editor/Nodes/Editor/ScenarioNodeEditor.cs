@@ -27,6 +27,10 @@ public class ScenarioNodeEditor : NodeEditor
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("startCurrency"));
 
         EditorGUILayout.Space();
+        string supportedPlayers = GetCompatiblePlayers(_scenarioNode.ActionsPerRound);
+        EditorGUILayout.HelpBox($"This Scenario will support {supportedPlayers} player(s)", MessageType.Info);
+
+        EditorGUILayout.Space();
         EditorGUILayout.LabelField("Entities", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_matrix"));
         foreach (NodePort port in _scenarioNode.EntityPorts)
@@ -77,5 +81,34 @@ public class ScenarioNodeEditor : NodeEditor
 
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();
+    }
+
+    private string GetCompatiblePlayers(int maxActions)
+    {
+        string players = "1";
+
+        if (maxActions % 2 == 0)
+        {
+            players += ", 2";
+        }
+
+        if (maxActions % 3 == 0)
+        {
+            players += ", 3";
+        }
+
+        if (maxActions % 4 == 0)
+        {
+            players += ", 4";
+        }
+
+        //Syntax
+        int lastComma = players.LastIndexOf(',');
+        if (lastComma >= 0)
+        {
+            players = players.Remove(lastComma, 1).Insert(lastComma, " or");
+        }
+
+        return players;
     }
 }
