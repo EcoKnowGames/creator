@@ -5,7 +5,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 {
     public class MultiplayerModal : MonoBehaviour
     {
+        [SerializeField] private TMP_Text _newRoundText;
         [SerializeField] private TMP_Text _indicatorText;
+
         public void SetPlayer(int index)
         {
             if (_indicatorText != null)
@@ -14,10 +16,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void ShowModal(int index)
+        public void ShowModal(int index, bool newRound = false)
         {
             SetPlayer(index);
             this.gameObject.SetActive(true);
+
+            if (_newRoundText != null)
+            {
+                _newRoundText.gameObject.SetActive(newRound);
+            }
         }
 
         public void HideModal()
