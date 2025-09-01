@@ -227,7 +227,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
             //Update UI
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, actionsHeld);
-            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, IsMultiplayer);
+            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, true, IsMultiplayer);
 
             if (_currentRound == 0)
             {
@@ -300,7 +300,7 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             _currentPlayerIndex = nextPlayer;
-            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, IsMultiplayer);
+            _sandboxUI?.UpdateMultiplayer(_currentPlayerIndex, false, IsMultiplayer);
 
             //Doesn't make sense for the players to have to press Next Round in multiplayer situations
             if (shouldAutoAdvance)
