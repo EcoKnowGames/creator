@@ -193,8 +193,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Multiplayer
         public void UpdateMultiplayer(int currentPlayer, bool isNewRound = false, bool isMultiplayer = false)
         {
-            _multiplayerBorder?.SetPlayer(currentPlayer);
             _multiplayerBorder.SetBorderVisible(isMultiplayer);
+
+            if (MultiplayerManager.Instance != null)
+            {
+                Color playerColour = MultiplayerManager.Instance.GetPlayerColour(currentPlayer);
+                _multiplayerBorder.SetBorderColour(playerColour);
+
+                string playerName = MultiplayerManager.Instance.GetPlayerName(currentPlayer);
+                _multiplayerBorder?.SetPlayer(playerName);
+            }
 
             if (isMultiplayer)
             {
