@@ -10,12 +10,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private CanvasGroup _canvasGroup => this.GetComponent<CanvasGroup>();
         [SerializeField] private RectTransform _indicatorBox;
         [SerializeField] private TMP_Text _indicatorText;
+        [SerializeField] private Image _borderImage;
 
-        public void SetPlayer(int index)
+        public void SetPlayer(string playerName)
         {
             if (_indicatorText != null)
             {
-                _indicatorText.text = string.Format($"Player {index + 1}'s Turn"); //Account for 0
+                //_indicatorText.text = string.Format($"Player {index + 1}'s Turn"); //Account for 0
+                _indicatorText.text = string.Format($"{playerName}'s Turn");
             }
 
             StartCoroutine(RefreshLayout());
@@ -28,6 +30,21 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _canvasGroup.alpha = visible ? 1f : 0f;
             }
         }
+
+        public void SetBorderColour(Color colour)
+        {
+            Image indicatorImage = _indicatorBox.GetComponent<Image>();
+            if (indicatorImage != null)
+            {
+                indicatorImage.color = colour;
+            }
+
+            if (_borderImage != null)
+            {
+                _borderImage.color = colour;
+            }
+        }
+
 
         private IEnumerator RefreshLayout()
         {
