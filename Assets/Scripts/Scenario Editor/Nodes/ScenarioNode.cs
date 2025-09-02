@@ -132,7 +132,35 @@ public class ScenarioNode : Node
         Debug.Log("DYNAMIC PORTS: " + DynamicPorts.Count());
     }
 
+    public bool DoesMapPopulationCountMatchMatrix()
+    {
+        if ((MapLayout != null) && (MapLayout.gridDef != null))
+        {
+            if (!MapLayout.gridDef.HasPopulations())
+            {
+                return true;
+            }
+            else
+            {
+                if (MapLayout.gridDef.GetValidEntityCount() != GetConnectedEntityCount())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     #region Entities
+    public int GetConnectedEntityCount()
+    {
+        if (graph is ScenarioNodeGraph scenarioGraph)
+        {
+            return scenarioGraph.GetEntityList().Count;
+        }
+
+        return 0;
+    }
     private void ClearEntityPorts()
     {
         if ((_entityPorts != null) && (_entityPorts.Count > 0))
