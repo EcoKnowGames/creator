@@ -215,6 +215,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         #region Load Sandbox
 #if UNITY_EDITOR
+        //Would be nice if the current graph config could detect the "open" graph
         public ScenarioConfig GetCurrentGraphConfig()
         {
             if (_scenarioNodeGraph != null)
@@ -225,7 +226,11 @@ namespace Glitchers.EcoKnow.Sandbox
             return null;
         }
 
-        //TODO(caspar): Not ideal, but we will eventually replace this with a proper frontend - this will work for now
+        public void RequestStartActiveGraph()
+        {
+            StartNewGameFromGraph();
+        }
+
         private void StartNewGameFromGraph()
         {
             ScenarioConfig config = ScenarioLoader.Instance.GetCurrentGraphConfig();
