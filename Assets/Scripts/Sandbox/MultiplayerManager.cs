@@ -59,7 +59,7 @@ namespace Glitchers.EcoKnow.Sandbox
         [SerializeField] private ColourPaletteObject _multiplayerColourPalette;
         private PlayerDef[] _playerDefs = null;
 
-
+        //TODO(caspar): Distinction between max available players and Max Players (currently playing)
         [SerializeField] private int _maxPlayers = 4;
         public int MaxPlayers => _maxPlayers;
 
