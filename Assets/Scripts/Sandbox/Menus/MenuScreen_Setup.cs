@@ -17,7 +17,30 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             base.Show();
 
             MultiplayerManager.Instance?.SetMaxPlayers(1); //Singleplayer is default
+            AddListeners();
             RefreshButtons();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            RemoveListeners();
+        }
+
+        private void AddListeners()
+        {
+            _playerButton_One?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(0, _playerButton_One.PlayerName));
+            _playerButton_Two?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(1, _playerButton_Two.PlayerName));
+            _playerButton_Three?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(2, _playerButton_Three.PlayerName));
+            _playerButton_Four?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(3, _playerButton_Four.PlayerName));
+        }
+
+        private void RemoveListeners()
+        {
+            _playerButton_One?.PlayerNameButton?.onClick.RemoveAllListeners();
+            _playerButton_Two?.PlayerNameButton?.onClick.RemoveAllListeners();
+            _playerButton_Three?.PlayerNameButton?.onClick.RemoveAllListeners();
+            _playerButton_Four?.PlayerNameButton?.onClick.RemoveAllListeners();
         }
 
         public void SetEntryScreen(MainMenuController.Screen entryScreen)

@@ -81,6 +81,10 @@ namespace Glitchers.EcoKnow.Sandbox
             _maxPlayers = max;
 
             _playerDefs = new PlayerDef[_maxPlayers];
+            for (int i = 0; i < _playerDefs.Length; i++)
+            {
+                _playerDefs[i] = new PlayerDef();
+            }
         }
 
         public void SetCurrentPlayer(int index)
@@ -147,8 +151,8 @@ namespace Glitchers.EcoKnow.Sandbox
         {
             if (string.IsNullOrEmpty(name))
             {
-                Debug.LogError($"{LogChannel} Failed to rename player {index}, the provided name string is empty or null");
-                return;
+                Debug.LogError($"{LogChannel} Failed to rename player {index}, the provided name string is empty or null. Resetting to default name");
+                //return;
             }
 
             PlayerDef playerDef = GetPlayerDef(index);
