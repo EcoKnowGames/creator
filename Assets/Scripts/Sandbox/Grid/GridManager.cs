@@ -138,10 +138,18 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
+        public void Awake()
+        {
+            DisableGrid();
+            if (Camera != null)
+            {
+                Camera.enabled = true;
+            }
+        }
 
         public void Start()
         {
-            DisableGrid();
+            //DisableGrid();
         }
 
         public void Init()
