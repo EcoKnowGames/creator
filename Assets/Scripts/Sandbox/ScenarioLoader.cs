@@ -86,7 +86,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 onCancel?.Invoke();
 
                 //TODO(caspar): Temporary while we await a proper frontend
-                Instance.StartNewGameFromGraph();
+                //Instance.StartNewGameFromGraph();
             },
             FileBrowser.PickMode.Files,
             false,
