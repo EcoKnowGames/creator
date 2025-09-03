@@ -16,6 +16,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private TMP_InputField _playerNameInput;
         [SerializeField] private Button _playerNameButton;
 
+        public Button PlayerNameButton => _playerNameButton;
+        public string PlayerName => _playerNameInput != null ? _playerNameInput.text : null;
+
         public void SetInteractable(bool interactable)
         {
             if (_maxPlayerButton_Deselected != null)

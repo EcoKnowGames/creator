@@ -202,15 +202,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                 string playerName = MultiplayerManager.Instance.GetPlayerName(currentPlayer);
                 _multiplayerBorder?.SetPlayer(playerName);
-            }
+            
 
-            if (isMultiplayer)
-            {
-                _multiplayerModal?.ShowModal(currentPlayer, isNewRound);
-            }
-            else
-            {
-                _multiplayerModal.HideModal();
+                if (isMultiplayer)
+                {
+                    _multiplayerModal?.ShowModal(playerName, isNewRound);
+                }
+                else
+                {
+                    _multiplayerModal.HideModal();
+                }
             }
         }
         #endregion
