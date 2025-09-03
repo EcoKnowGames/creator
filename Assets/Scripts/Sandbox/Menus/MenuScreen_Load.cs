@@ -22,6 +22,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         private void OnScenarioLoaded(Scenario scenario)
         {
             //TODO(caspar)
+            MainMenuController?.SetScreen(MainMenuController.Screen.SETUP_SCENARIO);
         }
     }
 }
