@@ -228,16 +228,24 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void RequestStartActiveGraph()
         {
-            StartNewGameFromGraph();
-        }
-
-        private void StartNewGameFromGraph()
-        {
-            ScenarioConfig config = ScenarioLoader.Instance.GetCurrentGraphConfig();
+            ScenarioConfig config = GetCurrentGraphConfig();
             if (config != null)
             {
                 _loadedConfig = config;
-                SandboxManager.Instance.StartNewGame(config.Scenario);
+                StartLoadedConfig();
+            }
+        }
+
+        public void RequestStartLoadedConfig()
+        {
+            StartLoadedConfig();
+        }
+
+        private void StartLoadedConfig()
+        {
+            if ((_loadedConfig != null) && (SandboxManager.Instance != null))
+            {
+                SandboxManager.Instance.StartNewGame(_loadedConfig.Scenario);
             }
         }
 #endif

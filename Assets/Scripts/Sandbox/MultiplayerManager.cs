@@ -72,6 +72,13 @@ namespace Glitchers.EcoKnow.Sandbox
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            SetMaxPlayers(1); //Default
+        }
+
+        public void SetMaxPlayers(int max)
+        {
+            max = Mathf.Clamp(max, 1, 4);
+            _maxPlayers = max;
 
             _playerDefs = new PlayerDef[_maxPlayers];
         }
