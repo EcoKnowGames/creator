@@ -83,7 +83,7 @@ namespace Glitchers.EcoKnow.Sandbox
         #region Lifecycle
         void Start()
         {
-            ScenarioLoader.ShowLoadDialog(StartNewGame, null);
+            //ScenarioLoader.ShowLoadDialog(StartNewGame, null);
         }
 
         void Update()

@@ -28,11 +28,13 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         public void OnLoadActiveGraphPressed()
         {
-            //TODO(caspar): Load sandbox scene and then request start graph
-
             if ((ScenarioLoader.Instance != null) && (ScenarioLoader.Instance.GetCurrentGraphConfig() != null))
             {
-                ScenarioLoader.Instance.RequestStartActiveGraph();
+                MainMenuController?.RequestLoadSandboxScene(() => ScenarioLoader.Instance.RequestStartActiveGraph());
+            }
+            else
+            {
+                //TODO(caspar): Error
             }
         }
     }
