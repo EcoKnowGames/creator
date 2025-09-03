@@ -74,6 +74,12 @@ public class ScenarioNodeEditor : NodeEditor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Map", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_map"));
+        if (!_scenarioNode.DoesMapPopulationCountMatchMatrix())
+        {
+            int compatibleMapEntities = _scenarioNode.MapLayout != null && _scenarioNode.MapLayout.gridDef != null ? _scenarioNode.MapLayout.gridDef.GetValidEntityCount() : 0;
+            int connectedEntities = _scenarioNode.GetConnectedEntityCount();
+            EditorGUILayout.HelpBox($"The connected Map is compatible for ({compatibleMapEntities}) Entities, but the number of connected Entity Nodes is ({connectedEntities}). Some Entities may not be initialised on the Map when playing the Scenario", MessageType.Warning);
+        }
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Seed", EditorStyles.centeredGreyMiniLabel);
