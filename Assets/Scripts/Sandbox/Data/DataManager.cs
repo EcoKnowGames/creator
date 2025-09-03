@@ -91,7 +91,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             //Gather data here
             EventDataObject ev = new EventDataObject(
                 type,
-                1, //CurrentPlayer
+                GetPlayer(),
                 GetPopulations(),
                 GetInventory(),
                 GetWinConditions(),
@@ -243,6 +243,16 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
 
             return winConditionList;
+        }
+
+        private int GetPlayer()
+        {
+            if (MultiplayerManager.Instance != null)
+            {
+                return MultiplayerManager.Instance.CurrentPlayerIndex + 1; //Account for 0
+            }
+
+            return 1;
         }
         #endregion
 
