@@ -444,7 +444,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             //Instantiate necessary number of widgets
             PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
-            if (inventory != null)
+            if ((inventory != null) && (quantities != null))
             {
                 foreach (Quantity quantity in quantities)
                 {
@@ -455,7 +455,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void UpdateItemWidgets(Quantity[] quantities, int modifyAmount)
         {
-            if ((_itemWidgetContainer == null) || (_itemWidgetPrefab == null))
+            if ((_itemWidgetContainer == null) || (_itemWidgetPrefab == null) || (quantities == null))
             {
                 return;
             }
