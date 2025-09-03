@@ -30,6 +30,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private PopulationGraph _populationGraph;
         [SerializeField] private SummaryModal _summaryModal;
 
+        [Header("Multiplayer")]
+        [SerializeField] private MultiplayerBorder _multiplayerBorder;
+        [SerializeField] private MultiplayerModal _multiplayerModal;
+
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
         private const string LogChannel = "[SandboxUI]";
@@ -104,6 +108,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _modifyCellManager?.ExitModifyMode();
 
+            _inventoryModal?.HideModal();
+
             //_playerToolbar?.UpdateActionsRemaining(actions);
 
             RefreshInventories();
@@ -162,6 +168,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             SandboxManager.SpendActionPoint();
             RefreshInventories();
             Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
+            SandboxManager.OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
         }
         #endregion
 
@@ -180,6 +187,31 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnExitModifyMode()
         {
             //_playerToolbar?.HideToolbar();
+        }
+        #endregion
+
+        #region Multiplayer
+        public void UpdateMultiplayer(int currentPlayer, bool isNewRound = false, bool isMultiplayer = false)
+        {
+            _multiplayerBorder.SetBorderVisible(isMultiplayer);
+
+            if (MultiplayerManager.Instance != null)
+            {
+                Color playerColour = MultiplayerManager.Instance.GetPlayerColour(currentPlayer);
+                _multiplayerBorder.SetBorderColour(playerColour);
+
+                string playerName = MultiplayerManager.Instance.GetPlayerName(currentPlayer);
+                _multiplayerBorder?.SetPlayer(playerName);
+            }
+
+            if (isMultiplayer)
+            {
+                _multiplayerModal?.ShowModal(currentPlayer, isNewRound);
+            }
+            else
+            {
+                _multiplayerModal.HideModal();
+            }
         }
         #endregion
     }
