@@ -251,7 +251,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnModifySuccess(ModifyMode modifyMode)
         {
             ExitModifyMode();
-            int actionsRemaining = SandboxManager.SpendActionPoint();
+            SandboxManager.SpendActionPoint();
 
             if (modifyMode == ModifyMode.HARVEST)
             {
@@ -262,6 +262,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
             }
 
+            SandboxManager.OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
             onModifySuccess?.Invoke();
         }
 
