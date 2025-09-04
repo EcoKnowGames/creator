@@ -117,7 +117,7 @@ namespace Glitchers.EcoKnow.Sandbox
         }
 
         //Load ScenarioConfig from raw json
-        private static ScenarioConfig LoadConfig(string json)
+        public static ScenarioConfig LoadConfig(string json)
         {
             if (string.IsNullOrEmpty(json))
             {
