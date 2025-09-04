@@ -1,0 +1,387 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "7 Entity Test",
+    "Rounds": 12,
+    "ActionsPerRound": 4,
+    "StartCurrency": 100000,
+    "Seed": 123456,
+    "Entities": [
+      {
+        "ID": "Dog",
+        "Icon": "Icons/Icon_Hare",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 1.4,
+        "MovementRate": 0.3,
+        "VulnerableThreshold": 30.0,
+        "AbundanceThreshold": 300.0,
+        "AutoPlace": true,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Rabbit Foot",
+            "Value": 4
+          },
+          {
+            "ID": "Meat",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 50
+          },
+          {
+            "ID": "Rabbit Foot",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Cat",
+        "Icon": "Icons/Icon_Fox",
+        "Colour": "D2F62EFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.2,
+        "VulnerableThreshold": 10.0,
+        "AbundanceThreshold": 150.0,
+        "AutoPlace": true,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Meat",
+            "Value": 5
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 50
+          },
+          {
+            "ID": "Rabbit Foot",
+            "Value": 2
+          }
+        ]
+      },
+      {
+        "ID": "Rock",
+        "Icon": "Icons/Icon_Building",
+        "Colour": "FC6969FF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 200.0,
+        "AutoPlace": true,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Horse",
+        "Icon": null,
+        "Colour": "88BCFFFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": true,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "House",
+        "Icon": null,
+        "Colour": "B3A0FEFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": true,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Snake",
+        "Icon": null,
+        "Colour": "FB7DFDFF",
+        "GrowthRate": 1.2,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": true,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Fox",
+        "Icon": null,
+        "Colour": "FFDF3EFF",
+        "GrowthRate": 1.1,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      }
+    ],
+    "Items": [
+      {
+        "ID": "Meat",
+        "Icon": null,
+        "Value": 5,
+        "CanSell": true
+      },
+      {
+        "ID": "Rabbit Foot",
+        "Icon": null,
+        "Value": 10,
+        "CanSell": true
+      },
+      {
+        "ID": "Wood",
+        "Icon": null,
+        "Value": 60,
+        "CanSell": true
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Fox Population",
+        "Description": "Keep Fox Population above 4000 for 3 rounds!",
+        "EntityIndex": 1,
+        "LowerLimit": 4000.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 3
+      },
+      {
+        "Title": "Hare Population",
+        "Description": "Keep Hares within the range of 10000-20000",
+        "EntityIndex": 0,
+        "LowerLimit": 10000.0,
+        "UpperLimit": 50000.0,
+        "RequiredRounds": -1
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "Dog",
+        "Cat",
+        "Rock",
+        "Horse",
+        "House",
+        "Snake",
+        "Fox"
+      ],
+      "entityMatrix": [
+        [
+          -0.002,
+          0.001,
+          -0.002,
+          0.001,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.002,
+          -0.004,
+          -0.002,
+          -0.004,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "Level 1",
+      "gridDef": {
+        "rows": 6,
+        "columns": 12,
+        "tileIDs": [
+          [
+            1,
+            4,
+            1,
+            -1,
+            -1,
+            -1
+          ],
+          [
+            1,
+            1,
+            6,
+            1,
+            1,
+            -1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            -1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            3,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            3,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            3,
+            1,
+            1
+          ],
+          [
+            1,
+            8,
+            1,
+            3,
+            1,
+            1
+          ],
+          [
+            -1,
+            1,
+            1,
+            3,
+            3,
+            3
+          ],
+          [
+            -1,
+            1,
+            4,
+            1,
+            1,
+            -1
+          ],
+          [
+            -1,
+            1,
+            1,
+            1,
+            1,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            1,
+            1,
+            1,
+            -1
+          ]
+        ]
+      }
+    }
+  }
+}

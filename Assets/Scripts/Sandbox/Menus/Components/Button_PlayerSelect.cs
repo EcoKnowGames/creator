@@ -12,6 +12,8 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private Button _maxPlayerButton_Deselected;
         [SerializeField] private Button _maxPlayerButton_Selected;
 
+        public Button PlayerSelectButton => _maxPlayerButton_Deselected;
+
         [Header("Player Info")]
         [SerializeField] private TMP_InputField _playerNameInput;
         [SerializeField] private Button _playerNameButton;
