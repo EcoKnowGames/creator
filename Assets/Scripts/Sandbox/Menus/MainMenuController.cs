@@ -8,6 +8,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
     public class MainMenuController : MonoBehaviour
     {
         public enum Screen { MAIN, SELECT_SCENARIO, LOAD_SCENARIO, SETUP_SCENARIO };
+        private Screen _activeScreen = Screen.MAIN;
 
         [SerializeField] private MenuScreen_Main _mainMenuScreen;
         [SerializeField] private MenuScreen_Select _selectScenarioScreen;
@@ -51,6 +52,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                     }
                 case (Screen.SETUP_SCENARIO):
                     {
+                        _setupScenarioScreen.SetEntryScreen(_activeScreen); //Previous screen
                         _setupScenarioScreen?.Show();
                         break;
                     }
@@ -62,6 +64,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                     }
             }
 
+            _activeScreen = screenType;
         }
         #endregion
 

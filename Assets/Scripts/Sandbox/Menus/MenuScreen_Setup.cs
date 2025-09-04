@@ -1,11 +1,15 @@
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.Menus
 {
     public class MenuScreen_Setup : MenuScreen
     {
         private MainMenuController.Screen _entryScreen = MainMenuController.Screen.SELECT_SCENARIO;
+
+        [Header("Scenario Info")]
+        [SerializeField] private TMP_Text _scenarioName;
 
         [Header("Buttons")]
         [SerializeField] private Button_PlayerSelect _playerButton_One;
@@ -19,6 +23,11 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         public override void Show()
         {
             base.Show();
+
+            if ((ScenarioLoader.Instance != null) && (ScenarioLoader.Instance.LoadedConfig != null))
+            {
+                SetScenarioName(ScenarioLoader.Instance.LoadedConfig.Scenario.Name);
+            }
 
             MultiplayerManager.Instance?.SetMaxPlayers(1); //Singleplayer is default
             AddListeners();
@@ -47,11 +56,14 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                 for (int i = 0; i < _playerButtonList.Length; i++)
                 {
                     Button_PlayerSelect playerButton = _playerButtonList[i];
+
                     int playerIndex = i;
                     playerButton?.PlayerNameButton?.onClick.AddListener(() => {
                         MultiplayerManager.Instance.RenamePlayer(playerIndex, playerButton.PlayerName);
                         playerButton.OnNameSet();
                         });
+
+                    playerButton?.PlayerSelectButton.onClick.AddListener(() => SetMaxPlayers(playerIndex + 1));
                 }
             }
         }
@@ -64,6 +76,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                 for (int i = 0; i < _playerButtonList.Length; i++)
                 {
                     _playerButtonList[i].PlayerNameButton?.onClick.RemoveAllListeners();
+                    _playerButtonList[i].PlayerSelectButton.onClick.RemoveAllListeners();
                 }
             }
         }
@@ -83,7 +96,15 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             MainMenuController.RequestLoadSandboxScene(() => ScenarioLoader.Instance.RequestStartLoadedConfig());
         }
 
-        public void SetMaxPlayers(int maxPlayers)
+        private void SetScenarioName(string name)
+        {
+            if (_scenarioName != null)
+            {
+                _scenarioName.text = name;
+            }
+        }
+
+        private void SetMaxPlayers(int maxPlayers)
         {
             MultiplayerManager.Instance?.SetMaxPlayers(maxPlayers);
             RefreshButtons();

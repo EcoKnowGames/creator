@@ -49,7 +49,8 @@ namespace Glitchers.EcoKnow.Sandbox
         #endregion
 
         [Header("Scenario")]
-        [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
+        [SerializeField] private ScenarioConfigDataList _integratedScenarioList;
+        [SerializeField] private ScenarioNodeGraph _activeScenarioGraph;
         private ScenarioConfig _loadedConfig;
         public ScenarioConfig LoadedConfig => _loadedConfig;
         public Scenario LastPlayedScenario => _loadedConfig == null ? null : _loadedConfig.Scenario;
@@ -114,7 +115,6 @@ namespace Glitchers.EcoKnow.Sandbox
             Debug.LogError($"{LogChannel} Failed to parse Json, either filePath was invalid or the selected file was empty");
             return null;
         }
-
 
         //Load ScenarioConfig from raw json
         private static ScenarioConfig LoadConfig(string json)
@@ -211,6 +211,47 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return config;
         }
+
+        public void SetLoadedConfig(ScenarioConfig config)
+        {
+            if (config != null)
+            {
+                _loadedConfig = config;
+            }
+        }
+        #endregion
+
+        #region Integrated Scenarios
+        public ScenarioConfigDataList GetIntegratedScenarioList()
+        {
+            return _integratedScenarioList;
+        }
+
+        public List<ScenarioConfig> GetIntegratedScenarioConfigs()
+        {
+            List<ScenarioConfig> _scenarioConfigs = new List<ScenarioConfig>();
+
+            if (_integratedScenarioList != null)
+            {
+                foreach (ScenarioConfigDataList.ScenarioAsset asset in _integratedScenarioList.ScenarioAssets)
+                {
+                    if (asset.jsonAsset != null)
+                    {
+                        string rawJson = asset.jsonAsset.text;
+                        if (!string.IsNullOrEmpty(rawJson))
+                        {
+                            ScenarioConfig config = LoadConfig(rawJson);
+                            if (config != null)
+                            {
+                                _scenarioConfigs.Add(config);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return _scenarioConfigs;
+        }
         #endregion
 
         #region Load Sandbox
@@ -218,9 +259,9 @@ namespace Glitchers.EcoKnow.Sandbox
         //Would be nice if the current graph config could detect the "open" graph
         public ScenarioConfig GetCurrentGraphConfig()
         {
-            if (_scenarioNodeGraph != null)
+            if (_activeScenarioGraph != null)
             {
-                return _scenarioNodeGraph.GetConfig();
+                return _activeScenarioGraph.GetConfig();
             }
 
             return null;
