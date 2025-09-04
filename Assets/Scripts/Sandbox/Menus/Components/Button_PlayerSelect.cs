@@ -15,9 +15,33 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [Header("Player Info")]
         [SerializeField] private TMP_InputField _playerNameInput;
         [SerializeField] private Button _playerNameButton;
+        [SerializeField] private GameObject _playerNameConfirmCheck;
 
         public Button PlayerNameButton => _playerNameButton;
         public string PlayerName => _playerNameInput != null ? _playerNameInput.text : null;
+
+        public void SetPlayerCount(int count)
+        {
+            string playerCount = count == 0 ? "Single Player" : string.Format($"{count + 1} Players"); //Account for 0
+
+            if (_maxPlayerButton_Deselected != null)
+            {
+                TMP_Text deselectedText = _maxPlayerButton_Deselected.GetComponentInChildren<TMP_Text>();
+                if (deselectedText != null)
+                {
+                    deselectedText.text = playerCount;
+                }
+            }
+
+            if (_maxPlayerButton_Selected != null)
+            {
+                TMP_Text deselectedText = _maxPlayerButton_Selected.GetComponentInChildren<TMP_Text>();
+                if (deselectedText != null)
+                {
+                    deselectedText.text = playerCount;
+                }
+            }
+        }
 
         public void SetInteractable(bool interactable)
         {
@@ -51,6 +75,43 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             {
                 _playerNameButton.interactable = interactable;
             }
+
+            if (interactable == false)
+            {
+                SetCheckmarkVisible(false);
+            }
+        }
+
+        public void SetCheckmarkVisible(bool visible)
+        {
+            if (_playerNameConfirmCheck != null)
+            {
+                _playerNameConfirmCheck.SetActive(visible);
+            }
+        }
+
+        public void ResetNameInput(int playerIndex)
+        {
+            if (_playerNameInput != null)
+            {
+                _playerNameInput.text = string.Empty;
+                if (_playerNameInput.placeholder is TMP_Text placeholderText)
+                {
+                    placeholderText.text = string.Format($"Player {playerIndex + 1}"); //Account for 0
+                }
+            }
+
+            SetCheckmarkVisible(false);
+        }
+
+        public void OnNameSet()
+        {
+            SetCheckmarkVisible(true);
+        }
+
+        public void OnInputChanged()
+        {
+            SetCheckmarkVisible(false);
         }
 
         private IEnumerator RefreshLayout()

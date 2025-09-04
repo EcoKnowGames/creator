@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Menus
@@ -12,6 +13,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private Button_PlayerSelect _playerButton_Three;
         [SerializeField] private Button_PlayerSelect _playerButton_Four;
 
+        [SerializeField] private Transform _playerButtonContainer;
+        private Button_PlayerSelect[] _playerButtonList => _playerButtonContainer == null ? null : _playerButtonContainer.GetComponentsInChildren<Button_PlayerSelect>().OrderBy(x => x.transform.GetSiblingIndex()).ToArray(); //Just in case this for some reason does not return child order
+
         public override void Show()
         {
             base.Show();
@@ -19,6 +23,15 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             MultiplayerManager.Instance?.SetMaxPlayers(1); //Singleplayer is default
             AddListeners();
             RefreshButtons();
+
+            if (_playerButtonList != null)
+            {
+                for(int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    _playerButtonList[i].ResetNameInput(i);
+                    _playerButtonList[i].SetPlayerCount(i);
+                }
+            }
         }
 
         public override void Hide()
@@ -29,18 +42,30 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private void AddListeners()
         {
-            _playerButton_One?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(0, _playerButton_One.PlayerName));
-            _playerButton_Two?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(1, _playerButton_Two.PlayerName));
-            _playerButton_Three?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(2, _playerButton_Three.PlayerName));
-            _playerButton_Four?.PlayerNameButton?.onClick.AddListener(() => MultiplayerManager.Instance.RenamePlayer(3, _playerButton_Four.PlayerName));
+            if (_playerButtonList != null)
+            {
+                for (int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    Button_PlayerSelect playerButton = _playerButtonList[i];
+                    int playerIndex = i;
+                    playerButton?.PlayerNameButton?.onClick.AddListener(() => {
+                        MultiplayerManager.Instance.RenamePlayer(playerIndex, playerButton.PlayerName);
+                        playerButton.OnNameSet();
+                        });
+                }
+            }
         }
 
         private void RemoveListeners()
         {
-            _playerButton_One?.PlayerNameButton?.onClick.RemoveAllListeners();
-            _playerButton_Two?.PlayerNameButton?.onClick.RemoveAllListeners();
-            _playerButton_Three?.PlayerNameButton?.onClick.RemoveAllListeners();
-            _playerButton_Four?.PlayerNameButton?.onClick.RemoveAllListeners();
+
+            if (_playerButtonList != null)
+            {
+                for (int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    _playerButtonList[i].PlayerNameButton?.onClick.RemoveAllListeners();
+                }
+            }
         }
 
         public void SetEntryScreen(MainMenuController.Screen entryScreen)
@@ -74,15 +99,28 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         {
             //Setup Selected
             int maxPlayers = MultiplayerManager.Instance.MaxPlayers;
-            _playerButton_One?.SetSelected(maxPlayers == 1);
-            _playerButton_Two?.SetSelected(maxPlayers == 2);
-            _playerButton_Three?.SetSelected(maxPlayers == 3);
-            _playerButton_Four?.SetSelected(maxPlayers == 4);
+            if (_playerButtonList != null)
+            {
+                for (int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    _playerButtonList[i].SetSelected(maxPlayers == (i + 1));
+                }
+            }
 
-            _playerButton_One?.SetPlayerFieldInteractable(true);
-            _playerButton_Two?.SetPlayerFieldInteractable(2 <= maxPlayers);
-            _playerButton_Three?.SetPlayerFieldInteractable(3 <= maxPlayers);
-            _playerButton_Four?.SetPlayerFieldInteractable(4 <= maxPlayers);
+            if (_playerButtonList != null)
+            {
+                for (int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        _playerButtonList[i].SetPlayerFieldInteractable(true);
+                    }
+                    else
+                    {
+                        _playerButtonList[i].SetPlayerFieldInteractable((i + 1) <= maxPlayers);
+                    }
+                }
+            }
         }
 
         private void SetValidPlayerButtons()
@@ -95,10 +133,20 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                 maxActions = config.Scenario.ActionsPerRound;
             }
 
-            _playerButton_One?.SetInteractable(true);
-            _playerButton_Two?.SetInteractable(maxActions % 2 == 0);
-            _playerButton_Three?.SetInteractable(maxActions % 3 == 0);
-            _playerButton_Four?.SetInteractable(maxActions % 4 == 0);
+            if (_playerButtonList != null)
+            {
+                for (int i = 0; i < _playerButtonList.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        _playerButtonList[i].SetInteractable(true);
+                    }
+                    else
+                    {
+                        _playerButtonList[i].SetInteractable(maxActions % (i + 1) == 0);
+                    }
+                }
+            }
         }
     }
 }
