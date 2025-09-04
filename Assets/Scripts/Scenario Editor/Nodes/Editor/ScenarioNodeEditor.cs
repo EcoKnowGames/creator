@@ -20,8 +20,10 @@ public class ScenarioNodeEditor : NodeEditor
 
         EditorGUIUtility.labelWidth = 125.0f;
 
-        EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
+        EditorGUILayout.LabelField("Info", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("scenarioName"));
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("authorName"));
+        EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("rounds"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("actionsPerRound"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("startCurrency"));
