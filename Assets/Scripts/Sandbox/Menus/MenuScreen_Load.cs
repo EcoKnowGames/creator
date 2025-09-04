@@ -1,17 +1,36 @@
 using UnityEngine;
+using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.Menus
 {
     public class MenuScreen_Load : MenuScreen
     {
+        [Header("Raw JSON Input")]
+        [SerializeField] private TMP_InputField _rawJsonInput;
+        [SerializeField] private TMP_Text _inputFeedbackText;
+
+        public override void Show()
+        {
+            base.Show();
+
+            if (_inputFeedbackText != null)
+            {
+                //_inputFeedbackText.text = string.Empty; //??
+                _inputFeedbackText.gameObject.SetActive(false);
+            }
+        }
+
         public void OnLoadFromFilePressed()
         {
             ScenarioLoader.ShowLoadDialog(OnScenarioLoaded, null);
         }
 
-        public void OnLoadFromJSONPressed()
+        public void OnLoadFromJsonPressed()
         {
-
+            if (_rawJsonInput != null)
+            {
+                ValidateJson(_rawJsonInput.text);
+            }
         }
 
         public void OnReturnPressed()
@@ -21,8 +40,24 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private void OnScenarioLoaded(Scenario scenario)
         {
-            //TODO(caspar)
             MainMenuController?.SetScreen(MainMenuController.Screen.SETUP_SCENARIO);
+        }
+
+        private void ValidateJson(string rawJson)
+        {
+            ScenarioConfig config = ScenarioLoader.LoadConfig(rawJson);
+            if (config != null)
+            {
+                ScenarioLoader.Instance.SetLoadedConfig(config);
+                MainMenuController.SetScreen(MainMenuController.Screen.SETUP_SCENARIO);
+            }
+            else
+            {
+                if (_inputFeedbackText != null)
+                {
+                    _inputFeedbackText.gameObject.SetActive(true);
+                }
+            }
         }
     }
 }
