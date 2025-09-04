@@ -58,7 +58,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                 Button_ScenarioSelect button = Instantiate(_scenarioSelectButtonPrefab, _scenarioSelectContainer);
                 if (button != null)
                 {
-                    button.SetScenarioData(button.transform.GetSiblingIndex(), config.Scenario.Name, "TODO", config.Scenario.ActionsPerRound);
+                    button.SetScenarioData(button.transform.GetSiblingIndex(), config.Scenario.Name, config.Scenario.Author, config.Scenario.ActionsPerRound);
                     button.PlayButton.onClick.AddListener(() =>
                     {
                         ScenarioLoader.Instance.SetLoadedConfig(config);
