@@ -46,11 +46,11 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             //Add new buttons
             for (int i = 0; i < scenarioConfigs.Count; i++)
             {
-                AddScenarioToList(scenarioConfigs[i]);
+                AddScenarioToList(i + 1, scenarioConfigs[i]);
             }
         }
 
-        private void AddScenarioToList(ScenarioConfig config)
+        private void AddScenarioToList(int index, ScenarioConfig config)
         {
             //Instantiate and set up button
             if (config != null)
@@ -58,7 +58,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
                 Button_ScenarioSelect button = Instantiate(_scenarioSelectButtonPrefab, _scenarioSelectContainer);
                 if (button != null)
                 {
-                    button.SetScenarioData(button.transform.GetSiblingIndex(), config.Scenario.Name, config.Scenario.Author, config.Scenario.ActionsPerRound);
+                    button.SetScenarioData(index, config.Scenario.Name, config.Scenario.Author, config.Scenario.ActionsPerRound);
                     button.PlayButton.onClick.AddListener(() =>
                     {
                         ScenarioLoader.Instance.SetLoadedConfig(config);

@@ -7,7 +7,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
     {
         [Header("Raw JSON Input")]
         [SerializeField] private TMP_InputField _rawJsonInput;
-        [SerializeField] private TMP_Text _inputFeedbackText;
+        [SerializeField] private CanvasGroup _inputFeedbackText;
 
         public override void Show()
         {
@@ -15,8 +15,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
             if (_inputFeedbackText != null)
             {
-                //_inputFeedbackText.text = string.Empty; //??
-                _inputFeedbackText.gameObject.SetActive(false);
+                _inputFeedbackText.alpha = 0.0f;
             }
         }
 
@@ -55,7 +54,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             {
                 if (_inputFeedbackText != null)
                 {
-                    _inputFeedbackText.gameObject.SetActive(true);
+                    _inputFeedbackText.alpha = 1.0f;
                 }
             }
         }
