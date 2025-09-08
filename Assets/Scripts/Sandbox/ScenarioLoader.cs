@@ -49,7 +49,8 @@ namespace Glitchers.EcoKnow.Sandbox
         #endregion
 
         [Header("Scenario")]
-        [SerializeField] private ScenarioNodeGraph _scenarioNodeGraph;
+        [SerializeField] private ScenarioConfigDataList _integratedScenarioList;
+        [SerializeField] private ScenarioNodeGraph _activeScenarioGraph;
         private ScenarioConfig _loadedConfig;
         public ScenarioConfig LoadedConfig => _loadedConfig;
         public Scenario LastPlayedScenario => _loadedConfig == null ? null : _loadedConfig.Scenario;
@@ -86,7 +87,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 onCancel?.Invoke();
 
                 //TODO(caspar): Temporary while we await a proper frontend
-                Instance.StartNewGameFromGraph();
+                //Instance.StartNewGameFromGraph();
             },
             FileBrowser.PickMode.Files,
             false,
@@ -115,9 +116,8 @@ namespace Glitchers.EcoKnow.Sandbox
             return null;
         }
 
-
         //Load ScenarioConfig from raw json
-        private static ScenarioConfig LoadConfig(string json)
+        public static ScenarioConfig LoadConfig(string json)
         {
             if (string.IsNullOrEmpty(json))
             {
@@ -146,7 +146,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
             }
 
-            if (config != null)
+            if ((config != null) && (config.Scenario != null))
             {
                 //Validation
                 if (Application.version != config.AppVersion)
@@ -211,28 +211,82 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return config;
         }
+
+        public void SetLoadedConfig(ScenarioConfig config)
+        {
+            if (config != null)
+            {
+                _loadedConfig = config;
+            }
+        }
+        #endregion
+
+        #region Integrated Scenarios
+        public ScenarioConfigDataList GetIntegratedScenarioList()
+        {
+            return _integratedScenarioList;
+        }
+
+        public List<ScenarioConfig> GetIntegratedScenarioConfigs()
+        {
+            List<ScenarioConfig> _scenarioConfigs = new List<ScenarioConfig>();
+
+            if (_integratedScenarioList != null)
+            {
+                foreach (ScenarioConfigDataList.ScenarioAsset asset in _integratedScenarioList.ScenarioAssets)
+                {
+                    if (asset.jsonAsset != null)
+                    {
+                        string rawJson = asset.jsonAsset.text;
+                        if (!string.IsNullOrEmpty(rawJson))
+                        {
+                            ScenarioConfig config = LoadConfig(rawJson);
+                            if (config != null)
+                            {
+                                _scenarioConfigs.Add(config);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return _scenarioConfigs;
+        }
         #endregion
 
         #region Load Sandbox
 #if UNITY_EDITOR
+        //Would be nice if the current graph config could detect the "open" graph
         public ScenarioConfig GetCurrentGraphConfig()
         {
-            if (_scenarioNodeGraph != null)
+            if (_activeScenarioGraph != null)
             {
-                return _scenarioNodeGraph.GetConfig();
+                return _activeScenarioGraph.GetConfig();
             }
 
             return null;
         }
 
-        //TODO(caspar): Not ideal, but we will eventually replace this with a proper frontend - this will work for now
-        private void StartNewGameFromGraph()
+        public void RequestStartActiveGraph()
         {
-            ScenarioConfig config = ScenarioLoader.Instance.GetCurrentGraphConfig();
+            ScenarioConfig config = GetCurrentGraphConfig();
             if (config != null)
             {
                 _loadedConfig = config;
-                SandboxManager.Instance.StartNewGame(config.Scenario);
+                StartLoadedConfig();
+            }
+        }
+
+        public void RequestStartLoadedConfig()
+        {
+            StartLoadedConfig();
+        }
+
+        private void StartLoadedConfig()
+        {
+            if ((_loadedConfig != null) && (SandboxManager.Instance != null))
+            {
+                SandboxManager.Instance.StartNewGame(_loadedConfig.Scenario);
             }
         }
 #endif

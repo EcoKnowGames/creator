@@ -8,6 +8,7 @@ using XNode;
 public class ScenarioNode : Node
 {
     [SerializeField] protected string scenarioName;
+    [SerializeField] protected string authorName;
     [SerializeField] protected int rounds;
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
@@ -76,6 +77,7 @@ public class ScenarioNode : Node
     public List<NodePort> EntityPorts => _entityPorts;
 
     public string Name => scenarioName;
+    public string Author => string.IsNullOrEmpty(authorName) ? "Unknown Author" : authorName;
     public int TotalRounds => rounds;
     public int ActionsPerRound => actionsPerRound;
 
