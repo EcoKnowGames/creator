@@ -9,6 +9,8 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private Button_ScenarioSelect _scenarioSelectButtonPrefab;
         [SerializeField] private Transform _scenarioSelectContainer;
 
+        private const string LogChannel = "[MenuScreen_Select]";
+
         public override void Show()
         {
             base.Show();
@@ -33,7 +35,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         {
             if ((scenarioConfigs == null) || (scenarioConfigs.Count <= 0))
             {
-                //error
+                Debug.LogError($"{LogChannel} Failed to setup Scenario List, config list is null or empty");
                 return;
             }
 
