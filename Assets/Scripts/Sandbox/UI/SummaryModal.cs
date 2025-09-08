@@ -3,6 +3,8 @@ using TMPro;
 using Glitchers.EcoKnow.Sandbox;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
+using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -18,12 +20,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Score")]
         [SerializeField] private TMP_Text _scoreText;
 
+        protected RectTransform[] RectTransforms => this.GetComponentsInChildren<RectTransform>();
+
         private const string LogChannel = "[SummaryModal]";
 
         public void ShowModal()
         {
             this.gameObject.SetActive(true);
             SetupResults();
+            StartCoroutine(RefreshLayout());
         }
 
         public void HideModal()
@@ -48,6 +53,19 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             //TODO(caspar): Do we want to allow data export on WebGL? This will likely require some js
 #endif
+        }
+
+        private IEnumerator RefreshLayout()
+        {
+            yield return new WaitForEndOfFrame();
+
+            if ((RectTransforms != null) && (RectTransforms.Length > 0))
+            {
+                foreach (RectTransform transform in RectTransforms)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(transform);
+                }
+            }
         }
 
         #region Win Conditions
