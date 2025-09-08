@@ -50,7 +50,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             yield return new WaitForEndOfFrame();
 
-            //RectTransform rectTransform = this.GetComponent<RectTransform>();
             if (_indicatorBox != null)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_indicatorBox);
