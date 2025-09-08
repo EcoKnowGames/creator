@@ -5,6 +5,7 @@ using Glitchers.EcoKnow.Sandbox.Data;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using Glitchers.EcoKnow.Sandbox.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
@@ -82,7 +83,7 @@ namespace Glitchers.EcoKnow.Sandbox
         #region Lifecycle
         void Start()
         {
-            ScenarioLoader.ShowLoadDialog(StartNewGame, null);
+            //ScenarioLoader.ShowLoadDialog(StartNewGame, null);
         }
 
         void Update()
@@ -154,7 +155,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public void QuitGame()
         {
-            Application.Quit();
+            RequestLoadMainMenuScene();
         }
 
         private void Cleanup()
@@ -345,6 +346,22 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             return actionsRemaining;
+        }
+        #endregion
+
+        #region Main Menu
+        public void RequestLoadMainMenuScene()
+        {
+            StartCoroutine(LoadMainMenuScene());
+        }
+
+        private IEnumerator LoadMainMenuScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("scene_Start");
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
         #endregion
     }

@@ -13,6 +13,7 @@ using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 public record Scenario
     (
         string Name,
+        string Author,
         int Rounds,
         int ActionsPerRound,
         int StartCurrency,
@@ -172,6 +173,7 @@ public class ScenarioNodeGraph : NodeGraph
         //Collect our data
         Scenario scenario = new Scenario(
            scenarioNode.Name,
+           scenarioNode.Author,
            scenarioNode.TotalRounds,
            scenarioNode.ActionsPerRound,
            scenarioNode.StartCurrency,
