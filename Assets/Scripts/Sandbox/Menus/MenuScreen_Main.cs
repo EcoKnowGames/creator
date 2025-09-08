@@ -7,6 +7,8 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
     {
         [SerializeField] private Button _startActiveGraphButton;
 
+        private const string LogChannel = "[MenuScreen_Main]";
+
         public override void Show()
         {
             base.Show();
@@ -34,8 +36,13 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             }
             else
             {
-                //TODO(caspar): Error
+                Debug.LogError($"{LogChannel} Failed to load active graph, either the ScenarioLoader or ActiveGraph is null");
             }
+        }
+
+        public void OnMoreInfoPressed()
+        {
+            //TODO
         }
     }
 }
