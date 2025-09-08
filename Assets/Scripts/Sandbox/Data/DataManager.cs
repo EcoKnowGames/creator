@@ -92,6 +92,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             EventDataObject ev = new EventDataObject(
                 type,
                 GetPlayer(),
+                GetRound(),
                 GetPopulations(),
                 GetInventory(),
                 GetWinConditions(),
@@ -253,6 +254,16 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
 
             return 1;
+        }
+
+        private int GetRound()
+        {
+            if (SandboxManager.Instance != null)
+            {
+                return SandboxManager.Instance.CurrentRound + 1; //Account for 0
+            }
+
+            return -1;
         }
         #endregion
 
