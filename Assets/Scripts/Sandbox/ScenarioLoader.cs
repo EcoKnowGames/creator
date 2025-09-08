@@ -146,7 +146,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
             }
 
-            if (config != null)
+            if ((config != null) && (config.Scenario != null))
             {
                 //Validation
                 if (Application.version != config.AppVersion)

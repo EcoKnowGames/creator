@@ -39,7 +39,17 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private void OnScenarioLoaded(Scenario scenario)
         {
-            MainMenuController?.SetScreen(MainMenuController.Screen.SETUP_SCENARIO);
+            if (scenario == null)
+            {
+                if (_inputFeedbackText != null)
+                {
+                    _inputFeedbackText.alpha = 1.0f;
+                }
+            }
+            else
+            {
+                MainMenuController?.SetScreen(MainMenuController.Screen.SETUP_SCENARIO);
+            }
         }
 
         private void ValidateJson(string rawJson)
