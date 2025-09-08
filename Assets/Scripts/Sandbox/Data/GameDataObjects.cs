@@ -55,6 +55,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         (
             EventType Type,
             int Player,
+            int Round,
             Dictionary<string, int> Populations,
             Dictionary<string, int> Inventory,
             List<WinConditionDataObject> WinConditions,
