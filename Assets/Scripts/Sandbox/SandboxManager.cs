@@ -347,6 +347,17 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return actionsRemaining;
         }
+
+        public static int GetMaxActionPoints()
+        {
+            int maxActions = 0;
+            if (Instance != null)
+            {
+                maxActions = Instance._maxActionsPerRound;
+            }
+
+            return maxActions;
+        }
         #endregion
     }
 }

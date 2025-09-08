@@ -94,6 +94,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                 type,
                 GetPlayer(),
                 GetRound(),
+                GetAction(),
                 GetPopulations(),
                 GetInventory(),
                 GetWinConditions(),
@@ -271,6 +272,11 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
 
             return -1;
+        }
+
+        private int GetAction()
+        {
+            return SandboxManager.GetMaxActionPoints() - SandboxManager.GetAvailableActionPoints();
         }
         #endregion
 
