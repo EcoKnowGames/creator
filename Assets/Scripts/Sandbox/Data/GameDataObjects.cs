@@ -36,12 +36,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         (
             int X,
             int Y,
-            Dictionary<string, int> PopulationChange
-        );
-
-    public record MapDataObject
-        (
-            Dictionary<string, int>[,] Populations
+            Dictionary<string, int> Populations
         );
 
     public record WinConditionDataObject
@@ -59,7 +54,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             Dictionary<string, int> Populations,
             Dictionary<string, int> Inventory,
             List<WinConditionDataObject> WinConditions,
-            MapDataObject Map,
+            List<CellDataObject> Map,
             Dictionary<string, System.Object> Meta
         );
 
