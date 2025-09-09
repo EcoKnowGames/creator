@@ -36,6 +36,8 @@ namespace Glitchers.EcoKnow.Sandbox
     public class EntityManager : MonoBehaviour
     {
         private IEntityCalculator _entityCalculator = new StandardCalculator(); //Swap this out for different mathematics
+        public IEntityCalculator Calculator => _entityCalculator;
+
 
         //private float[,] _alphaMatrix;
         private Matrix _entityMatrix;
