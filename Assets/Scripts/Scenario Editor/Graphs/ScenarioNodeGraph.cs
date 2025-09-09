@@ -7,7 +7,9 @@ using UnityEditor;
 using UnityEngine;
 using XNode;
 
+#if UNITY_EDITOR
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+#endif
 
 //All data needed to create a scenario
 public record Scenario
@@ -51,11 +53,13 @@ public class ScenarioNodeGraph : NodeGraph
         _appVersion = Application.version;
         _unityVersion = Application.unityVersion;
 
+#if UNITY_EDITOR
         PackageInfo info = PackageInfo.FindForPackageName("com.github.siccity.xnode");
         if (info != null)
         {
             _xNodeVersion = info.version;
         }
+#endif
     }
 
     private void OnEnable()
