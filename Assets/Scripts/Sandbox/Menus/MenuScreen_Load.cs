@@ -19,6 +19,12 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             }
         }
 
+        public override void Hide()
+        {
+            ScenarioLoader.HideLoadDialog(); //If we exit this screen, hide the dialog
+            base.Hide();
+        }
+
         public void OnLoadFromFilePressed()
         {
             ScenarioLoader.ShowLoadDialog(OnScenarioLoaded, null);
