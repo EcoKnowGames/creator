@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Glitchers.EcoKnow.Sandbox.Data;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
 
@@ -30,12 +29,6 @@ namespace Glitchers.EcoKnow.Sandbox
         Quantity[] IntroduceQuantities
         );
 
-
-    /*public record Matrix(
-        string[] EntityIDs,
-        float[,] EntityAlphas 
-        );*/
-
     public delegate void EntityEvent(int column, int row, int id);
 
     //Note(caspar) -> This class stores and handles manipulation of the Entity data
@@ -49,7 +42,7 @@ namespace Glitchers.EcoKnow.Sandbox
         public int EntityTypeCount => _entityTypeList.Length;
 
 
-        //Cell lookup table?
+        //Cell lookup table
         //X, Y, entityIndex
         private int[,,] _entityLookupTable;
 

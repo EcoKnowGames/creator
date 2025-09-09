@@ -68,6 +68,7 @@ namespace Glitchers.EcoKnow.Sandbox
         private int _currentRound = -1;
 
         public int MaxRounds => _maxRounds;
+        public int CurrentRound => _currentRound;
 
         private int _maxActionsPerRound = 1;
 
@@ -346,6 +347,17 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             return actionsRemaining;
+        }
+
+        public static int GetMaxActionPoints()
+        {
+            int maxActions = 0;
+            if (Instance != null)
+            {
+                maxActions = Instance._maxActionsPerRound;
+            }
+
+            return maxActions;
         }
         #endregion
 
