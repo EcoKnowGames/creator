@@ -239,6 +239,12 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         {
             if (Input.GetButtonDown("Fire1"))
             {
+                // Don't process cell clicks if camera is being dragged
+                if (gridCamera != null && gridCamera.IsDragging())
+                {
+                    return;
+                }
+                
                 Cell cell = CastToCell();
                 if (cell != null)
                 {
