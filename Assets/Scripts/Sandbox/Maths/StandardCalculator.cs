@@ -117,13 +117,14 @@ namespace Glitchers.EcoKnow.Sandbox
                         for (int row = 0; row < entityLookupTable.GetLongLength(1); row++)
                         {
                             int currentPopulation = entityLookupTable[column, row, i];
-                            int neighbouringCellCount = entityManager.GetValidNeighbourCount(column, row, i);
-
                             if (currentPopulation < 0)
                             {
                                 //This cell/entity is empty, do not perform movement calculations
                                 continue;
                             }
+
+                            int neighbouringCellCount = entityManager.GetValidNeighbourCount(column, row, i);
+                            Vector2[] edgeCells = entityManager.FindOppositeEdges(column, row, i, true);
 
                             //get number of entities to move
                             int entitiesToMove = 0;
@@ -133,7 +134,7 @@ namespace Glitchers.EcoKnow.Sandbox
                             }
 
                             //divide moving entities by the number of valid neighbours
-                            int entitiesMovingPerCell = Mathf.FloorToInt((float)entitiesToMove / (float)neighbouringCellCount);
+                            int entitiesMovingPerCell = Mathf.FloorToInt((float)entitiesToMove / (float)(neighbouringCellCount + edgeCells.Count()));
 
                             //Add to neighbouring cells and remove from current cell respectively
                             for (int x = -1; x < 2; x++)
@@ -145,7 +146,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
                                     if (x == 0 && y == 0)
                                     {
-                                        movementTable[xPos, yPos, i] -= (entitiesMovingPerCell * neighbouringCellCount);
+                                        movementTable[xPos, yPos, i] -= (entitiesMovingPerCell * (neighbouringCellCount + edgeCells.Count()));
                                     }
                                     else if (xPos >= 0 &&
                                             xPos < entityLookupTable.GetLongLength(0) &&
@@ -159,6 +160,12 @@ namespace Glitchers.EcoKnow.Sandbox
                                         }
                                     }
                                 }
+                            }
+
+                            //Wrap around edges
+                            foreach(Vector2 cell in edgeCells)
+                            {
+                                movementTable[(int)cell.x, (int)cell.y, i] += entitiesMovingPerCell;
                             }
                         }
                     }
