@@ -379,6 +379,103 @@ namespace Glitchers.EcoKnow.Sandbox
 
             return neighbours;
         }
+
+        public Vector2[] FindOppositeEdges(int column, int row, int entity, bool ignoreNeighbours = false)
+        {
+            List<Vector2> oppositeEdges = new List<Vector2>();
+
+            //Test Left
+            bool edgeLeft = true;
+            bool edgeRight = true;
+
+            for (int i = 0; i < _entityLookupTable.GetLongLength(0); i++)
+            {
+                if (_entityLookupTable[i, row, entity] >= 0)
+                {
+                    if (i < column)
+                    {
+                        edgeLeft = false;
+                    }
+                    else if (i > column)
+                    {
+                        edgeRight = false;
+                    }
+                }
+            }
+
+            bool edgeTop = true;
+            bool edgeBottom = true;
+            for (int j = 0; j < _entityLookupTable.GetLongLength(1); j++)
+            {
+                if (_entityLookupTable[column, j, entity] >= 0)
+                {
+                    if (j < column)
+                    {
+                        edgeTop = false;
+                    }
+                    else if (j > column)
+                    {
+                        edgeBottom = false;
+                    }
+                }
+            }
+
+
+            //Now gather our opposite Cells if relevant
+            if (edgeLeft)
+            {
+                int limit = ignoreNeighbours ? column + 1 : column;
+                for (int i = (int)_entityLookupTable.GetLongLength(0) - 1; i > limit; i--)
+                {
+                    if (_entityLookupTable[i, row, entity] >= 0)
+                    { 
+                        oppositeEdges.Add(new Vector2(i, row));
+                        break;
+                    }
+                }
+            }
+
+            if (edgeRight)
+            {
+                int limit = ignoreNeighbours ? column - 1 : column;
+                for (int j = 0; j < limit; j++)
+                {
+                    if (_entityLookupTable[j, row, entity] >= 0)
+                    {
+                        oppositeEdges.Add(new Vector2(j, row));
+                        break;
+                    }
+                }
+            }
+
+            if (edgeTop)
+            {
+                int limit = ignoreNeighbours ? row + 1 : row;
+                for (int k = (int)_entityLookupTable.GetLongLength(1) - 1; k > limit; k--)
+                {
+                    if (_entityLookupTable[column, k, entity] >= 0)
+                    {
+                        oppositeEdges.Add(new Vector2(column, k));
+                        break;
+                    }
+                }
+            }
+
+            if (edgeBottom)
+            {
+                int limit = ignoreNeighbours ? row - 1 : row;
+                for (int l = 0; l < limit; l++)
+                {
+                    if (_entityLookupTable[column, l, entity] >= 0)
+                    {
+                        oppositeEdges.Add(new Vector2(column, l));
+                        break;
+                    }
+                }
+            }
+
+            return oppositeEdges.ToArray();
+        }
         #endregion
     }
 }
