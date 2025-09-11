@@ -184,8 +184,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void CalculateMaths()
         {
-            _entityManager?.CalculateNewEntityCount();
-            _entityManager?.CalculateMovement();
+            _entityManager?.PerformCalculations();
             _gridManager?.UpdateAllCells();
         }
 

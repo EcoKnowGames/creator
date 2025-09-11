@@ -9,14 +9,20 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private TMP_InputField _rawJsonInput;
         [SerializeField] private CanvasGroup _inputFeedbackText;
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if (_inputFeedbackText != null)
             {
                 _inputFeedbackText.alpha = 0.0f;
             }
+        }
+
+        public override void Hide()
+        {
+            ScenarioLoader.HideLoadDialog(); //If we exit this screen, hide the dialog
+            base.Hide();
         }
 
         public void OnLoadFromFilePressed()
