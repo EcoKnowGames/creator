@@ -32,6 +32,12 @@ namespace Glitchers.EcoKnow.Sandbox.Data
     }
     #endregion
 
+    public record CalculatorDataObject
+        (
+            string Name,
+            string Version
+        );
+
     public record CellDataObject
         (
             int X,
@@ -62,6 +68,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
     public record GameDataObject
         (
             ScenarioConfig Config,
+            CalculatorDataObject Calculator,
             EventDataObject[] Events
         );
 }
