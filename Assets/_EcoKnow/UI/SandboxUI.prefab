@@ -7410,7 +7410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 684580558784250403, guid: 8f1b54f5697784046b6209352828f486, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 209.99995
+      value: 209.99973
       objectReference: {fileID: 0}
     - target: {fileID: 952816840482342156, guid: 8f1b54f5697784046b6209352828f486, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15976,10 +15976,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
@@ -15987,7 +15995,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3101691608656033213}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 5228009807665607886}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 1243719425653360108}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
@@ -15995,11 +16019,35 @@ PrefabInstance:
       value: ShowModal
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ExitModifyMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: DeselectEntity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Glitchers.EcoKnow.Sandbox.UI.InventoryModal, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Glitchers.EcoKnow.Sandbox.UI.ModifyCellManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: Glitchers.EcoKnow.Sandbox.UI.EntityPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541954892864996892, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7406805555780014572, guid: 5784ca3da47df464da19b218a53462b3, type: 3}
