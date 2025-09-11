@@ -16,7 +16,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
         [SerializeField] private ObjectivesPanel _objectivePanel;
-        //[SerializeField] private PlayerToolbar _playerToolbar;
         [SerializeField] private ToolPanel _toolPanel;
 
         [Header("Modification Panels")]
@@ -130,8 +129,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             _inventoryModal?.HideModal();
 
-            //_playerToolbar?.UpdateActionsRemaining(actions);
-
             RefreshInventories();
         }
         #endregion
@@ -195,7 +192,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Modify Mode
         private void OnEnterModifyMode(ModifyMode mode)
         {
-            //_playerToolbar?.SetModifyModeText(mode);
+
         }
 
         private void OnModifySuccess()
@@ -206,7 +203,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void OnExitModifyMode()
         {
-            //_playerToolbar?.HideToolbar();
+
         }
         #endregion
 

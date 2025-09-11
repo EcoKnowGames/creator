@@ -83,7 +83,7 @@ namespace Glitchers.EcoKnow.Sandbox
         #region Lifecycle
         void Start()
         {
-            //ScenarioLoader.ShowLoadDialog(StartNewGame, null);
+
         }
 
         void Update()
@@ -235,7 +235,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private void EndGame()
         {
-            //NOTE: Refreshes all of the UI to prevent errors appearing behind the Summary Modal
+            //Refreshes all of the UI to prevent errors appearing behind the Summary Modal
             _sandboxUI?.OnNewRoundStarted(_currentRound, _maxRounds, 0);
 
             bool playerWins = AreWinConditionsMet();

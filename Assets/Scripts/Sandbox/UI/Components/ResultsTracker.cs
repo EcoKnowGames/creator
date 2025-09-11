@@ -144,10 +144,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             yield return new WaitForEndOfFrame();
 
-            //Now force update
+            //Now force layout update
             for (int i = 0; i < _resultWidgets.Count(); i++)
             {
-                //Force update layout
                 ResultsWidget widget = _resultWidgets[i];
                 RectTransform widgetRect = widget.GetComponent<RectTransform>();
                 if (widgetRect != null)

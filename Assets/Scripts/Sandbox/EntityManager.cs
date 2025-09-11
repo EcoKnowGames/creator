@@ -35,7 +35,6 @@ namespace Glitchers.EcoKnow.Sandbox
     //Data can be requested or modified here
     public class EntityManager : MonoBehaviour
     {
-        //private float[,] _alphaMatrix;
         private Matrix _entityMatrix;
         public float[,] AlphaMatrix => _entityMatrix.entityMatrix;
         private Entity[] _entityTypeList;
