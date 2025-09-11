@@ -9,9 +9,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private const string LogChannel = "[MenuScreen_Main]";
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if (_startActiveGraphButton != null)
             {
@@ -30,6 +30,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         public void OnLoadActiveGraphPressed()
         {
+#if UNITY_EDITOR
             if ((ScenarioLoader.Instance != null) && (ScenarioLoader.Instance.GetCurrentGraphConfig() != null))
             {
                 MainMenuController?.RequestLoadSandboxScene(() => ScenarioLoader.Instance.RequestStartActiveGraph());
@@ -38,11 +39,17 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             {
                 Debug.LogError($"{LogChannel} Failed to load active graph, either the ScenarioLoader or ActiveGraph is null");
             }
+#endif
+        }
+
+        public void OnQuitPressed()
+        {
+            Application.Quit();
         }
 
         public void OnMoreInfoPressed()
         {
-            //TODO
+            Application.OpenURL("https://ecoknowgames.github.io/");
         }
     }
 }
