@@ -120,6 +120,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             GameDataObject data = new GameDataObject
                 (
                     ScenarioLoader.Instance.LoadedConfig,
+                    GetCalculator(),
                     _eventLog.ToArray()
                 );
 
@@ -178,6 +179,23 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         #endregion
 
         #region Data Gathering
+        private CalculatorDataObject GetCalculator()
+        {
+            if (SandboxManager.Instance != null)
+            {
+                EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                if ((entityManager != null) && (entityManager.Calculator != null))
+                {
+                    return new CalculatorDataObject(
+                        entityManager.Calculator.Name(),
+                        entityManager.Calculator.Version()
+                        );
+                }
+            }
+
+            return null;
+        }
+
         private List<CellDataObject> GetMapPopulations()
         {
             List<CellDataObject> mapData = new List<CellDataObject>();
