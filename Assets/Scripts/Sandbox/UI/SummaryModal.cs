@@ -51,7 +51,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 #if !UNITY_WEBGL
             Data.DataManager.Instance.ShowSaveDialog(null, null);
 
-            //TODO(caspar): Do we want to allow data export on WebGL? This will likely require some js
+            //TODO: WebGL support for data export will require some additional js
 #endif
         }
 

@@ -270,7 +270,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     return false;
                 }
 
-                //TODO(caspar): We cannot harvest more than we have in the cell, so what sort of user feedback should we get if we try to harvest too much?
+                //TODO: We cannot harvest more than we have in the cell, so what sort of user feedback should we get if we try to harvest too much?
 
                 int newPopulation = Mathf.Max(currentPopulation - amount, 0);
                 int difference = newPopulation - currentPopulation;

@@ -145,7 +145,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 }
             }
 
-            //Temp -> This whole UI will be revamped in the future but this works for now to prevent issues with layouts
             if (this.GetComponent<RectTransform>() != null)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
