@@ -32,16 +32,17 @@ namespace Glitchers.EcoKnow.Sandbox.Data
     }
     #endregion
 
+    public record CalculatorDataObject
+        (
+            string Name,
+            string Version
+        );
+
     public record CellDataObject
         (
             int X,
             int Y,
-            Dictionary<string, int> PopulationChange
-        );
-
-    public record MapDataObject
-        (
-            Dictionary<string, int>[,] Populations
+            Dictionary<string, int> Populations
         );
 
     public record WinConditionDataObject
@@ -55,16 +56,19 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         (
             EventType Type,
             int Player,
+            int Round,
+            int Action,
             Dictionary<string, int> Populations,
             Dictionary<string, int> Inventory,
             List<WinConditionDataObject> WinConditions,
-            MapDataObject Map,
+            List<CellDataObject> Map,
             Dictionary<string, System.Object> Meta
         );
 
     public record GameDataObject
         (
             ScenarioConfig Config,
+            CalculatorDataObject Calculator,
             EventDataObject[] Events
         );
 }

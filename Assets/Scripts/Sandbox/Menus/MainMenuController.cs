@@ -15,9 +15,21 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private MenuScreen_Load _loadScenarioScreen;
         [SerializeField] private MenuScreen_Setup _setupScenarioScreen;
 
+        [SerializeField] private GameObject _pressPlayObject;
+
+        private void Awake()
+        {
+            _pressPlayObject?.SetActive(false);
+        }
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
+            _mainMenuScreen?.Show();
+            _selectScenarioScreen?.Show();
+            _loadScenarioScreen?.Show();
+            _setupScenarioScreen?.Show();
+
             SetScreen(Screen.MAIN);
         }
 
