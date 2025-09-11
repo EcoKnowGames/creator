@@ -21,7 +21,7 @@ public class EntityNodeEditor : NodeEditor
         entityIcon = _entityNode.Icon;
 
         ColourPaletteObject.ColourSwatch[] swatches = GetSwatches();
-        entityColour = swatches == null ? new ColourPaletteObject.ColourSwatch("black", Color.black) : swatches[_entityNode.ColourIndex];
+        entityColour = swatches == null && _entityNode.ColourIndex < swatches.Length ? new ColourPaletteObject.ColourSwatch("black", Color.black) : swatches[_entityNode.ColourIndex];
 
         // Update serialized object's representation
         serializedObject.Update();

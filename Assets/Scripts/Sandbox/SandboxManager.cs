@@ -130,7 +130,11 @@ namespace Glitchers.EcoKnow.Sandbox
                 //Setup entities and items
                 _entityManager.RegisterAlphaMatrix(scenario.Matrix);
                 _entityManager.RegisterEntities(scenario.Entities.ToList());
-                _playerInventory.RegisterItemDefinitions(scenario.Items.ToList());
+
+                if (scenario.Items != null)
+                {
+                    _playerInventory.RegisterItemDefinitions(scenario.Items.ToList());
+                }
 
                 //Setup grid
                 GridDef gridDef = scenario.Map.gridDef;
