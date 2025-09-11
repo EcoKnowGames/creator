@@ -135,7 +135,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 
                 // For left mouse: Only start dragging if we've moved enough (prevents accidental drags on clicks)
                 // For middle mouse: Start dragging immediately
-                if (!_isDragging && (middleMouseHeld || mouseDelta.magnitude > 5.0f))
+                if (!_isDragging && (middleMouseHeld || mouseDelta.magnitude > 2.0f))
                 {
                     _isDragging = true;
                 }

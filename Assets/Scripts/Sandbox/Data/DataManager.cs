@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Glitchers.EcoKnow.Sandbox.Grid;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SimpleFileBrowser;
@@ -92,6 +93,8 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             EventDataObject ev = new EventDataObject(
                 type,
                 GetPlayer(),
+                GetRound(),
+                GetAction(),
                 GetPopulations(),
                 GetInventory(),
                 GetWinConditions(),
@@ -117,6 +120,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             GameDataObject data = new GameDataObject
                 (
                     ScenarioLoader.Instance.LoadedConfig,
+                    GetCalculator(),
                     _eventLog.ToArray()
                 );
 
@@ -175,18 +179,41 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         #endregion
 
         #region Data Gathering
-        private MapDataObject GetMapPopulations()
+        private CalculatorDataObject GetCalculator()
         {
-            Dictionary<string, int>[,] populations = null;
-            if (SandboxManager.Instance.EntityManager != null)
+            if (SandboxManager.Instance != null)
             {
-                populations = SandboxManager.Instance.EntityManager.GetPopulationsByCell();
+                EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                if ((entityManager != null) && (entityManager.Calculator != null))
+                {
+                    return new CalculatorDataObject(
+                        entityManager.Calculator.Name(),
+                        entityManager.Calculator.Version()
+                        );
+                }
             }
 
-            MapDataObject mapData = new MapDataObject
-                (
-                    populations
-                );
+            return null;
+        }
+
+        private List<CellDataObject> GetMapPopulations()
+        {
+            List<CellDataObject> mapData = new List<CellDataObject>();
+
+            //Write the entire map + co-ordinates and populations to an object
+            GridManager gridManager = SandboxManager.Instance.GridManager;
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+            if ((gridManager != null) && (entityManager != null))
+            {
+                Vector2 gridSize = gridManager.GridSize;
+                for (int column = 0; column < gridSize.x; column++)
+                {
+                    for (int row = 0; row < gridSize.y; row++)
+                    {
+                        mapData.Add(new CellDataObject(column, row, entityManager.GetPopulationsInCell(column, row)));
+                    }
+                }
+            }
 
             return mapData;
         }
@@ -253,6 +280,21 @@ namespace Glitchers.EcoKnow.Sandbox.Data
             }
 
             return 1;
+        }
+
+        private int GetRound()
+        {
+            if (SandboxManager.Instance != null)
+            {
+                return SandboxManager.Instance.CurrentRound + 1; //Account for 0
+            }
+
+            return -1;
+        }
+
+        private int GetAction()
+        {
+            return SandboxManager.GetMaxActionPoints() - SandboxManager.GetAvailableActionPoints();
         }
         #endregion
 

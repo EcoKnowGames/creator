@@ -20,9 +20,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private Transform _playerButtonContainer;
         private Button_PlayerSelect[] _playerButtonList => _playerButtonContainer == null ? null : _playerButtonContainer.GetComponentsInChildren<Button_PlayerSelect>().OrderBy(x => x.transform.GetSiblingIndex()).ToArray(); //Just in case this for some reason does not return child order
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if ((ScenarioLoader.Instance != null) && (ScenarioLoader.Instance.LoadedConfig != null))
             {
@@ -35,7 +35,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
             if (_playerButtonList != null)
             {
-                for(int i = 0; i < _playerButtonList.Length; i++)
+                for (int i = 0; i < _playerButtonList.Length; i++)
                 {
                     _playerButtonList[i].ResetNameInput(i);
                     _playerButtonList[i].SetPlayerCount(i);
