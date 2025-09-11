@@ -7,7 +7,6 @@ using static XNode.Node;
 [System.Serializable]
 public class MapLayout
 {
-    //TODO
     public string fileName;
     public GridDef gridDef;
 

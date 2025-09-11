@@ -28,7 +28,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private GameObject _activeState;
         [SerializeField] private GameObject _futureState;
 
-        //TODO(caspar): Active range
         [Header("Active Text")]
         [SerializeField] private TMP_Text _activeText;
         [SerializeField] private TMP_Text _rangeText;

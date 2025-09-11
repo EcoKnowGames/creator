@@ -61,8 +61,6 @@ public class ScenarioNodeGraph : NodeGraph
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        //TODO(caspar): Do we upgrade graphs to the latest version? But not downgrade? How do we resolve this? Do we upgrade when the user saves changes to the object?
-
         string warningStr = string.Format($"Warning, The Scenario Graph \"{this.name}\" was created using a different version of the app. It may be incompatible and some nodes may not behave as expected.\n");
         bool showWarning = false;
 
@@ -178,7 +176,7 @@ public class ScenarioNodeGraph : NodeGraph
            scenarioNode.ActionsPerRound,
            scenarioNode.StartCurrency,
            scenarioNode.Seed,
-           GetEntityList().ToArray(),                //Note(caspar): I wanted to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
+           GetEntityList().ToArray(),                //NOTE: Would prefer to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
            scenarioNode.ItemDefs == null ? null : scenarioNode.ItemDefs.ToArray(),
            scenarioNode.WinConditions.ToArray(),
            scenarioNode.Matrix,
