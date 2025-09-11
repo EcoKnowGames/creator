@@ -97,6 +97,11 @@ namespace Glitchers.EcoKnow.Sandbox
             );
         }
 
+        public static void HideLoadDialog()
+        {
+            FileBrowser.HideDialog();
+        }
+
         private static string ParseJsonFromFile(string[] filePaths)
         {
             if ((filePaths != null) && (filePaths.Length > 0))
@@ -276,7 +281,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 StartLoadedConfig();
             }
         }
-
+#endif
         public void RequestStartLoadedConfig()
         {
             StartLoadedConfig();
@@ -289,7 +294,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 SandboxManager.Instance.StartNewGame(_loadedConfig.Scenario);
             }
         }
-#endif
+
         #endregion
     }
 }
