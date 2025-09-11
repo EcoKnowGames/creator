@@ -9,9 +9,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private const string LogChannel = "[MenuScreen_Main]";
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if (_startActiveGraphButton != null)
             {
@@ -42,7 +42,7 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         public void OnMoreInfoPressed()
         {
-            //TODO
+            Application.OpenURL("https://ecoknowgames.github.io/");
         }
     }
 }
