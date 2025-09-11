@@ -290,17 +290,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             return null;
         }
 
-        public Cell FindCellAtPosition(int row, int column)
+        public Cell FindCellAtPosition(int column, int row)
         {
             if ((cellList != null) && (cellList.Length > 0))
             {
                 //Search for our cell
                 if ((row >= 0)
                     && (column >= 0)
-                    && (row < cellList.GetLength(0))
-                    && (column < cellList.GetLength(1)))
+                    && (column < cellList.GetLength(0))
+                    && (row < cellList.GetLength(1)))
                 {
-                    return cellList[row, column];
+                    return cellList[column, row];
                 }
             }
 
