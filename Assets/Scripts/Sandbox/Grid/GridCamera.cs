@@ -67,8 +67,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             _currentZoomLevel = 1.0f;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void UpdateInput()
         {
             HandleKeyboardInput();
             HandleMouseInput();

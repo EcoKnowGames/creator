@@ -92,6 +92,26 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #endregion
 
         #region Game Lifecycle
+        public bool IsFocused()
+        {
+            if (_summaryModal.isActiveAndEnabled)
+            {
+                return true;
+            }
+
+            if (_inventoryModal.isActiveAndEnabled)
+            {
+                return true;
+            }
+
+            if (_populationGraph.IsVisible)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void OnGameEnded(SandboxManager.Result result)
         {
             _summaryModal?.ShowModal();
