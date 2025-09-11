@@ -253,7 +253,6 @@ namespace Glitchers.EcoKnow.Sandbox
 
         #region Load Sandbox
 #if UNITY_EDITOR
-        //Would be nice if the current graph config could detect the "open" graph
         public ScenarioConfig GetCurrentGraphConfig()
         {
             if (_activeScenarioGraph != null)

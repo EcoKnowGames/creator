@@ -15,7 +15,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] ItemWidget[] _enabledWidgets;
         [SerializeField] ItemWidget[] _disabledWidgets;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         public void RefreshInventory()
         {
             DisableWidgets();
