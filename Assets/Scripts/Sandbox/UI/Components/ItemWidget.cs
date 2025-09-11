@@ -19,8 +19,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Color _validColour;
         [SerializeField] private Color _invalidColour;
 
-        private bool _showSign = false;
-
         private const string LogChannel = "[ItemWidget]";
 
         public void Awake()

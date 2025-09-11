@@ -75,8 +75,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
 
             Dictionary<string, object> metaData = new Dictionary<string, object>();
 
-            //This works
-            if (type == EventType.SELL
+            /*if (type == EventType.SELL
                 || type == EventType.INTRODUCE
                 || type == EventType.HARVEST)
             {
@@ -85,9 +84,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                 {
                     //metaData.Add("InventoryChange", inventoryDiff);
                 }
-            }
-
-
+            }*/
 
             //Gather data here
             EventDataObject ev = new EventDataObject(
