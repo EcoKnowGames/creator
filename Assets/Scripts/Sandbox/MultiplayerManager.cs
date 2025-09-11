@@ -151,7 +151,7 @@ namespace Glitchers.EcoKnow.Sandbox
         {
             if (string.IsNullOrEmpty(name))
             {
-                Debug.LogError($"{LogChannel} Failed to rename player {index}, the provided name string is empty or null. Resetting to default name");
+                Debug.LogWarning($"{LogChannel} Failed to rename player {index}, the provided name string is empty or null. Resetting to default name");
                 //return;
             }
 
