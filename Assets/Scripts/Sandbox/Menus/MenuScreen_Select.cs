@@ -11,9 +11,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
 
         private const string LogChannel = "[MenuScreen_Select]";
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if (ScenarioLoader.Instance != null)
             {

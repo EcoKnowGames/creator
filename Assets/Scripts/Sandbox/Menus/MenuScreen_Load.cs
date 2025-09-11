@@ -9,9 +9,9 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
         [SerializeField] private TMP_InputField _rawJsonInput;
         [SerializeField] private CanvasGroup _inputFeedbackText;
 
-        public override void Show()
+        protected override void OnEnabled()
         {
-            base.Show();
+            base.OnEnabled();
 
             if (_inputFeedbackText != null)
             {
