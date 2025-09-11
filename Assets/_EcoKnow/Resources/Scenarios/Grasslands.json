@@ -1,0 +1,683 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Grasslands",
+    "Author": "University of Stirling",
+    "Rounds": 32,
+    "ActionsPerRound": 4,
+    "StartCurrency": 100,
+    "Seed": 123456,
+    "Entities": [
+      {
+        "ID": "big_bluestem",
+        "Icon": "Icons/keycap_1_high_contrast",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "switchgrass",
+        "Icon": "Icons/keycap_2_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "little_bluestem",
+        "Icon": "Icons/keycap_3_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "wild_rye",
+        "Icon": "Icons/keycap_4_high_contrast",
+        "Colour": "88BCFFFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "prairie_dropseed",
+        "Icon": "Icons/keycap_5_high_contrast",
+        "Colour": "FB7DFDFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "purple_loosestrife",
+        "Icon": "Icons/wilted_flower_high_contrast",
+        "Colour": "B3A0FEFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "corn",
+        "Icon": "Icons/ear_of_corn_high_contrast",
+        "Colour": "FFDF3EFF",
+        "GrowthRate": 1.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 4
+          }
+        ]
+      }
+    ],
+    "Items": null,
+    "WinConditions": [
+      {
+        "Title": "Purple Loosestrife Population",
+        "Description": "Keep the population below 100",
+        "EntityIndex": 5,
+        "LowerLimit": 0.0,
+        "UpperLimit": 100.0,
+        "RequiredRounds": -1
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "big_bluestem",
+        "switchgrass",
+        "little_bluestem",
+        "wild_rye",
+        "prairie_dropseed",
+        "purple_loosestrife",
+        "corn"
+      ],
+      "entityMatrix": [
+        [
+          -0.01,
+          0.0,
+          -0.04,
+          -0.02,
+          0.0,
+          -0.01,
+          0.0
+        ],
+        [
+          -0.04,
+          -0.02,
+          0.0,
+          0.0,
+          -0.02,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -0.01,
+          -0.01,
+          -0.04,
+          0.0,
+          -0.02,
+          0.0
+        ],
+        [
+          0.0,
+          -0.04,
+          0.0,
+          -0.01,
+          -0.04,
+          0.0,
+          0.0
+        ],
+        [
+          -0.02,
+          0.0,
+          -0.02,
+          0.0,
+          -0.01,
+          -0.01,
+          0.0
+        ],
+        [
+          -0.04,
+          -0.08,
+          -0.1,
+          -0.1,
+          -0.08,
+          -0.04,
+          0.0
+        ],
+        [
+          -1.0,
+          -1.0,
+          -1.0,
+          -1.0,
+          -1.0,
+          -1.0,
+          -0.01
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "Map_GrasslandSpecies",
+      "gridDef": {
+        "rows": 7,
+        "columns": 7,
+        "tileIDs": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            null,
+            null
+          ],
+          [
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              2,
+              0
+            ]
+          ],
+          [
+            null,
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              2,
+              0
+            ]
+          ],
+          [
+            null,
+            null,
+            null,
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              10,
+              10,
+              10,
+              10,
+              0,
+              0
+            ],
+            null
+          ]
+        ]
+      }
+    }
+  }
+}

@@ -2,21 +2,23 @@
   "AppVersion": "1.0",
   "UnityVersion": "6000.0.49f1",
   "Scenario": {
-    "Name": "Wilderness Test Unstable",
+    "Name": "Unstable Ecosystem",
+    "Author": "University of Stirling",
     "Rounds": 12,
     "ActionsPerRound": 4,
-    "StartCurrency": 20000,
+    "StartCurrency": 2000,
     "Seed": 123456,
     "Entities": [
       {
         "ID": "Hare",
-        "Icon": "Icons/Icon_Hare",
+        "Icon": "Icons/rabbit_high_contrast",
         "Colour": "FC9F4EFF",
         "GrowthRate": 0.6,
         "MovementRate": 0.3,
         "VulnerableThreshold": 30.0,
         "AbundanceThreshold": 300.0,
         "AutoPlace": true,
+        "StartPopulation": 100,
         "CanHarvest": true,
         "CanIntroduce": true,
         "HarvestQuantities": [
@@ -42,13 +44,14 @@
       },
       {
         "ID": "Fox",
-        "Icon": "Icons/Icon_Fox",
-        "Colour": "D2F62EFF",
+        "Icon": "Icons/fox_high_contrast",
+        "Colour": "B0D01EFF",
         "GrowthRate": -0.3,
         "MovementRate": 0.2,
         "VulnerableThreshold": 10.0,
         "AbundanceThreshold": 150.0,
         "AutoPlace": true,
+        "StartPopulation": 100,
         "CanHarvest": true,
         "CanIntroduce": true,
         "HarvestQuantities": [
@@ -70,13 +73,14 @@
       },
       {
         "ID": "Rock",
-        "Icon": "Icons/Icon_Building",
+        "Icon": "Icons/rock_high_contrast",
         "Colour": "FC6969FF",
         "GrowthRate": 0.0,
         "MovementRate": 0.0,
         "VulnerableThreshold": 0.0,
         "AbundanceThreshold": 200.0,
         "AutoPlace": false,
+        "StartPopulation": 100,
         "CanHarvest": false,
         "CanIntroduce": true,
         "HarvestQuantities": null,
@@ -111,18 +115,18 @@
     "WinConditions": [
       {
         "Title": "Fox Population",
-        "Description": "Keep Fox Population above 4000 for 3 rounds!",
+        "Description": "Keep Fox Population above 400 for 3 rounds!",
         "EntityIndex": 1,
-        "LowerLimit": 4000.0,
+        "LowerLimit": 400.0,
         "UpperLimit": 0.0,
         "RequiredRounds": 3
       },
       {
         "Title": "Hare Population",
-        "Description": "Keep Hares within the range of 10000-20000",
+        "Description": "Keep Hares within the range of 1000-5000",
         "EntityIndex": 0,
-        "LowerLimit": 10000.0,
-        "UpperLimit": 50000.0,
+        "LowerLimit": 1000.0,
+        "UpperLimit": 5000.0,
         "RequiredRounds": -1
       }
     ],
@@ -151,139 +155,20 @@
       ]
     },
     "Map": {
-      "fileName": "Wilderness",
+      "fileName": "Map_PopulationTest",
       "gridDef": {
-        "rows": 13,
-        "columns": 14,
+        "rows": 6,
+        "columns": 5,
         "tileIDs": [
           [
-            -1,
-            -1,
-            -1,
-            -1,
             0,
             0,
             0,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1
-          ],
-          [
-            -1,
-            -1,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            -1,
-            -1
-          ],
-          [
-            -1,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            -1
-          ],
-          [
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            -1
-          ],
-          [
-            0,
-            0,
-            0,
-            5,
-            0,
-            0,
-            0,
-            -1,
-            8,
-            12,
             0,
             0,
             -1
           ],
           [
-            0,
-            0,
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            12,
-            0,
-            0,
-            -1
-          ],
-          [
-            0,
-            5,
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            0,
-            0,
-            -1,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0,
             0,
@@ -293,78 +178,153 @@
           ],
           [
             0,
-            -1,
-            12,
-            -1,
             0,
             0,
-            0,
-            0,
-            2,
-            2,
             0,
             0,
             0
           ],
           [
-            0,
-            5,
-            8,
-            0,
-            5,
+            -1,
             -1,
             0,
             0,
-            0,
-            2,
-            0,
-            0,
-            -1
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2,
-            0,
-            0,
-            -1
-          ],
-          [
             -1,
-            0,
-            5,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2,
-            0,
-            -1,
-            -1
+            0
           ],
           [
             -1,
             -1,
             0,
-            0,
-            0,
-            5,
-            0,
-            0,
-            0,
-            -1,
             -1,
             -1,
             -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            [
+              50,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            [
+              50,
+              0,
+              0
+            ],
+            [
+              50,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              20,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              0,
+              0
+            ],
+            [
+              20,
+              20,
+              5
+            ]
+          ],
+          [
+            null,
+            null,
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              0,
+              0
+            ],
+            null,
+            [
+              20,
+              20,
+              5
+            ]
+          ],
+          [
+            null,
+            null,
+            [
+              20,
+              0,
+              0
+            ],
+            null,
+            null,
+            null
           ]
         ]
       }
