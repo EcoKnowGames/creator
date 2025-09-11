@@ -23,7 +23,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             if ((_enabledWidgets == null) || (_disabledWidgets == null)
                 || (_enabledWidgets.Count() <= 0) || (_disabledWidgets.Count() <= 0))
             {
-                //TODO(caspar): error
                 return;
             }
 
@@ -54,8 +53,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                         widget.gameObject.SetActive(true);
                     }
                 }
-
-                //todo
             }
         }
 

@@ -333,7 +333,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if ((SandboxManager.Instance.EntityManager == null) || (selectedCells == null))
             {
-                //TODO(caspar): error
                 return;
             }
 
@@ -468,8 +467,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 {
                     if (i >= widgets.Length)
                     {
-                        //TODO(caspar): We should never reach this point
-                        //Spawn new widget? Just in case?
+                        //We should never reach this point
+                        //Potentially spawn new widget as failsafe
                     }
                     else
                     {

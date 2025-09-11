@@ -17,6 +17,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public Action<int> onEntitySelected;
         public Action onEntityDeselected;
 
+        private const string LogChannel = "[EntityPanel]";
+
         public void Init(Entity[] entities)
         {
             if (entities == null)
@@ -169,7 +171,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
             else
             {
-                //TODO(caspar): Failed?
+                Debug.LogError($"{LogChannel} Failed to select widget for entity with index {index}");
             }
         }
 

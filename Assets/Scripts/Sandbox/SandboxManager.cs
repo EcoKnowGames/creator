@@ -63,7 +63,6 @@ namespace Glitchers.EcoKnow.Sandbox
         [Header("UI")]
         [SerializeField] private SandboxUI _sandboxUI;
 
-        //TODO(caspar): Should rounds and win conditions be handled in another location?
         private int _maxRounds = 1;
         private int _currentRound = -1;
 
