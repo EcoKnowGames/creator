@@ -14,10 +14,19 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             Hide();
         }
 
+        private void OnEnable()
+        {
+            OnEnabled();
+        }
+
+        protected virtual void OnEnabled()
+        {
+            StartCoroutine(RefreshLayout());
+        }
+
         public virtual void Show()
         {
             this.gameObject.SetActive(true);
-            StartCoroutine(RefreshLayout());
         }
 
         public virtual void Hide()
