@@ -89,7 +89,10 @@ namespace Glitchers.EcoKnow.Sandbox
 
         void Update()
         {
-            _gridManager?.HandleInput();
+            if ((_sandboxUI != null) && (!_sandboxUI.IsFocused()))
+            {
+                _gridManager?.HandleInput();
+            }
         }
 
         public void StartNewGame(Scenario scenario)

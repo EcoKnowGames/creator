@@ -237,6 +237,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         public void HandleInput()
         {
+            gridCamera?.UpdateInput();
+
             if (Input.GetButtonDown("Fire1"))
             {
                 // Don't process cell clicks if camera is being dragged
