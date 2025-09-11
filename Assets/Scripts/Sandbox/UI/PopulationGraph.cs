@@ -264,6 +264,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     markLine.serieIndex = index;
                     markLine.show = true;
 
+                    if (min <= 0)
+                    {
+                        markArea.end.type = MarkAreaType.Min;
+                        markArea.end.dimension = 0;
+                    }
+                    else
+                    {
+                        markArea.end.type = MarkAreaType.None;
+                    }
+
                     //Setup markLines
                     for (int i = 0; i < 2; i++)
                     {
