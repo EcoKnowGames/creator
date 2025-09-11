@@ -12,8 +12,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private LineChart _lineChart;
 
         private int _lastLegendIndexClicked = -1;
-
-        //TODO(caspar): Template Graph to copy style from?
         public bool IsVisible => _graphContainer != null ? _graphContainer.gameObject.activeSelf : false;
 
         private const string LogChannel = "[PopulationGraph]";
@@ -118,18 +116,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         //But we want to control it so that players can "focus" on series without the graph resizing
         private void SetYAxis_Population(int maxPopulation)
         {
-            //TODO
             if (_lineChart != null)
             {
                 YAxis yAxis = _lineChart.GetChartComponent<YAxis>();
                 if (yAxis != null)
                 {
                     int units = 1000;
-                    /*if (maxPopulation >= 10000)
-                    {
-                        units = 10000;
-                    }*/
-
                     int highest = maxPopulation + (units - (maxPopulation % units));
 
                     yAxis.min = 0;
@@ -247,7 +239,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             line.itemStyle.color = colour;
             line.symbol.color = colour;
 
-            line.symbol.type = SymbolType.None; //TODO(caspar): Would be nice if we had templates to copy from
+            line.symbol.type = SymbolType.None;
 
             return line;
         }

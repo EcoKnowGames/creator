@@ -281,7 +281,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
             Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
 
-            //TODO(caspar): Mask?
             hit = Physics2D.Raycast(ray.origin, ray.direction, distance);
 
             if (hit.transform != null)

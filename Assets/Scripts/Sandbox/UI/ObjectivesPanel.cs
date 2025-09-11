@@ -87,7 +87,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnEntityUpdated(int column, int row, int id)
         {
-            //TODO(caspar): Update active result widget with our current total
             ObjectiveWidget widget = GetWidgetForEntity(id);
             if (widget != null)
             {

@@ -141,7 +141,6 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         public void ShowSaveDialog(Action onSuccess, Action onCancel)
         {
             //Get scenario name
-            //TODO(caspar): Date/time?
             string scenarioName = "Unknown";
             if ((ScenarioLoader.Instance != null) && (ScenarioLoader.Instance.LastPlayedScenario != null))
             {
