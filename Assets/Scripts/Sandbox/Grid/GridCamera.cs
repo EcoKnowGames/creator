@@ -355,7 +355,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                         if (_currentZoomIndex < zoomValues.Count - 1)
                         {
                             _currentZoomIndex++;
-                            //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);
                         }
                         break;
                     }
@@ -364,7 +363,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                         if (_currentZoomIndex > 0)
                         {
                             _currentZoomIndex--;
-                            //_camera.DOOrthoSize(zoomValues[_currentZoomIndex], 0.4f).SetEase(Ease.OutBack);;
                         }
                         break;
                     }

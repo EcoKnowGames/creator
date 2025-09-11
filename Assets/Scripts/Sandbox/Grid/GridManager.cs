@@ -147,11 +147,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             }
         }
 
-        public void Start()
-        {
-            //DisableGrid();
-        }
-
         public void Init()
         {
             if (SandboxManager.Instance.EntityManager != null)
@@ -385,26 +380,6 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 }
             }
         }
-        #endregion
-
-        #region UI
-        /*public void RegisterUIEvents(RoundViewController inRoundsVC)
-        {
-            if (inRoundsVC != null)
-            {
-                inRoundsVC.onCameraButtonPressed += gridCamera.MoveCamera;
-                inRoundsVC.onCameraZoomButtonPressed += gridCamera.UpdateCameraZoom;
-            }
-        }
-
-        public void DeregisterUIEvents(RoundViewController inRoundsVC)
-        {
-            if (inRoundsVC != null)
-            {
-                inRoundsVC.onCameraButtonPressed -= gridCamera.MoveCamera;
-                inRoundsVC.onCameraZoomButtonPressed -= gridCamera.UpdateCameraZoom;
-            }
-        }*/
         #endregion
     }
 }

@@ -266,16 +266,5 @@ public class ScenarioNodeGraph : NodeGraph
 
 #endif
 
-    /*[ContextMenu("Import JSON")]
-    public static void ImportJSON()
-    {
-        string json = "";
-
-        if (!string.IsNullOrEmpty(json))
-        {
-            ScenarioNodeGraph newScenarioNodeGraph = JsonUtility.FromJson<ScenarioNodeGraph>(json);
-        }
-    }*/
-
     #endregion
 }

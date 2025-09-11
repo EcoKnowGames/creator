@@ -16,7 +16,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (_indicatorText != null)
             {
-                //_indicatorText.text = string.Format($"Player {index + 1}'s Turn"); //Account for 0
                 _indicatorText.text = string.Format($"{playerName}'s Turn");
             }
 
