@@ -22,10 +22,11 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **Unity Editor version**: Use Unity `6000.0.49f1` (Unity 6). Opening with a different version may cause compatibility issues.
 - **Steps**:
   1. Clone the repository.
-  2. Open Unity Hub, add the project folder, and select Editor `6000.0.49f1`.
-  3. Unity will import and resolve packages automatically (internet required for Git-based packages).
-  4. Open the sandbox scene: `Assets/Scenes/scene_Sandbox.unity`.
-  5. Press Play.
+  2. Ensure GIT LFS is enabled or assets will be blank
+  3. Open Unity Hub, add the project folder, and select Editor `6000.0.49f1`.
+  4. Unity will import and resolve packages automatically (internet required for Git-based packages).
+  5. Open the sandbox scene: `Assets/Scenes/scene_Sandbox.unity`.
+  6. Press Play.
 
 ### Packages used (auto-installed via Package Manager)
 - **com.github.siccity.xnode**: BSD-3-Clause — Graph editor framework used by the Scenario Editor.
