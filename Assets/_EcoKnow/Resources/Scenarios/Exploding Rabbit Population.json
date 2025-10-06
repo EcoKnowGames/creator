@@ -1,0 +1,847 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Exploding Rabbit Population",
+    "Author": "University of Stirling",
+    "Rounds": 32,
+    "ActionsPerRound": 2,
+    "StartCurrency": 100,
+    "Seed": 123456,
+    "Entities": [
+      {
+        "ID": "Grass",
+        "Icon": "Icons/fallen_leaf_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 0.26,
+        "MovementRate": 0.08,
+        "VulnerableThreshold": 1.0,
+        "AbundanceThreshold": 100.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Rabbit",
+        "Icon": "Icons/rabbit_high_contrast",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": -0.008,
+        "MovementRate": 0.13,
+        "VulnerableThreshold": 4.0,
+        "AbundanceThreshold": 100.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "Rabbit Pelt",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Fox",
+        "Icon": "Icons/fox_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": -0.004,
+        "MovementRate": 0.18,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 100.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "Fox Pelt",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Hawk",
+        "Icon": "Icons/eagle_high_contrast",
+        "Colour": "88BCFFFF",
+        "GrowthRate": -0.04,
+        "MovementRate": 0.35,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 10.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Oak",
+        "Icon": "Icons/deciduous_tree_high_contrast",
+        "Colour": "B6FFBFFF",
+        "GrowthRate": 0.06,
+        "MovementRate": 0.03,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 10.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": [
+          {
+            "ID": "Wood",
+            "Value": 5
+          }
+        ],
+        "IntroduceQuantities": null
+      }
+    ],
+    "Items": [
+      {
+        "ID": "Fox Pelt",
+        "Icon": "Icons/fox_high_contrast",
+        "Value": 2,
+        "CanSell": true
+      },
+      {
+        "ID": "Rabbit Pelt",
+        "Icon": "Icons/rabbit_face_high_contrast",
+        "Value": 1,
+        "CanSell": true
+      },
+      {
+        "ID": "Wood",
+        "Icon": "Icons/wood_high_contrast",
+        "Value": 2,
+        "CanSell": true
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Rabbit Population",
+        "Description": "Keep the Rabbit population below 1200",
+        "EntityIndex": 1,
+        "LowerLimit": 0.0,
+        "UpperLimit": 1200.0,
+        "RequiredRounds": -1
+      },
+      {
+        "Title": "Hawk Conservation",
+        "Description": "Conservationists want at least 40 Hawks to thrive on this landscape",
+        "EntityIndex": 3,
+        "LowerLimit": 40.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 10
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "Grass",
+        "Rabbit",
+        "Fox",
+        "Hawk",
+        "Oak"
+      ],
+      "entityMatrix": [
+        [
+          -0.0015,
+          0.0125,
+          0.0,
+          0.0,
+          -0.001
+        ],
+        [
+          -0.004,
+          -0.002,
+          0.003,
+          0.01,
+          0.0
+        ],
+        [
+          0.0,
+          -0.0035,
+          -0.0025,
+          -0.0015,
+          0.0
+        ],
+        [
+          0.0,
+          -0.0015,
+          -0.001,
+          -0.003,
+          0.0
+        ],
+        [
+          -0.001,
+          0.0,
+          0.0,
+          0.0,
+          -0.002
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "exploding_rabbit_map",
+      "gridDef": {
+        "rows": 7,
+        "columns": 16,
+        "tileIDs": [
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            [
+              12,
+              8,
+              2,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              2,
+              6,
+              0
+            ]
+          ],
+          [
+            null,
+            null,
+            null,
+            [
+              20,
+              10,
+              4,
+              2,
+              0
+            ],
+            [
+              20,
+              10,
+              4,
+              0,
+              4
+            ],
+            [
+              12,
+              10,
+              2,
+              6,
+              0
+            ],
+            [
+              8,
+              8,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            null,
+            [
+              20,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              10,
+              0,
+              0,
+              0
+            ],
+            [
+              12,
+              10,
+              2,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              4,
+              0,
+              0
+            ],
+            [
+              20,
+              10,
+              4,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              12,
+              10,
+              4,
+              0,
+              0
+            ],
+            [
+              12,
+              10,
+              2,
+              6,
+              4
+            ],
+            [
+              20,
+              10,
+              6,
+              0,
+              4
+            ],
+            [
+              16,
+              10,
+              4,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              4,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              20,
+              10,
+              4,
+              0,
+              0
+            ],
+            [
+              8,
+              8,
+              4,
+              0,
+              4
+            ],
+            [
+              12,
+              8,
+              4,
+              2,
+              4
+            ],
+            [
+              16,
+              10,
+              4,
+              2,
+              4
+            ],
+            [
+              20,
+              10,
+              2,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              20,
+              8,
+              4,
+              0,
+              0
+            ],
+            [
+              20,
+              12,
+              2,
+              0,
+              4
+            ],
+            [
+              20,
+              12,
+              4,
+              0,
+              4
+            ],
+            [
+              12,
+              8,
+              4,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              20,
+              8,
+              0,
+              0,
+              4
+            ],
+            [
+              12,
+              12,
+              6,
+              2,
+              4
+            ],
+            [
+              16,
+              12,
+              4,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              2,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              12,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              10,
+              0,
+              0,
+              4
+            ],
+            [
+              20,
+              12,
+              6,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              4,
+              0,
+              4
+            ],
+            [
+              20,
+              10,
+              4,
+              6,
+              0
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              16,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              8,
+              4,
+              2,
+              0
+            ],
+            [
+              16,
+              8,
+              6,
+              0,
+              0
+            ],
+            [
+              20,
+              8,
+              0,
+              0,
+              4
+            ],
+            [
+              12,
+              10,
+              4,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              12,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              12,
+              8,
+              0,
+              0,
+              4
+            ],
+            [
+              16,
+              10,
+              0,
+              0,
+              4
+            ],
+            [
+              20,
+              0,
+              0,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              20,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              20,
+              10,
+              0,
+              0,
+              6
+            ],
+            [
+              20,
+              10,
+              0,
+              2,
+              0
+            ],
+            [
+              20,
+              8,
+              0,
+              0,
+              4
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              12,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              20,
+              0,
+              0,
+              0,
+              0
+            ],
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              0,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              6
+            ],
+            [
+              16,
+              10,
+              0,
+              0,
+              0
+            ],
+            null,
+            null
+          ],
+          [
+            null,
+            [
+              20,
+              8,
+              0,
+              0,
+              0
+            ],
+            [
+              8,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4
+            ],
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            [
+              16,
+              8,
+              4,
+              4,
+              0
+            ],
+            [
+              8,
+              10,
+              4,
+              0,
+              0
+            ],
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            [
+              16,
+              12,
+              2,
+              4,
+              0
+            ],
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      }
+    }
+  }
+}

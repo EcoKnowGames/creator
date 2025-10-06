@@ -6,143 +6,213 @@
     "Author": "University of Stirling",
     "Rounds": 32,
     "ActionsPerRound": 4,
-    "StartCurrency": 100,
+    "StartCurrency": 40,
     "Seed": 123456,
     "Entities": [
       {
         "ID": "big_bluestem",
-        "Icon": "Icons/keycap_1_high_contrast",
+        "Icon": "Icons/sunflower_high_contrast",
         "Colour": "FC9F4EFF",
         "GrowthRate": 1.0,
         "MovementRate": 0.1,
-        "VulnerableThreshold": 0.0,
+        "VulnerableThreshold": 2.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
-        "CanHarvest": false,
-        "CanIntroduce": false,
-        "HarvestQuantities": null,
-        "IntroduceQuantities": null
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Plant mass",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
       },
       {
         "ID": "switchgrass",
-        "Icon": "Icons/keycap_2_high_contrast",
+        "Icon": "Icons/tulip_high_contrast",
         "Colour": "B0D01EFF",
         "GrowthRate": 1.0,
         "MovementRate": 0.1,
-        "VulnerableThreshold": 0.0,
+        "VulnerableThreshold": 2.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
         "CanHarvest": true,
-        "CanIntroduce": false,
+        "CanIntroduce": true,
         "HarvestQuantities": [
           {
-            "ID": "currency",
+            "ID": "Plant mass",
             "Value": 1
           }
         ],
-        "IntroduceQuantities": null
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          },
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
       },
       {
         "ID": "little_bluestem",
-        "Icon": "Icons/keycap_3_high_contrast",
+        "Icon": "Icons/leafy_green_high_contrast",
         "Colour": "FC6969FF",
         "GrowthRate": 1.0,
         "MovementRate": 0.1,
-        "VulnerableThreshold": 0.0,
+        "VulnerableThreshold": 2.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
-        "CanHarvest": false,
-        "CanIntroduce": false,
-        "HarvestQuantities": null,
-        "IntroduceQuantities": null
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Plant mass",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
       },
       {
         "ID": "wild_rye",
-        "Icon": "Icons/keycap_4_high_contrast",
+        "Icon": "Icons/leaf_fluttering_in_wind_high_contrast",
         "Colour": "88BCFFFF",
         "GrowthRate": 1.0,
         "MovementRate": 0.1,
-        "VulnerableThreshold": 0.0,
+        "VulnerableThreshold": 2.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
         "CanHarvest": true,
-        "CanIntroduce": false,
+        "CanIntroduce": true,
         "HarvestQuantities": [
           {
-            "ID": "currency",
+            "ID": "Plant mass",
             "Value": 1
           }
         ],
-        "IntroduceQuantities": null
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
       },
       {
         "ID": "prairie_dropseed",
-        "Icon": "Icons/keycap_5_high_contrast",
+        "Icon": "Icons/four_leaf_clover_high_contrast",
         "Colour": "FB7DFDFF",
         "GrowthRate": 1.0,
         "MovementRate": 0.1,
-        "VulnerableThreshold": 0.0,
+        "VulnerableThreshold": 2.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
         "CanHarvest": true,
-        "CanIntroduce": false,
+        "CanIntroduce": true,
         "HarvestQuantities": [
           {
-            "ID": "currency",
-            "Value": 1
+            "ID": "Corn",
+            "Value": 0
           }
         ],
-        "IntroduceQuantities": null
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
       },
       {
         "ID": "purple_loosestrife",
         "Icon": "Icons/wilted_flower_high_contrast",
         "Colour": "B3A0FEFF",
         "GrowthRate": 1.0,
-        "MovementRate": 0.1,
+        "MovementRate": 0.4,
         "VulnerableThreshold": 0.0,
-        "AbundanceThreshold": 0.0,
+        "AbundanceThreshold": 10.0,
         "AutoPlace": false,
         "StartPopulation": 100,
-        "CanHarvest": false,
+        "CanHarvest": true,
         "CanIntroduce": false,
-        "HarvestQuantities": null,
+        "HarvestQuantities": [
+          {
+            "ID": "Plant mass",
+            "Value": 1
+          }
+        ],
         "IntroduceQuantities": null
       },
       {
         "ID": "corn",
         "Icon": "Icons/ear_of_corn_high_contrast",
         "Colour": "FFDF3EFF",
-        "GrowthRate": 1.0,
+        "GrowthRate": 1.4,
         "MovementRate": 0.0,
         "VulnerableThreshold": 0.0,
         "AbundanceThreshold": 0.0,
         "AutoPlace": false,
         "StartPopulation": 100,
-        "CanHarvest": false,
+        "CanHarvest": true,
         "CanIntroduce": true,
-        "HarvestQuantities": null,
+        "HarvestQuantities": [
+          {
+            "ID": "Corn",
+            "Value": 1
+          }
+        ],
         "IntroduceQuantities": [
           {
             "ID": "currency",
-            "Value": 4
+            "Value": 10
           }
         ]
       }
     ],
-    "Items": null,
+    "Items": [
+      {
+        "ID": "Corn",
+        "Icon": "Icons/ear_of_corn_high_contrast",
+        "Value": 10,
+        "CanSell": true
+      },
+      {
+        "ID": "Plant mass",
+        "Icon": "Icons/wastebasket_high_contrast",
+        "Value": 1,
+        "CanSell": false
+      }
+    ],
     "WinConditions": [
       {
         "Title": "Purple Loosestrife Population",
-        "Description": "Keep the population below 100",
+        "Description": "Remove all purple loosetrife for 5 rounds",
         "EntityIndex": 5,
         "LowerLimit": 0.0,
-        "UpperLimit": 100.0,
+        "UpperLimit": 1.0,
+        "RequiredRounds": 5
+      },
+      {
+        "Title": "Blig bluestem",
+        "Description": "Keep it above 500",
+        "EntityIndex": 0,
+        "LowerLimit": 500.0,
+        "UpperLimit": 0.0,
         "RequiredRounds": -1
       }
     ],
@@ -217,8 +287,8 @@
           -1.0,
           -1.0,
           -1.0,
-          -1.0,
-          -0.01
+          -0.16,
+          -0.1
         ]
       ]
     },
@@ -349,7 +419,7 @@
               10,
               10,
               10,
-              0,
+              2,
               0
             ],
             [
@@ -376,7 +446,7 @@
               10,
               10,
               10,
-              0,
+              2,
               0
             ],
             [
@@ -394,7 +464,7 @@
               10,
               10,
               10,
-              0,
+              2,
               0
             ],
             null
@@ -546,7 +616,7 @@
               10,
               10,
               10,
-              0,
+              2,
               0
             ],
             [
@@ -639,7 +709,7 @@
               10,
               10,
               10,
-              2,
+              0,
               0
             ]
           ],
@@ -662,7 +732,7 @@
               10,
               10,
               10,
-              0,
+              2,
               0
             ],
             [
