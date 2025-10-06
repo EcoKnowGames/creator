@@ -1,0 +1,938 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Rock Paper Scissors",
+    "Author": "Brad Duthie",
+    "Rounds": 56,
+    "ActionsPerRound": 3,
+    "StartCurrency": 0,
+    "Seed": 0,
+    "Entities": [
+      {
+        "ID": "Rock",
+        "Icon": "Icons/rock_high_contrast",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 0.04,
+        "MovementRate": 0.4,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Rock",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "Rock",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Scissors",
+        "Icon": "Icons/scissors_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 0.04,
+        "MovementRate": 0.4,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Scissor",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "Scissor",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Paper",
+        "Icon": "Icons/roll_of_paper_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": 0.04,
+        "MovementRate": 0.4,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Paper",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "Paper",
+            "Value": 1
+          }
+        ]
+      }
+    ],
+    "Items": [
+      {
+        "ID": "Paper",
+        "Icon": "Icons/roll_of_paper_high_contrast",
+        "Value": 1,
+        "CanSell": false
+      },
+      {
+        "ID": "Rock",
+        "Icon": "Icons/rock_high_contrast",
+        "Value": 1,
+        "CanSell": false
+      },
+      {
+        "ID": "Scissor",
+        "Icon": "Icons/scissors_high_contrast",
+        "Value": 1,
+        "CanSell": false
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Rock Win",
+        "Description": "",
+        "EntityIndex": 0,
+        "LowerLimit": 200.0,
+        "UpperLimit": 400.0,
+        "RequiredRounds": 10
+      },
+      {
+        "Title": "Scissor Win",
+        "Description": "",
+        "EntityIndex": 1,
+        "LowerLimit": 200.0,
+        "UpperLimit": 400.0,
+        "RequiredRounds": 10
+      },
+      {
+        "Title": "Paper Win",
+        "Description": "",
+        "EntityIndex": 2,
+        "LowerLimit": 200.0,
+        "UpperLimit": 400.0,
+        "RequiredRounds": 10
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "Rock",
+        "Paper",
+        "Scissors"
+      ],
+      "entityMatrix": [
+        [
+          -0.002,
+          0.012,
+          -0.01
+        ],
+        [
+          -0.01,
+          -0.002,
+          0.012
+        ],
+        [
+          0.012,
+          -0.01,
+          -0.002
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "map_rock_paper_scissors",
+      "gridDef": {
+        "rows": 12,
+        "columns": 12,
+        "tileIDs": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "tilePopulations": [
+          [
+            [
+              10,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              0
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              0
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              0
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              10,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              4,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              10,
+              2,
+              0
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              10,
+              2,
+              0
+            ],
+            [
+              10,
+              2,
+              0
+            ],
+            null,
+            null,
+            null,
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              10,
+              2,
+              0
+            ],
+            [
+              10,
+              2,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              6,
+              2,
+              0
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              2,
+              6
+            ],
+            [
+              10,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              10,
+              2,
+              2
+            ],
+            [
+              10,
+              2,
+              2
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              2
+            ],
+            [
+              0,
+              0,
+              2
+            ],
+            [
+              6,
+              2,
+              2
+            ],
+            [
+              6,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              10,
+              2,
+              6
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              2
+            ],
+            [
+              0,
+              0,
+              2
+            ],
+            [
+              2,
+              6,
+              0
+            ],
+            [
+              2,
+              6,
+              0
+            ],
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              10,
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              0
+            ],
+            null,
+            null,
+            null,
+            [
+              10,
+              2,
+              0
+            ],
+            [
+              10,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              0
+            ],
+            null,
+            null,
+            null,
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              0,
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              6,
+              0
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              0
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              10,
+              6,
+              0
+            ],
+            [
+              2,
+              6,
+              2
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        ]
+      }
+    }
+  }
+}
