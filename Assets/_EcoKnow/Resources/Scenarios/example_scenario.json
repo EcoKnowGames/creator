@@ -1,0 +1,214 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Example Scenario",
+    "Author": "Brad",
+    "Rounds": 12,
+    "ActionsPerRound": 4,
+    "StartCurrency": 100,
+    "Seed": 0,
+    "Entities": [
+      {
+        "ID": "",
+        "Icon": "Icons/bug_high_contrast",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 1.836,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 100.0,
+        "AbundanceThreshold": 1000.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "worm",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
+      },
+      {
+        "ID": "",
+        "Icon": "Icons/blackbird_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": -0.305,
+        "MovementRate": 0.5,
+        "VulnerableThreshold": 200.0,
+        "AbundanceThreshold": 1200.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "",
+        "Icon": "Icons/deciduous_tree_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": 0.028,
+        "MovementRate": 0.2,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 100.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      }
+    ],
+    "Items": [
+      {
+        "ID": "worm",
+        "Icon": "Icons/worm_high_contrast",
+        "Value": 10,
+        "CanSell": true
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Keep birds above 2000",
+        "Description": "Keep the birds above 2000",
+        "EntityIndex": 1,
+        "LowerLimit": 100.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 4
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "\"Species_1\"",
+        "\"Species_2\"",
+        "\"Species_3\""
+      ],
+      "entityMatrix": [
+        [
+          -0.002476,
+          0.000478,
+          0.001563
+        ],
+        [
+          -0.00043,
+          -0.009461,
+          0.001257
+        ],
+        [
+          0.000479,
+          0.000443,
+          -0.004708
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "simple_map",
+      "gridDef": {
+        "rows": 4,
+        "columns": 4,
+        "tileIDs": [
+          [
+            -1,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0
+          ]
+        ],
+        "tilePopulations": [
+          [
+            null,
+            [
+              610,
+              12,
+              300
+            ],
+            [
+              610,
+              12,
+              300
+            ],
+            null
+          ],
+          [
+            [
+              600,
+              12,
+              300
+            ],
+            [
+              594,
+              12,
+              310
+            ],
+            [
+              594,
+              12,
+              300
+            ],
+            null
+          ],
+          [
+            [
+              594,
+              12,
+              300
+            ],
+            [
+              610,
+              0,
+              310
+            ],
+            [
+              600,
+              12,
+              310
+            ],
+            [
+              600,
+              12,
+              310
+            ]
+          ],
+          [
+            null,
+            null,
+            [
+              594,
+              12,
+              300
+            ],
+            [
+              600,
+              12,
+              300
+            ]
+          ]
+        ]
+      }
+    }
+  }
+}
