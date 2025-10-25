@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    public class StandardCalculator : IEntityCalculator
+    public class StructuredCalculator : IEntityCalculator
     {
         public string Name() => "Standard";
         public string Version() => "1.0";
