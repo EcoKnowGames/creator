@@ -20,6 +20,11 @@ public class ItemNodeEditor : NodeEditor
 
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_id"));
 
+        if (string.IsNullOrEmpty(_itemNode.ID))
+        {
+            EditorGUILayout.HelpBox($"Item requires an ID.", MessageType.Warning);
+        }
+
         EditorGUILayout.Space();
 
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_icon"));
