@@ -56,8 +56,8 @@ public class ScenarioNodeEditor : NodeEditor
 
             foreach (Item item in _scenarioNode.ItemDefs)
             {
-                bool itemIdInvalid = item.ID == string.Empty;
-                bool itemIdDuplicated = itemIdInvalid ? false : _scenarioNode.ItemDefs.Where(x => x.ID.Equals(item.ID)).Count() > 1;
+                bool itemIdInvalid = string.IsNullOrEmpty(item.ID);
+                bool itemIdDuplicated = itemIdInvalid ? false : _scenarioNode.ItemDefs.Where(x => !string.IsNullOrEmpty(x.ID) && x.ID.Equals(item.ID)).Count() > 1;
 
                 string displayName = string.Format($"<color=green>- {item.ID}</color>");
                 if (itemIdInvalid)
