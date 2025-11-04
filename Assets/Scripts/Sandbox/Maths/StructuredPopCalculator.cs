@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    public class StandardCalculator : IEntityCalculator
+    public class StructuredCalculator : IEntityCalculator
     {
         public string Name() => "Standard";
         public string Version() => "1.0";
@@ -81,7 +81,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     float[] NNrAN = new float[entityManager.EntityTypeCount];
                     for (int a = 0; a < N.Length; a++)
                     {
-                        NNrAN[a] = N[a] + (N[a] * (r[a] + AN[a]));
+                        NNrAN[a] = AN[a];
                         //Debug.Log(NNrAN[a]);
                     }
 
