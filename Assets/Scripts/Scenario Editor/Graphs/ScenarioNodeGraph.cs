@@ -59,6 +59,8 @@ public class ScenarioNodeGraph : NodeGraph
         {
             _xNodeVersion = info.version;
         }
+
+        colourPalette = GetDefaultPalette();
 #endif
     }
 
@@ -157,6 +159,21 @@ public class ScenarioNodeGraph : NodeGraph
         }
 
         return Color.white;
+    }
+
+    private ColourPaletteObject GetDefaultPalette()
+    {
+        ColourPaletteObject palette = null;
+
+#if UNITY_EDITOR
+        GUID[] guids = AssetDatabase.FindAssetGUIDs("t:ColourPaletteObject, l:Base"); //Find a ColourPaletteObject labelled with "Base", which is our default for this project
+        if (guids != null && guids.Length > 0)
+        {
+            palette = AssetDatabase.LoadAssetByGUID<ColourPaletteObject>(guids[0]);
+        }
+#endif
+
+        return palette;
     }
     #endregion
 
