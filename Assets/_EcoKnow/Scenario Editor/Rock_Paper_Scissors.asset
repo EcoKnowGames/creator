@@ -68,7 +68,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 0
+  _selectedID: Paper
 --- !u!114 &-7162147227295446764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 2
+  _selectedID: Scissor
 --- !u!114 &-6645827319471254915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Rock
 --- !u!114 &-5846011331157597572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Rock
 --- !u!114 &-784360732301681957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,9 +325,9 @@ MonoBehaviour:
     - _map
     - _winConditions
     - _items
-    - Scissors
-    - Paper
     - Rock
+    - Paper
+    - Scissors
     values:
     - _fieldName: _matrix
       _node: {fileID: -784360732301681957}
@@ -389,13 +389,13 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: Scissors
+    - _fieldName: Rock
       _node: {fileID: -784360732301681957}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: -5846011331157597572}
+        node: {fileID: 9009179440933735862}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -413,13 +413,13 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: Rock
+    - _fieldName: Scissors
       _node: {fileID: -784360732301681957}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: _id
-        node: {fileID: 9009179440933735862}
+        node: {fileID: -5846011331157597572}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -573,7 +573,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 0
+  _selectedID: Paper
 --- !u!114 &1227927996421366911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,7 +639,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 2
+  _selectedID: Scissor
 --- !u!114 &6090172055090998514
 MonoBehaviour:
   m_ObjectHideFlags: 0

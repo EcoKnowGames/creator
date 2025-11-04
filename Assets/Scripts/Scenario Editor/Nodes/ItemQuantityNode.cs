@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
 using XNode;
@@ -7,31 +6,29 @@ using XNode;
 
 public class ItemQuantityNode : BaseQuantityNode
 {
-    [SerializeField, HideInInspector] protected int itemIndex;
     public int ItemIndex
     {
         get
         {
-            return itemIndex;
+            if (AvailableItems != null)
+            {
+                return Mathf.Max(0, AvailableItems.FindIndex(x => x.ID == ID));
+            }
+
+            return 0;
         }
         set
         {
-            itemIndex = value;
-        }
-    }
-
-    protected override string ID
-    {
-        get
-        {
-            if ((AvailableItems != null) && (ItemIndex > 0) && (itemIndex < AvailableItems.Count))
+            int index = (value >= 0) && (value < AvailableItems.Count) ? value : 0;
+            if (AvailableItems != null)
             {
-                return AvailableItems[itemIndex].ID;
+                _selectedID = AvailableItems[index].ID;
             }
-
-            return null;
         }
     }
+
+    [SerializeField, HideInInspector] protected string _selectedID;
+    protected override string ID => _selectedID;
 
     public List<Item> AvailableItems
     {
@@ -50,14 +47,19 @@ public class ItemQuantityNode : BaseQuantityNode
     // Use this for initialization
     protected override void Init()
     {
-		base.Init();		
-	}
+        base.Init();
+
+        if (string.IsNullOrEmpty(_selectedID))
+        {
+            ItemIndex = 0;
+        }
+    }
 
     protected override Quantity GetQuantity()
     {
-        if ((AvailableItems != null) && (ItemIndex >= 0) && (itemIndex < AvailableItems.Count))
+        if ((AvailableItems != null) && (ItemIndex >= 0) && (ItemIndex < AvailableItems.Count))
         {
-            return new Quantity(AvailableItems[itemIndex].ID, Value);
+            return new Quantity(AvailableItems[ItemIndex].ID, Value);
         }
 
         return null;
