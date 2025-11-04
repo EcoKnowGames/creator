@@ -1,0 +1,472 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Emissions",
+    "Author": "Brad",
+    "Rounds": 24,
+    "ActionsPerRound": 2,
+    "StartCurrency": 100,
+    "Seed": 0,
+    "Entities": [
+      {
+        "ID": "People",
+        "Icon": "Icons/child_high_contrast_default",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 0.1,
+        "MovementRate": 0.05,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Health",
+        "Icon": "Icons/woman_health_worker_high_contrast_default",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 0.1,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Public_transport",
+        "Icon": "Icons/trolleybus_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": [
+          {
+            "ID": "Ticket",
+            "Value": 10
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ]
+      },
+      {
+        "ID": "Emissions",
+        "Icon": "Icons/fire_high_contrast",
+        "Colour": "88BCFFFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "Pollution",
+        "Icon": "Icons/cloud_high_contrast",
+        "Colour": "B3A0FEFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.1,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 0.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      }
+    ],
+    "Items": [
+      {
+        "ID": "Ticket",
+        "Icon": "Icons/ticket_high_contrast",
+        "Value": 4,
+        "CanSell": true
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Health",
+        "Description": " Keep health above 1200 for 8 rounds.",
+        "EntityIndex": 1,
+        "LowerLimit": 1200.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 8
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "People",
+        "Health",
+        "Public_transport",
+        "Emissions",
+        "Pollution"
+      ],
+      "entityMatrix": [
+        [
+          -0.001,
+          0.0,
+          0.0,
+          0.02,
+          0.0
+        ],
+        [
+          0.001,
+          -0.001,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.02,
+          -0.0001,
+          -0.004,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          -0.01,
+          0.04
+        ],
+        [
+          0.0,
+          -0.004,
+          0.0,
+          0.0,
+          -0.01
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "emissions_map",
+      "gridDef": {
+        "rows": 8,
+        "columns": 8,
+        "tileIDs": [
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            -1
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            [
+              10,
+              120,
+              10,
+              60,
+              40
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              10,
+              40,
+              10,
+              20,
+              20
+            ],
+            [
+              10,
+              63,
+              10,
+              20,
+              30
+            ],
+            null
+          ],
+          [
+            null,
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              10,
+              45,
+              10,
+              20,
+              30
+            ],
+            [
+              10,
+              65,
+              10,
+              20,
+              34
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            [
+              10,
+              87,
+              10,
+              40,
+              40
+            ],
+            [
+              10,
+              22,
+              10,
+              20,
+              20
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              10,
+              45,
+              10,
+              20,
+              30
+            ],
+            [
+              10,
+              150,
+              10,
+              6,
+              40
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            [
+              10,
+              46,
+              10,
+              20,
+              20
+            ],
+            [
+              10,
+              124,
+              10,
+              40,
+              40
+            ],
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      }
+    }
+  }
+}
