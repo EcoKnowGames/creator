@@ -230,7 +230,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 0
+  _selectedID: Corn
 --- !u!114 &-5948827081687220555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Name: Item Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 584, y: 216}
+  position: {x: 552, y: 200}
   ports:
     keys:
     - _quantity
@@ -262,7 +262,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Plant mass
 --- !u!114 &-3245645402518670928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +294,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Plant mass
 --- !u!114 &-2165607934056711419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +326,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Plant mass
 --- !u!114 &-1705689603022999336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,7 +474,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 0
-  itemIndex: 0
+  _selectedID: Corn
 --- !u!114 &965181200777939732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,7 +1161,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Plant mass
 --- !u!114 &7810883030057956782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1261,7 +1261,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Plant mass
 --- !u!114 &8747541214109367747
 MonoBehaviour:
   m_ObjectHideFlags: 0
