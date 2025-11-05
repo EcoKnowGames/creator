@@ -41,6 +41,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                         ItemWidget widget = _enabledWidgets[i];
 
                         //Show our item in a widget
+                        widget.ShowTitle(false);
                         widget.SetIcon(item.Item1.Icon);
                         widget.SetQuantity(item.Item2);
                         widget.gameObject.SetActive(true);
