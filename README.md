@@ -19,7 +19,7 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **Scenario Graph assets**: `Assets/_EcoKnow/Scenario Editor/` (e.g., `TestScenarioGraph.asset`)
 
 ### FIRST TIME SETUP
-- **Unity Editor version**: Use Unity `6000.0.49f1` (Unity 6). Opening with a different version may cause compatibility issues.
+- **Unity Editor version**: Use Unity `6000.0.60f1` (Unity 6). Opening with a different version may cause compatibility issues.
 - **Steps**:
   1. Clone the repository.
   2. Ensure GIT LFS is enabled or assets will be blank
