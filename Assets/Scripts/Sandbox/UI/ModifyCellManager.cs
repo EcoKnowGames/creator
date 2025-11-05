@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
@@ -212,27 +213,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyMode = mode;
             ClearSelectedCells();
 
-            switch (_modifyMode)
+            if (_modifyMode != ModifyMode.NONE)
             {
-                case (ModifyMode.HARVEST):
-                    {
-                        ShowHarvestModal(SelectedEntityIndex);
-                        break;
-                    }
-
-                case (ModifyMode.INTRODUCE):
-                    {
-                        ShowIntroduceModal(SelectedEntityIndex);
-                        break;
-                    }
-                case (ModifyMode.NONE):
-                    {
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
+                ShowModal(SelectedEntityIndex, _modifyMode);
             }
 
             onEnterModifyMode?.Invoke(_modifyMode);
@@ -272,10 +255,23 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         }
         #endregion
 
+        public void ShowModal(int entityIndex, ModifyMode modifyMode)
+        {
+            if (modifyMode == ModifyMode.INTRODUCE)
+            {
+                StartCoroutine(ShowIntroduceModal(entityIndex));
+            }
+            else if (modifyMode == ModifyMode.HARVEST)
+            {
+                StartCoroutine(ShowHarvestModal(entityIndex));
+            }
+        }
+
         #region Harvest
-        private void ShowHarvestModal(int entityIndex)
+        private IEnumerator ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnInputModified, OnHarvestConfirmed, OnModifyCancelled);
+            yield return new WaitForEndOfFrame();
             _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
@@ -309,9 +305,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #endregion
 
         #region Introduce
-        private void ShowIntroduceModal(int entityIndex)
+        private IEnumerator ShowIntroduceModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnInputModified, OnIntroduceConfirmed, OnModifyCancelled);
+            yield return new WaitForEndOfFrame();
             _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
