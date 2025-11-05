@@ -129,7 +129,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 0
+  _selectedID: worm
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,9 +177,9 @@ MonoBehaviour:
     - _map
     - _winConditions
     - _items
-    - '"Species_1"'
-    - '"Species_2"'
     - '"Species_3"'
+    - '"Species_2"'
+    - '"Species_1"'
     values:
     - _fieldName: _matrix
       _node: {fileID: 855045186378313062}
@@ -229,7 +229,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: '"Species_1"'
+    - _fieldName: '"Species_3"'
       _node: {fileID: 855045186378313062}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -247,7 +247,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
-    - _fieldName: '"Species_3"'
+    - _fieldName: '"Species_1"'
       _node: {fileID: 855045186378313062}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089

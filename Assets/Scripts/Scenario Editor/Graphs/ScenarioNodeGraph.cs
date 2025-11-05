@@ -77,8 +77,8 @@ public class ScenarioNodeGraph : NodeGraph
             warningStr += string.Format($"\nApp Version: {_appVersion}    (Current: {Application.version})");
         }
 
-        //Check Unity
-        if (_unityVersion != Application.unityVersion)
+        //Check Unity (Major version)
+        if (_unityVersion.Split('.')[0] != Application.unityVersion.Split('.')[0])
         {
             showWarning = true;
             warningStr += string.Format($"\nUnity Version: {_unityVersion}    (Current: {Application.unityVersion})");
