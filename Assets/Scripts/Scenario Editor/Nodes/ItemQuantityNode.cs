@@ -12,7 +12,7 @@ public class ItemQuantityNode : BaseQuantityNode
         {
             if (AvailableItems != null)
             {
-                return Mathf.Max(0, AvailableItems.FindIndex(x => x.ID == ID));
+                return Mathf.Max(0, AvailableItems.FindIndex(x => x.ID == _selectedID));
             }
 
             return 0;
@@ -27,7 +27,7 @@ public class ItemQuantityNode : BaseQuantityNode
         }
     }
 
-    [SerializeField, HideInInspector] protected string _selectedID;
+    [SerializeField, HideInInspector] private string _selectedID;
     protected override string ID => _selectedID;
 
     public List<Item> AvailableItems
@@ -53,15 +53,5 @@ public class ItemQuantityNode : BaseQuantityNode
         {
             ItemIndex = 0;
         }
-    }
-
-    protected override Quantity GetQuantity()
-    {
-        if ((AvailableItems != null) && (ItemIndex >= 0) && (ItemIndex < AvailableItems.Count))
-        {
-            return new Quantity(AvailableItems[ItemIndex].ID, Value);
-        }
-
-        return null;
     }
 }
