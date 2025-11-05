@@ -363,7 +363,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 0
+  _selectedID: Meat
 --- !u!114 &-1152431932792402805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,7 +535,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 4
-  itemIndex: 1
+  _selectedID: Rabbit Foot
 --- !u!114 &1651366151217186011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,7 +632,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 2
-  itemIndex: 1
+  _selectedID: Rabbit Foot
 --- !u!114 &4220380142789208255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,7 +665,7 @@ MonoBehaviour:
       _dynamic: 0
   mapCSV: {fileID: 4900000, guid: 52a2001293d4268458a26f5312c0b3b1, type: 3}
   map:
-    fileName: Map_PopulationTest
+    fileName: Map_HaresFoxesHouses
     gridDef:
       rows: 6
       columns: 5
@@ -773,7 +773,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 5
-  itemIndex: 0
+  _selectedID: Meat
 --- !u!114 &8305353051423345535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,7 +805,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   _value: 1
-  itemIndex: 1
+  _selectedID: Rabbit Foot
 --- !u!114 &8368680822340120736
 MonoBehaviour:
   m_ObjectHideFlags: 0
