@@ -311,21 +311,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             //Check the toggles
             //These don't update until after the modal is set active,
             //So we can't rely on this to work in ShowModal()
-            if (_unitMode == UnitMode.DISCRETE)
+            if (_discreteToggle != null)
             {
-                if (_discreteToggle != null)
-                {
-                    _discreteToggle.isOn = true;
-                }
+                _discreteToggle.isOn = _unitMode == UnitMode.DISCRETE;
             }
-            else if (_unitMode == UnitMode.PERCENT)
-            {
-                if (_percentToggle != null)
-                {
-                    _percentToggle.isOn = true;
-              
-                }
 
+            if (_percentToggle != null)
+            {
+                _percentToggle.isOn = _unitMode == UnitMode.PERCENT;
             }
         }
 
@@ -349,35 +342,43 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _predictedPopulationText.text = (totalPopulation + actualDifference).ToString("n0");
             }
 
+            bool canPerformAction = false;
+
+            Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? SandboxManager.Instance.EntityManager.GetHarvestRewards(entityIndex) : SandboxManager.Instance.EntityManager.GetIntroduceCosts(entityIndex);
+            if (requirements != null)
+            {
+                //We have found the entityType and requirements, action is possible
+                canPerformAction = true;
+
+                int currentInputValue = _modifyMode == ModifyMode.HARVEST ? (int)InputValue * -1 : (int)InputValue;
+                int quantityToDisplay = selectedCells.Count > 0 ? actualDifference : currentInputValue;
+                UpdateItemWidgets(requirements, quantityToDisplay);
+
+                foreach (Quantity quantity in requirements)
+                {
+                    bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, Mathf.Abs(actualDifference)) : true;
+                    if (!hasQuantity)
+                    {
+                        canPerformAction = false;
+                        break;
+                    }
+                }
+            }
+
             //If we have no cells selected, automatically fail the perform check
-            bool canPerformAction = true;
             if ((selectedCells.Count <= 0) || (InputValue <= 0))
             {
                 canPerformAction = false;
-                SetItemWidgetsVisibile(false);
             }
-            //If we have cells selected, check our inventory quantities before we accept an action as valid
-            else
+
+            //Widgets always visible for Introduce, but depend on tile selection for harvest
+            if (_modifyMode == ModifyMode.HARVEST)
             {
-                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(entityIndex);
-                if (entityType != null)
-                {
-                    Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? entityType.HarvestQuantities : entityType.IntroduceQuantities;
-                    if (requirements != null)
-                    {
-                        SetItemWidgetsVisibile(true);
-                        UpdateItemWidgets(requirements, actualDifference);
-                        foreach (Quantity quantity in requirements)
-                        {
-                            bool hasQuantity = _modifyMode == ModifyMode.INTRODUCE ? SandboxManager.Instance.PlayerInventory.HasQuantities(new Quantity[] { quantity }, Mathf.Abs(actualDifference)) : true;
-                            if (!hasQuantity)
-                            {
-                                canPerformAction = false;
-                                break;
-                            }
-                        }
-                    }
-                }
+                SetItemWidgetsVisibile(canPerformAction);
+            }
+            else if (_modifyMode == ModifyMode.INTRODUCE)
+            {
+                SetItemWidgetsVisibile(true);
             }
 
             //Disable button if we don't have the requirements
@@ -387,9 +388,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             //Refresh layout
-            if (this.GetComponent<RectTransform>() != null)
+            //Prevent refresh if we're not active (e.g. when swapping between Harvest and Introduce)
+            if (this.gameObject.activeSelf)
             {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
+                StartCoroutine(RefreshLayout());
             }
         }
 
