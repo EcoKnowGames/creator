@@ -25,7 +25,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             SetValid(true);
             ShowItemIcon();
-            ShowTitle(false);
         }
 
         public void SetTitle(string title)
@@ -37,7 +36,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private void ShowTitle(bool visible)
+        public void ShowTitle(bool visible)
         {
             if (_itemTitle != null)
             {
