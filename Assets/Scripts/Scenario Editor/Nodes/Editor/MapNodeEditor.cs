@@ -34,6 +34,8 @@ public class MapNodeEditor : NodeEditor
         string entityCountStr = validEntityCount >= 0 ? validEntityCount.ToString() : "Not Specified";
         EditorGUILayout.TextField("Compatible # of Entities", entityCountStr);
 
+        GUI.enabled = true;
+
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();
     }
