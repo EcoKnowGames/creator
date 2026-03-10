@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Buffers.Text;
+using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox;
 using UnityEngine;
@@ -9,9 +11,13 @@ public class ScenarioNode : Node
 {
     [SerializeField] protected string scenarioName;
     [SerializeField] protected string authorName;
+    [SerializeField, Multiline] protected string description;
+    [SerializeField, HideInInspector] protected string coverImageBase64;
     [SerializeField] protected int rounds;
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
+
+    private Texture2D coverImageCache;
 
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private Matrix _matrix;
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private MapLayout _map;
@@ -78,6 +84,38 @@ public class ScenarioNode : Node
 
     public string Name => scenarioName;
     public string Author => string.IsNullOrEmpty(authorName) ? "Unknown Author" : authorName;
+    public string Description => string.IsNullOrEmpty(description) ? null : description;
+    public string CoverImageBase64
+    {
+        get
+        {
+            return coverImageBase64;
+        }
+        set
+        {
+            coverImageBase64 = value;
+            if (value == null)
+            {
+                ClearCoverImageCache();
+            }
+            else
+            {
+                CacheCoverImage(value);
+            }
+        }
+    }
+    public Texture2D CoverImage
+    {
+        get
+        {
+            if (coverImageCache == null)
+            {
+                CacheCoverImage(coverImageBase64);
+            }
+
+            return coverImageCache;
+        }
+    }
     public int TotalRounds => rounds;
     public int ActionsPerRound => actionsPerRound;
 
@@ -174,6 +212,26 @@ public class ScenarioNode : Node
         }
 
         _entityPorts.Clear();
+    }
+    #endregion
+
+    #region Cover Image
+    private void CacheCoverImage(string base64)
+    {
+        if (string.IsNullOrEmpty(base64))
+        {
+            return;
+        }
+
+        byte[] imageBytes = Convert.FromBase64String(base64);
+        Texture2D coverImage = new Texture2D(2, 2);
+        coverImage.LoadImage(imageBytes);
+        coverImageCache = coverImage;
+    }
+
+    private void ClearCoverImageCache()
+    {
+        coverImageCache = null;
     }
     #endregion
 
