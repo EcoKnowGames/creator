@@ -36,13 +36,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             _targetIndex = index;
+            _type = WinCondition.TargetType.Entity;
 
-           if (_entityIcon != null)
+            if (_entityIcon != null)
             {
                 _entityIcon.SetEntity(entity);
             }
-
-            _type = WinCondition.TargetType.Entity;
         }
 
         public void SetItem(int index, Item itemDef)
@@ -54,13 +53,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             _targetIndex = index;
+            _type = WinCondition.TargetType.Item;
 
             if (_entityIcon != null)
             {
                 _entityIcon.SetItem(itemDef);
             }
-
-            _type = WinCondition.TargetType.Item;
         }
 
         public void SetCurrency()
@@ -70,6 +68,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _entityIcon.SetCurrency();
             }
 
+            _targetIndex = 0;
             _type = WinCondition.TargetType.Currency;
         }
 
