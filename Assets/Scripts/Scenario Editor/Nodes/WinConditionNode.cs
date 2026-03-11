@@ -7,7 +7,8 @@ public record WinConditionRecord
 (
     string Title,
     string Description,
-    int EntityIndex,
+    int TypeIndex,
+    int TargetIndex,
     float LowerLimit,
     float UpperLimit,
     int RequiredRounds
@@ -22,18 +23,11 @@ public class WinConditionNode : Node
     [SerializeField, Multiline]
     protected string description;
 
-    [SerializeField, HideInInspector] protected int entityIndex;
-    public int EntityIndex
-    {
-        get
-        {
-            return entityIndex;
-        }
-        set
-        {
-            entityIndex = value;
-        }
-    }
+    [SerializeField, HideInInspector] protected int typeIndex;
+    public int TypeIndex { get { return typeIndex; } set { typeIndex = value; } }
+
+    [SerializeField, HideInInspector] protected int targetIndex;
+    public int TargetIndex { get { return targetIndex; } set { targetIndex = value; } }
 
     [SerializeField] protected float lowerLimit;
     [SerializeField] protected float upperLimit;
@@ -55,6 +49,20 @@ public class WinConditionNode : Node
                 {
                     return scenarioGraph.GetEntityList();
                 }
+            }
+
+            return null;
+        }
+    }
+
+    public List<Item> AvailableItems
+    {
+        get
+        {
+            //Return valid item list from graph
+            if (graph is ScenarioNodeGraph scenarioGraph)
+            {
+                return scenarioGraph.GetScenarioNode()?.ItemDefs;
             }
 
             return null;
@@ -90,7 +98,7 @@ public class WinConditionNode : Node
 
     public WinConditionRecord GetWinCondition()
     {
-        return new WinConditionRecord(title, description, entityIndex, lowerLimit, upperLimit, requiredRounds);
+        return new WinConditionRecord(title, description, typeIndex, targetIndex, lowerLimit, upperLimit, requiredRounds);
     }
 
     public bool IsConnected()
@@ -107,7 +115,7 @@ public class WinConditionNode : Node
         return false;
     }
 
-    public bool IsPopulationRangeValid()
+    public bool IsRangeValid()
     {
         if ((upperLimit > 0) && (upperLimit < lowerLimit))
         {

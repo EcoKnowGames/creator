@@ -17,6 +17,7 @@ namespace Glitchers.EcoKnow.Sandbox
     public class PlayerInventory : MonoBehaviour
     {
         private List<Item> _itemDefs = new List<Item>();
+        private List<Item> ItemDefs => _itemDefs == null ? null : _itemDefs.OrderBy(x => x.ID).ToList();
         private Dictionary<string, int> _inventory = new Dictionary<string, int>();
         public Dictionary<string, int> Inventory => _inventory;
 
@@ -45,7 +46,20 @@ namespace Glitchers.EcoKnow.Sandbox
 
         public Item GetItemDef(string id)
         {
-            return _itemDefs.FirstOrDefault(x => x.ID.Equals(id, StringComparison.OrdinalIgnoreCase));
+            return ItemDefs.FirstOrDefault(x => x.ID.Equals(id, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public Item GetItemDef(int index)
+        {
+            if (index < 0 || index >= ItemDefs.Count)
+                return null;
+
+            return ItemDefs[index];
+        }
+
+        public int GetItemIndex(string id)
+        {
+            return ItemDefs.FindIndex(x => x.ID.Equals(id, StringComparison.OrdinalIgnoreCase));
         }
 
         #region Add/Remove by Item ID
@@ -118,7 +132,7 @@ namespace Glitchers.EcoKnow.Sandbox
             bool foundItem = _inventory.TryGetValue(id, out amountHeld);
             if (foundItem && (amountHeld >= amount))
             {
-                Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
+                Item def = ItemDefs.FirstOrDefault(x => x.ID.Equals(id, System.StringComparison.OrdinalIgnoreCase));
                 if ((def != null) && (def.CanSell))
                 {
                     //Adjust inventory
@@ -159,7 +173,7 @@ namespace Glitchers.EcoKnow.Sandbox
             //As we are searching ItemDefs we will only fetch items defined by the Item Nodes and not actions or currency
             foreach(KeyValuePair<string, int> item in _inventory)
             {
-                Item def = _itemDefs.FirstOrDefault(x => x.ID.Equals(item.Key, System.StringComparison.OrdinalIgnoreCase));
+                Item def = ItemDefs.FirstOrDefault(x => x.ID.Equals(item.Key, System.StringComparison.OrdinalIgnoreCase));
                 if (def != null)
                 {
                     items.Add(new Tuple<Item, int>(def, item.Value));
