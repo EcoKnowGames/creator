@@ -166,6 +166,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnInventoryUpdated(string id, int amount)
         {
             RefreshInventories();
+            _objectivePanel?.OnInventoryUpdated(id, amount);
         }
 
         private void RefreshInventories()

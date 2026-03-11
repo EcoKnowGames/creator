@@ -1,9 +1,6 @@
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -22,8 +19,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ResultsTracker _resultsTracker;
         public ResultsTracker ResultsTracker => _resultsTracker;
 
-        private int _entityIndex; //Safety
-        public int EntityIndex => _entityIndex;
+        private WinCondition.TargetType _type;
+        public WinCondition.TargetType Type => _type;
+
+        private int _targetIndex; //Safety
+        public int TargetIndex => _targetIndex;
 
         private const string LogChannel = "[ObjectiveWidget]";
 
@@ -35,12 +35,42 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 return;
             }
 
-            _entityIndex = index;
+            _targetIndex = index;
 
            if (_entityIcon != null)
             {
                 _entityIcon.SetEntity(entity);
             }
+
+            _type = WinCondition.TargetType.Entity;
+        }
+
+        public void SetItem(int index, Item itemDef)
+        {
+            if (itemDef == null)
+            {
+                Debug.LogError($"{LogChannel} Failed setup, Item is null!");
+                return;
+            }
+
+            _targetIndex = index;
+
+            if (_entityIcon != null)
+            {
+                _entityIcon.SetItem(itemDef);
+            }
+
+            _type = WinCondition.TargetType.Item;
+        }
+
+        public void SetCurrency()
+        {
+            if (_entityIcon != null)
+            {
+                _entityIcon.SetCurrency();
+            }
+
+            _type = WinCondition.TargetType.Currency;
         }
 
         public void UpdateObjective(int currentRound, int maxRound)
@@ -78,31 +108,62 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     _resultsTracker?.UpdateResultsTrack(condition.Results, currentRound, maxRound);
                 }
 
-                UpdatePopulation(condition);
+                UpdateQuantity(condition);
             }
         }
 
-        public void OnEntityUpdated()
+        public void OnQuantityUpdated()
         {
             WinCondition condition = GetWinCondition();
             if (condition != null)
             {
-                UpdatePopulation(condition);
+                UpdateQuantity(condition);
             }
         }
 
-        public void UpdatePopulation(WinCondition condition)
+        public void UpdateQuantity(WinCondition condition)
         {
             if (condition.GetLatestResult() == WinCondition.Result.FAILED)
             {
                 return;
             }
 
-            if (SandboxManager.Instance.EntityManager != null)
+            int quantity = 0;
+            switch (_type)
             {
-                int population = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(EntityIndex);
-                _resultsTracker?.UpdateActiveWidget(population, condition.lowerLimit, condition.upperLimit);
+                case (WinCondition.TargetType.Entity):
+                    {
+                        if (SandboxManager.Instance.EntityManager != null)
+                        {
+                            quantity = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(TargetIndex);
+                        }
+                        break;
+                    }
+                case (WinCondition.TargetType.Item):
+                    {
+                        if (SandboxManager.Instance.PlayerInventory != null)
+                        {
+                            Item itemDef = SandboxManager.Instance.PlayerInventory.GetItemDef(TargetIndex);
+                            if (itemDef != null)
+                            {
+                                quantity = SandboxManager.Instance.PlayerInventory.GetAmountHeld(itemDef.ID);
+                            }
+                        }
+                        break;
+                    }
+                case (WinCondition.TargetType.Currency):
+                    {
+                        if (SandboxManager.Instance.PlayerInventory != null)
+                        {
+                            quantity = SandboxManager.Instance.PlayerInventory.GetAmountHeld(PlayerInventory.CurrencyID);
+                        }
+                        break;
+                    }
+                default:
+                    break;
             }
+
+            _resultsTracker?.UpdateActiveWidget(quantity, condition.lowerLimit, condition.upperLimit);
         }
 
 
@@ -110,7 +171,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             if (SandboxManager.Instance.WinConditions != null)
             {
-                return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.EntityIndex == EntityIndex);
+                switch (_type)
+                {
+                    case (WinCondition.TargetType.Entity):
+                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Entity && x.TargetIndex == TargetIndex);
+                    case (WinCondition.TargetType.Item):
+                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Item && x.TargetIndex == TargetIndex);
+                    case (WinCondition.TargetType.Currency):
+                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Currency);
+                    default:
+                        return null;
+                }
             }
 
             return null;
