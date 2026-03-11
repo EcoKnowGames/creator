@@ -36,8 +36,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             EntityManager entityManager = SandboxManager.Instance.EntityManager;
             if (entityManager != null)
             {
-                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(winCondition.EntityIndex);
-                SetEntity(winCondition.EntityIndex, entityType);
+                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(winCondition.TargetIndex);
+                SetEntity(winCondition.TargetIndex, entityType);
             }
 
             //If we haven't succeeded, we automatically fail
