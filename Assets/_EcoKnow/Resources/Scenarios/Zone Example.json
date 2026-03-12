@@ -1,0 +1,1068 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.68f1",
+  "Scenario": {
+    "Name": "Zone Example",
+    "Author": "Glitchers",
+    "Rounds": 12,
+    "ActionsPerRound": 4,
+    "StartCurrency": 8000,
+    "Seed": 123456,
+    "Entities": [
+      {
+        "ID": "HeavyMetal",
+        "Icon": "Icons/rock_high_contrast",
+        "Colour": "FFDF3EFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 5.0,
+        "AbundanceThreshold": 30.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null,
+        "GrowthRates": [
+          0.05,
+          0.01,
+          0.01
+        ],
+        "MovementRates": [
+          0.06,
+          0.05,
+          0.05
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            false
+          ],
+          [
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            true
+          ]
+        ]
+      },
+      {
+        "ID": "VetiverGrass",
+        "Icon": "Icons/potted_plant_high_contrast",
+        "Colour": "B6FFBFFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 5.0,
+        "AbundanceThreshold": 15.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null,
+        "GrowthRates": [
+          0.005,
+          0.1,
+          -0.05
+        ],
+        "MovementRates": [
+          0.01,
+          0.02,
+          0.0
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            false
+          ],
+          [
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            true
+          ]
+        ]
+      },
+      {
+        "ID": "NativePlants",
+        "Icon": "Icons/potted_plant_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 5.0,
+        "AbundanceThreshold": 15.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null,
+        "GrowthRates": [
+          -0.02,
+          0.08,
+          0.02
+        ],
+        "MovementRates": [
+          0.01,
+          0.03,
+          0.01
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            false
+          ],
+          [
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            true
+          ]
+        ]
+      },
+      {
+        "ID": "CitricAcid",
+        "Icon": "Icons/lemon_high_contrast",
+        "Colour": "FFDF3EFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 10.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 10
+          }
+        ],
+        "GrowthRates": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "MovementRates": [
+          0.05,
+          0.04,
+          0.04
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            true
+          ],
+          [
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            true
+          ]
+        ]
+      },
+      {
+        "ID": "Fish",
+        "Icon": "Icons/fish_high_contrast",
+        "Colour": "88BCFFFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 3.0,
+        "AbundanceThreshold": 15.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null,
+        "GrowthRates": [
+          0.0,
+          0.0,
+          0.1
+        ],
+        "MovementRates": [
+          0.0,
+          0.0,
+          0.08
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            true
+          ],
+          [
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            true
+          ]
+        ]
+      },
+      {
+        "ID": "PublicPerception",
+        "Icon": "Icons/sports_medal_high_contrast",
+        "Colour": "FB7DFDFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 8.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null,
+        "GrowthRates": [
+          0.02,
+          0.02,
+          0.02
+        ],
+        "MovementRates": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "ZoneTransitions": [
+          [
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true
+          ]
+        ]
+      }
+    ],
+    "Items": null,
+    "WinConditions": [
+      {
+        "Title": "Public Perception",
+        "Description": "",
+        "EntityIndex": 5,
+        "LowerLimit": 250.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 3
+      },
+      {
+        "Title": "Fishing Stock",
+        "Description": "",
+        "EntityIndex": 4,
+        "LowerLimit": 200.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 2
+      },
+      {
+        "Title": "Rejuvination",
+        "Description": "",
+        "EntityIndex": 2,
+        "LowerLimit": 250.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 3
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "HeavyMetal",
+        "VetiverGrass",
+        "NativePlants",
+        "CitricAcid",
+        "Fish",
+        "PublicPerception"
+      ],
+      "entityMatrix": [
+        [
+          0.001,
+          -0.005,
+          -0.01,
+          -0.005,
+          0.0,
+          -0.008
+        ],
+        [
+          -0.006,
+          -0.003,
+          0.002,
+          0.0,
+          0.0,
+          0.005
+        ],
+        [
+          0.0,
+          0.0,
+          -0.003,
+          0.0,
+          0.0,
+          0.003
+        ],
+        [
+          -0.008,
+          0.005,
+          -0.003,
+          -0.004,
+          0.0,
+          0.003
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.002
+        ]
+      ],
+      "zoneID": 0
+    },
+    "Map": {
+      "fileName": "Map_CopperTailingsDump",
+      "gridDef": {
+        "rows": 6,
+        "columns": 9,
+        "tileIDs": [
+          [
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            -1,
+            2,
+            2,
+            2,
+            2,
+            -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            null,
+            [
+              35,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              35,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              35,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              35,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            null
+          ],
+          [
+            [
+              40,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              40,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              45,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              5,
+              0,
+              12,
+              0,
+              0,
+              3
+            ],
+            [
+              8,
+              0,
+              10,
+              0,
+              0,
+              3
+            ],
+            [
+              8,
+              0,
+              10,
+              0,
+              0,
+              3
+            ],
+            [
+              8,
+              0,
+              10,
+              0,
+              0,
+              3
+            ],
+            [
+              8,
+              0,
+              10,
+              0,
+              0,
+              3
+            ],
+            [
+              5,
+              0,
+              12,
+              0,
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              20,
+              0,
+              0,
+              5
+            ],
+            [
+              0,
+              0,
+              18,
+              0,
+              0,
+              5
+            ],
+            [
+              0,
+              0,
+              20,
+              0,
+              0,
+              5
+            ],
+            [
+              0,
+              0,
+              20,
+              0,
+              0,
+              5
+            ],
+            [
+              0,
+              0,
+              18,
+              0,
+              0,
+              5
+            ],
+            [
+              0,
+              0,
+              20,
+              0,
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              5,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              5,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              7,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              7,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              8,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              5
+            ]
+          ],
+          [
+            null,
+            [
+              0,
+              0,
+              0,
+              0,
+              12,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              12,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              12,
+              5
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              12,
+              5
+            ],
+            null
+          ]
+        ],
+        "zoneDefs": [
+          {
+            "ID": 0,
+            "Name": "Tailings",
+            "Colour": "#CD853F"
+          },
+          {
+            "ID": 1,
+            "Name": "Land",
+            "Colour": "#48bb78"
+          },
+          {
+            "ID": 2,
+            "Name": "Water",
+            "Colour": "#4aa1f2"
+          }
+        ],
+        "bgColour": "#8B7355",
+        "ZoneCount": 3
+      }
+    },
+    "Matrices": [
+      {
+        "entityIDs": [
+          "HeavyMetal",
+          "VetiverGrass",
+          "NativePlants",
+          "CitricAcid",
+          "Fish",
+          "PublicPerception"
+        ],
+        "entityMatrix": [
+          [
+            0.001,
+            -0.005,
+            -0.01,
+            -0.005,
+            0.0,
+            -0.008
+          ],
+          [
+            -0.006,
+            -0.003,
+            0.002,
+            0.0,
+            0.0,
+            0.005
+          ],
+          [
+            0.0,
+            0.0,
+            -0.003,
+            0.0,
+            0.0,
+            0.003
+          ],
+          [
+            -0.008,
+            0.005,
+            -0.003,
+            -0.004,
+            0.0,
+            0.003
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.002
+          ]
+        ],
+        "zoneID": 0
+      },
+      {
+        "entityIDs": [
+          "HeavyMetal",
+          "VetiverGrass",
+          "NativePlants",
+          "CitricAcid",
+          "Fish",
+          "PublicPerception"
+        ],
+        "entityMatrix": [
+          [
+            0.001,
+            -0.005,
+            -0.01,
+            -0.005,
+            0.0,
+            -0.008
+          ],
+          [
+            -0.006,
+            -0.003,
+            0.002,
+            0.0,
+            0.0,
+            0.005
+          ],
+          [
+            0.0,
+            0.0,
+            -0.003,
+            0.0,
+            0.0,
+            0.003
+          ],
+          [
+            -0.008,
+            0.005,
+            -0.003,
+            -0.004,
+            0.0,
+            0.003
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.002
+          ]
+        ],
+        "zoneID": 1
+      },
+      {
+        "entityIDs": [
+          "HeavyMetal",
+          "VetiverGrass",
+          "NativePlants",
+          "CitricAcid",
+          "Fish",
+          "PublicPerception"
+        ],
+        "entityMatrix": [
+          [
+            0.001,
+            -0.001,
+            -0.002,
+            -0.004,
+            -0.008,
+            -0.006
+          ],
+          [
+            0.0,
+            -0.003,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -0.003,
+            0.0,
+            0.001,
+            0.001
+          ],
+          [
+            -0.009,
+            0.0,
+            0.0,
+            -0.005,
+            0.003,
+            0.003
+          ],
+          [
+            0.0,
+            0.0,
+            0.001,
+            0.0,
+            -0.002,
+            0.006
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.002
+          ]
+        ],
+        "zoneID": 2
+      }
+    ]
+  }
+}
