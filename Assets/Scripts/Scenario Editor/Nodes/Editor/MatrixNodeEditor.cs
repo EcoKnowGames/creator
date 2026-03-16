@@ -20,6 +20,12 @@ public class MatrixNodeEditor : NodeEditor
 
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("matricesCSV"));
 
+        if (_matrixNode.IsConnected() && !_matrixNode.IsCsvValid())
+        {
+            EditorGUILayout.HelpBox("Please provide a valid CSV file", MessageType.Warning);
+            EditorGUILayout.Space();
+        }
+
         // Zone dropdown
         ZoneDef[] zoneDefs = GetZoneDefs();
         if (zoneDefs != null && zoneDefs.Length > 1)
