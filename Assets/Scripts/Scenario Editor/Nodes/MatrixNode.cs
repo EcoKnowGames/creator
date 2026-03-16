@@ -66,8 +66,11 @@ public class MatrixNode : Node
         }
         set
         {
-            _zoneIndex = value;
-            ProcessMatrix();
+            if (_zoneIndex != value)
+            {
+                _zoneIndex = value;
+                ProcessMatrix();
+            }
         }
     }
 
@@ -84,6 +87,11 @@ public class MatrixNode : Node
     private void OnValidate()
     {
         ProcessMatrix();
+    }
+
+    public bool IsCsvValid()
+    {
+        return matricesCSV != null && !string.IsNullOrEmpty(matricesCSV.text);
     }
 
     public void ProcessMatrix()
