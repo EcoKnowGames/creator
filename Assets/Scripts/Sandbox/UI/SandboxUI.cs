@@ -95,6 +95,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Game Lifecycle
         public bool IsFocused()
         {
+            if (_objectivesModal.isActiveAndEnabled)
+            {
+                return true;
+            }
+
             if (_summaryModal.isActiveAndEnabled)
             {
                 return true;
