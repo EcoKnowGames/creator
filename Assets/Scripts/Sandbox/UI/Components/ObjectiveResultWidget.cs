@@ -24,8 +24,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ResultsTracker _resultsTracker;
         public ResultsTracker ResultsTracker => _resultsTracker;
 
-        private int _entityIndex; //Safety
-        public int EntityIndex => _entityIndex;
+        private WinCondition.TargetType _type;
+        public WinCondition.TargetType Type => _type;
+
+        private int _targetIndex; //Safety
+        public int TargetIndex => _targetIndex;
 
         private const string LogChannel = "[ObjectiveResultWidget]";
 
@@ -33,11 +36,25 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             SetObjectiveInformation(winCondition);
 
-            EntityManager entityManager = SandboxManager.Instance.EntityManager;
-            if (entityManager != null)
+            switch (winCondition.Type)
             {
-                Entity entityType = SandboxManager.Instance.EntityManager.GetEntityType(winCondition.EntityIndex);
-                SetEntity(winCondition.EntityIndex, entityType);
+                case (WinCondition.TargetType.Entity):
+                {
+                    SetEntity(winCondition.TargetIndex, winCondition.TargetEntity);
+                    break;
+                }
+                case (WinCondition.TargetType.Item):
+                {
+                    SetItem(winCondition.TargetIndex, winCondition.TargetItem);
+                    break;
+                }
+                case (WinCondition.TargetType.Currency):
+                {
+                    SetCurrency();
+                    break;
+                }
+                default:
+                    break;
             }
 
             //If we haven't succeeded, we automatically fail
@@ -61,13 +78,42 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 return;
             }
 
-            _entityIndex = index;
+            _targetIndex = index;
+            _type = WinCondition.TargetType.Entity;
 
             if (_entityIcon != null)
             {
                 _entityIcon.SetEntity(entity);
             }
         }
+
+        private void SetItem(int index, Item itemDef)
+        {
+            if (itemDef == null)
+            {
+                Debug.LogError($"{LogChannel} Failed setup, Item is null!");
+                return;
+            }
+
+            _targetIndex = index;
+            _type = WinCondition.TargetType.Item;
+
+            if (_entityIcon != null)
+            {
+                _entityIcon.SetItem(itemDef);
+            }
+        }
+        private void SetCurrency()
+        {
+            if (_entityIcon != null)
+            {
+                _entityIcon.SetCurrency();
+            }
+
+            _targetIndex = 0;
+            _type = WinCondition.TargetType.Currency;
+        }
+
 
         private void SetObjectiveInformation(WinCondition condition)
         {

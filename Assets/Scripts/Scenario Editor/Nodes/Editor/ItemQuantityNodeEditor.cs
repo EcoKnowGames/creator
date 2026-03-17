@@ -22,12 +22,11 @@ public class ItemQuantityNodeEditor : NodeEditor
 
         EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
 
-        //Entity list
-        int entityIndex = _itemQuantityNode.ItemIndex;
+        int itemIndex = _itemQuantityNode.ItemIndex;
         if ((_itemQuantityNode.AvailableItems != null) && (_itemQuantityNode.AvailableItems.Count > 0))
         {
-            entityIndex = EditorGUILayout.Popup("Item", entityIndex, _itemQuantityNode.AvailableItems.Select(x => x.ID).ToArray());
-            _itemQuantityNode.ItemIndex = entityIndex;
+            itemIndex = EditorGUILayout.Popup("Item", itemIndex, _itemQuantityNode.AvailableItems.Select(x => x.ID).ToArray());
+            _itemQuantityNode.ItemIndex = itemIndex;
 
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_value"), new GUIContent("Quantity"));
         }
