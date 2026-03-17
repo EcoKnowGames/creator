@@ -285,7 +285,8 @@ MonoBehaviour:
   _id: 
   title: Fox Population
   description: Keep Fox Population above 4000 for 3 rounds!
-  entityIndex: 1
+  typeIndex: 0
+  targetIndex: 1
   lowerLimit: 6000
   upperLimit: 0
   requiredRounds: 3
@@ -354,7 +355,8 @@ MonoBehaviour:
   _id: 
   title: Hare Population
   description: Keep Hares within the range of 10000-20000
-  entityIndex: 0
+  typeIndex: 0
+  targetIndex: 0
   lowerLimit: 10000
   upperLimit: 50000
   requiredRounds: -1
