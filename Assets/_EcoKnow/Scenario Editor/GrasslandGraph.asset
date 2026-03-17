@@ -1195,7 +1195,8 @@ MonoBehaviour:
   _id: 
   title: Purple Loosestrife Population
   description: Remove all purple loosetrife for 5 rounds
-  entityIndex: 5
+  typeIndex: 0
+  targetIndex: 5
   lowerLimit: 0
   upperLimit: 1
   requiredRounds: 5
@@ -1329,7 +1330,8 @@ MonoBehaviour:
   _id: 
   title: Blig bluestem
   description: Keep it above 500
-  entityIndex: 0
+  typeIndex: 0
+  targetIndex: 0
   lowerLimit: 500
   upperLimit: 0
   requiredRounds: -1
