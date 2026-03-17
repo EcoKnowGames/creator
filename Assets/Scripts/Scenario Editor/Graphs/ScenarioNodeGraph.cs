@@ -16,6 +16,8 @@ public record Scenario
     (
         string Name,
         string Author,
+        string Description,
+        string CoverImageBase64,
         int Rounds,
         int ActionsPerRound,
         int StartCurrency,
@@ -193,6 +195,8 @@ public class ScenarioNodeGraph : NodeGraph
         Scenario scenario = new Scenario(
            scenarioNode.Name,
            scenarioNode.Author,
+           scenarioNode.Description,
+           scenarioNode.CoverImageBase64,
            scenarioNode.TotalRounds,
            scenarioNode.ActionsPerRound,
            scenarioNode.StartCurrency,
