@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5308749629569927742
 Transform:
   m_ObjectHideFlags: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -952955595040889675, guid: e6eb9fae42e57bc4bb0d39922d8a62b7, type: 3}
-  m_Color: {r: 0.72782385, g: 0.7048772, b: 0.9056604, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -579,7 +579,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -952955595040889675, guid: e6eb9fae42e57bc4bb0d39922d8a62b7, type: 3}
-  m_Color: {r: 0.52156866, g: 0.5058824, b: 0.7254902, a: 0.34901962}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.101960786}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -666,7 +666,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.18431373, g: 0.21176471, b: 0.39215687, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -728,6 +728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightObject: {fileID: 901068526692372020}
   selectedObject: {fileID: 1247965285414074229}
+  zoneColorRenderer: {fileID: 2474698394359569128}
   _cellTokenPrefab: {fileID: 2812143473954796345, guid: 3035921ea38412e4fa6c011f385dc5c4, type: 3}
   _cellTokenContainer: {fileID: 4567345362638782228}
   spacingCompact: -15

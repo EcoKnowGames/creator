@@ -67,7 +67,6 @@ public class MatrixNodeEditor : NodeEditor
 
     private ZoneDef[] GetZoneDefs()
     {
-        // Walk: MatrixNode -> ScenarioNode -> MapLayout -> GridDef -> zoneDefs
         NodePort outputPort = _matrixNode.GetOutputPort("matrix");
         if (outputPort != null && outputPort.IsConnected)
         {
