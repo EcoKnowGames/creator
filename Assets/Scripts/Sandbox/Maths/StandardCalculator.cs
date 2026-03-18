@@ -53,14 +53,15 @@ namespace Glitchers.EcoKnow.Sandbox
                         continue;
                     }
 
-                    float[,] A = entityManager.AlphaMatrix;
+                    int zone = entityManager.GetZoneType(column, row);
+                    float[,] A = entityManager.GetAlphaMatrixForZone(zone);
                     if ((A.GetLongLength(0) != entityManager.EntityTypeCount) || (A.GetLongLength(1) != entityManager.EntityTypeCount))
                     {
                         Debug.LogError($"[{Name()} Calculator] Entity count [{entityList.Length}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
                         return;
                     }
 
-                    float[] r = entityManager.GetEntityTypeList().Select(x => x.GrowthRate).ToArray();
+                    float[] r = entityManager.GetEntityTypeList().Select(x => x.ZoneInformation != null && x.ZoneInformation.FirstOrDefault(z => z.ZoneID == zone) != null ? x.ZoneInformation.FirstOrDefault(z => z.ZoneID == zone).GrowthRate : x.GrowthRate).ToArray();
                     float[] N = entityList.Select(x => (float)x.Population).ToArray();
 
                     //AN
@@ -108,7 +109,7 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 Entity entity = entityManager.GetEntityTypeList()[i];
 
-                if (entity.MovementRate > 0f)
+                if (entity.MovementRate > 0f || (entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.MovementRate > 0f)))
                 {
                     int[,,] movementTable = new int[entityLookupTable.GetLongLength(0), entityLookupTable.GetLongLength(1), entityLookupTable.GetLongLength(2)];
 
@@ -124,14 +125,25 @@ namespace Glitchers.EcoKnow.Sandbox
                                 continue;
                             }
 
-                            // Get valid neighbors for this cell
-                            List<Vector2Int> validNeighbors = GetValidNeighbors(entityManager, entityLookupTable, column, row, i);
+                            int currentZone = entityManager.GetZoneType(column, row);
+                            float movementRate = entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.ZoneID == currentZone) ? entity.ZoneInformation.FirstOrDefault(x => x.ZoneID == currentZone).MovementRate : entity.MovementRate;
+
+                            if (movementRate <= 0f)
+                            {
+                                continue;
+                            }
+
+                            // Get valid neighbors for this cell, filtering by zone transitions
+                            List<Vector2Int> validNeighbors = GetValidNeighbors(entityManager, entityLookupTable, column, row, i, entity, currentZone);
                             int neighbouringCellCount = validNeighbors.Count;
 
-                            if (neighbouringCellCount == 0) continue;
+                            if (neighbouringCellCount == 0)
+                            {
+                                continue;
+                            }
 
                             // 1. Sample number of movers from Binomial distribution
-                            int entitiesToMove = SampleBinomial(currentPopulation, entity.MovementRate);
+                            int entitiesToMove = SampleBinomial(currentPopulation, movementRate);
 
                             if (entitiesToMove > 0)
                             {
@@ -166,8 +178,8 @@ namespace Glitchers.EcoKnow.Sandbox
             }
         }
 
-        // Helper method to get valid neighbor coordinates
-        private List<Vector2Int> GetValidNeighbors(EntityManager entityManager, int[,,] entityLookupTable, int column, int row, int entityIndex)
+        // Helper method to get valid neighbor coordinates, with zone transition filtering
+        private List<Vector2Int> GetValidNeighbors(EntityManager entityManager, int[,,] entityLookupTable, int column, int row, int entityIndex, Entity entity = null, int currentZone = 0)
         {
             List<Vector2Int> validNeighbors = new List<Vector2Int>();
 
@@ -189,6 +201,18 @@ namespace Glitchers.EcoKnow.Sandbox
                     // Check if the target cell is valid for this entity
                     if (entityLookupTable[xPos, yPos, entityIndex] >= 0)
                     {
+                        // Check zone transition rules
+                        if (entity != null && entity.ZoneInformation != null)
+                        {
+                            int neighbourZone = entityManager.GetZoneType(xPos, yPos);
+
+                            bool canTransition = entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone));
+                            if (!canTransition)
+                            {
+                                continue;
+                            }
+                        }
+
                         validNeighbors.Add(new Vector2Int(xPos, yPos));
                     }
                 }
