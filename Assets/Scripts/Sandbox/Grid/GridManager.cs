@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +20,11 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int[,][] tilePopulations;
         public ZoneDef[] zoneDefs; // null = legacy single-zone map
         public string bgColour; // null = no background color specified
+
+        public bool HasZones()
+        {
+            return zoneDefs != null && zoneDefs.Count() > 0;
+        }
 
         public int GetZoneType(int column, int row)
         {
