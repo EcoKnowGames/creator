@@ -254,7 +254,7 @@ public class ScenarioNodeGraph : NodeGraph
 
             //Validation for Matrix/Zone count
             int matrixCount = scenarioNode.Matrices == null ? 1 : scenarioNode.Matrices.Count();
-            if (scenarioNode.MapLayout.gridDef.ZoneCount != matrixCount)
+            if (scenarioNode.MapLayout.gridDef.GetZoneCount() != matrixCount)
             {
                 EditorUtility.DisplayDialog("ERROR", "Scenario export failed, there is a mismatch between the number of Matrix Nodes and the number of Zones defined by the Map Node. Please ensure one Matrix CSV is provided for each Zone.", "OK");
                 return;

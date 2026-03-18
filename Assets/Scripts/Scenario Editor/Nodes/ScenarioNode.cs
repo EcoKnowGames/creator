@@ -13,7 +13,7 @@ public class ScenarioNode : Node
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
 
-    [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private Matrix _matrix;
+    [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Matrix _matrix;
     [Input(ShowBackingValue.Never, ConnectionType.Override)] [SerializeField] private MapLayout _map;
 
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private string _winConditions;
@@ -24,13 +24,28 @@ public class ScenarioNode : Node
     {
         get
         {
-            //Return valid matrix
+            //Return first valid matrix (legacy compat)
             if ((GetInputPort("_matrix") != null) && (GetInputPort("_matrix").ConnectionCount > 0))
             {
                 return GetInputPort("_matrix").GetConnections().Select(x => x.node).OfType<MatrixNode>().First().matrix;
             }
 
             return null;
+        }
+    }
+
+    public Matrix[] Matrices
+    {
+        get
+        {
+            if ((GetInputPort("_matrix") != null) && (GetInputPort("_matrix").ConnectionCount > 1))
+            {
+                return GetInputPort("_matrix").GetConnections()
+                    .Select(x => x.node).OfType<MatrixNode>()
+                    .Select(x => x.matrix).ToArray();
+            }
+
+            return null; // Single matrix or none -- use legacy Matrix
         }
     }
 
@@ -73,7 +88,7 @@ public class ScenarioNode : Node
     [SerializeField] private int _seed;
     public int Seed => _seed;
 
-    private List<NodePort> _entityPorts = new List<NodePort>();
+    [SerializeField] private List<NodePort> _entityPorts = new List<NodePort>();
     public List<NodePort> EntityPorts => _entityPorts;
 
     public string Name => scenarioName;
@@ -87,6 +102,17 @@ public class ScenarioNode : Node
     protected override void Init()
     {
         base.Init();
+
+        //NOTE -> This doesn't always work as we have no guarantee what order the nodes initialise in
+
+        // Rebuild _entityPorts from xNode's serialized dynamic ports.
+        // _entityPorts is not serialized, so it resets to empty on domain reload,
+        // but xNode's internal port dictionary preserves the dynamic ports and
+        // their connections. Re-syncing here keeps the editor drawing them.
+        if (DynamicOutputs != null)
+        {
+            _entityPorts = new List<NodePort>(DynamicOutputs.Where(x => x.Connection != null && x.Connection.node is EntityNode));
+        }
     }
 
     private void OnValidate()
@@ -112,12 +138,17 @@ public class ScenarioNode : Node
     {
         if (GetInputPort("_matrix").IsConnected)
         {
-            Matrix matrix = (Matrix)GetInputPort("_matrix").GetInputValue();
             ClearEntityPorts();
 
-            if ((matrix != null) && (_entityPorts != null))
+            // Union entity IDs across all connected matrices
+            var allMatrixNodes = GetInputPort("_matrix").GetConnections()
+                .Select(x => x.node).OfType<MatrixNode>().ToList();
+
+            var entityIDs = allMatrixNodes.SelectMany(x => x.matrix.entityIDs).Select(x => x).Distinct().ToList();
+
+            if (_entityPorts != null)
             {
-                foreach (string id in matrix.entityIDs)
+                foreach (string id in entityIDs)
                 {
                     if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
                     {
