@@ -155,7 +155,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 _entityManager?.AddEntitiesToGrid(gridDef, _gridManager);
 
                 //Set up all of our UI
-                _sandboxUI?.Init(_entityManager, _winConditions.ToArray(), _playerInventory);
+                _sandboxUI?.Init(scenario, _entityManager, _winConditions.ToArray(), _playerInventory);
 
                 yield return new WaitForEndOfFrame();
 
