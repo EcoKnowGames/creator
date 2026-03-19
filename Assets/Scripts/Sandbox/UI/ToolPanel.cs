@@ -15,6 +15,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private Button _introduceButton;
 
         [Header("Positioning")]
+        [SerializeField] private RectTransform _panelRectTransform;
         [SerializeField] private float entityWidgetXOffset = -70f;
 
         private const string LogChannel = "[ToolPanel]";
@@ -82,6 +83,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             finalPosition.x += xOffset;
 
             this.transform.position = finalPosition;
+
+            if (_panelRectTransform != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_panelRectTransform);
+            }
         }
     }
 }
