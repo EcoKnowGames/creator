@@ -133,6 +133,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _entityPanel?.UpdateAllWidgets();
 
             _modifyCellManager?.ExitModifyMode();
+            _modifyCellManager?.ResetLimits();
 
             _inventoryModal?.HideModal();
 
