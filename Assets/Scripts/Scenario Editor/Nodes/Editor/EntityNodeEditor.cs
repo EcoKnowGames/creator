@@ -141,18 +141,24 @@ public class EntityNodeEditor : NodeEditor
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.LabelField("Harvest", EditorStyles.centeredGreyMiniLabel);
             _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
             if (_entityNode.CanHarvest)
             {
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_harvestLimit"), new GUIContent("Limit Per-Round"));
+
                 NodePort inputPort = _entityNode.GetInputPort("_harvestQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
                 EditorGUILayout.Space();
             }
 
             // Introduction Options
+            EditorGUILayout.LabelField("Introduce", EditorStyles.centeredGreyMiniLabel);
             _entityNode.CanIntroduce = EditorGUILayout.Toggle("Can Introduce?", _entityNode.CanIntroduce);
             if (_entityNode.CanIntroduce)
             {
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_introduceLimit"), new GUIContent("Limit Per-Round"));
+
                 NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
                 EditorGUILayout.Space();
