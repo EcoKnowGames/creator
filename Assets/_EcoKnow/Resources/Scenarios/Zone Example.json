@@ -23,32 +23,33 @@
         "CanIntroduce": false,
         "HarvestQuantities": null,
         "IntroduceQuantities": null,
-        "GrowthRates": [
-          0.05,
-          0.01,
-          0.01
-        ],
-        "MovementRates": [
-          0.06,
-          0.05,
-          0.05
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            false
-          ],
-          [
-            false,
-            true,
-            true
-          ],
-          [
-            false,
-            false,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": 0.05,
+            "MovementRate": 0.06,
+            "Transitions": [
+              0,
+              1
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.01,
+            "MovementRate": 0.05,
+            "Transitions": [
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": 0.01,
+            "MovementRate": 0.05,
+            "Transitions": [
+              2
+            ]
+          }
         ]
       },
       {
@@ -64,33 +65,38 @@
         "CanHarvest": true,
         "CanIntroduce": true,
         "HarvestQuantities": null,
-        "IntroduceQuantities": null,
-        "GrowthRates": [
-          0.005,
-          0.1,
-          -0.05
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 2
+          }
         ],
-        "MovementRates": [
-          0.01,
-          0.02,
-          0.0
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            false
-          ],
-          [
-            false,
-            true,
-            false
-          ],
-          [
-            false,
-            false,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": 0.005,
+            "MovementRate": 0.01,
+            "Transitions": [
+              0,
+              1
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.1,
+            "MovementRate": 0.02,
+            "Transitions": [
+              1
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": -0.05,
+            "MovementRate": 0.0,
+            "Transitions": [
+              2
+            ]
+          }
         ]
       },
       {
@@ -106,33 +112,38 @@
         "CanHarvest": true,
         "CanIntroduce": true,
         "HarvestQuantities": null,
-        "IntroduceQuantities": null,
-        "GrowthRates": [
-          -0.02,
-          0.08,
-          0.02
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 8
+          }
         ],
-        "MovementRates": [
-          0.01,
-          0.03,
-          0.01
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            false
-          ],
-          [
-            false,
-            true,
-            false
-          ],
-          [
-            false,
-            false,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": -0.02,
+            "MovementRate": 0.01,
+            "Transitions": [
+              0,
+              1
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.08,
+            "MovementRate": 0.03,
+            "Transitions": [
+              1
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": 0.02,
+            "MovementRate": 0.01,
+            "Transitions": [
+              2
+            ]
+          }
         ]
       },
       {
@@ -151,35 +162,37 @@
         "IntroduceQuantities": [
           {
             "ID": "currency",
-            "Value": 10
+            "Value": 5
           }
         ],
-        "GrowthRates": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "MovementRates": [
-          0.05,
-          0.04,
-          0.04
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            true
-          ],
-          [
-            false,
-            true,
-            true
-          ],
-          [
-            false,
-            false,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": 0.0,
+            "MovementRate": 0.05,
+            "Transitions": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.0,
+            "MovementRate": 0.04,
+            "Transitions": [
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": 0.0,
+            "MovementRate": 0.04,
+            "Transitions": [
+              2
+            ]
+          }
         ]
       },
       {
@@ -196,32 +209,34 @@
         "CanIntroduce": false,
         "HarvestQuantities": null,
         "IntroduceQuantities": null,
-        "GrowthRates": [
-          0.0,
-          0.0,
-          0.1
-        ],
-        "MovementRates": [
-          0.0,
-          0.0,
-          0.08
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            true
-          ],
-          [
-            false,
-            true,
-            true
-          ],
-          [
-            false,
-            false,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": 0.0,
+            "MovementRate": 0.0,
+            "Transitions": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.0,
+            "MovementRate": 0.0,
+            "Transitions": [
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": 0.1,
+            "MovementRate": 0.08,
+            "Transitions": [
+              2
+            ]
+          }
         ]
       },
       {
@@ -238,32 +253,37 @@
         "CanIntroduce": false,
         "HarvestQuantities": null,
         "IntroduceQuantities": null,
-        "GrowthRates": [
-          0.02,
-          0.02,
-          0.02
-        ],
-        "MovementRates": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "ZoneTransitions": [
-          [
-            true,
-            true,
-            true
-          ],
-          [
-            true,
-            true,
-            true
-          ],
-          [
-            true,
-            true,
-            true
-          ]
+        "ZoneInformation": [
+          {
+            "ZoneID": 0,
+            "GrowthRate": 0.02,
+            "MovementRate": 0.0,
+            "Transitions": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 1,
+            "GrowthRate": 0.02,
+            "MovementRate": 0.0,
+            "Transitions": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "ZoneID": 2,
+            "GrowthRate": 0.02,
+            "MovementRate": 0.0,
+            "Transitions": [
+              0,
+              1,
+              2
+            ]
+          }
         ]
       }
     ],
@@ -306,43 +326,43 @@
       "entityMatrix": [
         [
           0.001,
-          -0.005,
-          -0.01,
-          -0.005,
-          0.0,
-          -0.008
-        ],
-        [
-          -0.006,
-          -0.003,
-          0.002,
-          0.0,
-          0.0,
-          0.005
-        ],
-        [
-          0.0,
-          0.0,
-          -0.003,
-          0.0,
-          0.0,
-          0.003
-        ],
-        [
-          -0.008,
-          0.005,
-          -0.003,
+          -0.001,
+          -0.002,
           -0.004,
-          0.0,
-          0.003
+          -0.008,
+          -0.006
         ],
         [
           0.0,
-          0.0,
+          -0.003,
           0.0,
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -0.003,
+          0.0,
+          0.001,
+          0.001
+        ],
+        [
+          -0.009,
+          0.0,
+          0.0,
+          -0.005,
+          0.003,
+          0.003
+        ],
+        [
+          0.0,
+          0.0,
+          0.001,
+          0.0,
+          -0.002,
+          0.006
         ],
         [
           0.0,
@@ -353,7 +373,7 @@
           -0.002
         ]
       ],
-      "zoneID": 0
+      "zoneIndex": 2
     },
     "Map": {
       "fileName": "Map_CopperTailingsDump",
@@ -875,133 +895,10 @@
             "Colour": "#4aa1f2"
           }
         ],
-        "bgColour": "#8B7355",
-        "ZoneCount": 3
+        "bgColour": "#8B7355"
       }
     },
     "Matrices": [
-      {
-        "entityIDs": [
-          "HeavyMetal",
-          "VetiverGrass",
-          "NativePlants",
-          "CitricAcid",
-          "Fish",
-          "PublicPerception"
-        ],
-        "entityMatrix": [
-          [
-            0.001,
-            -0.005,
-            -0.01,
-            -0.005,
-            0.0,
-            -0.008
-          ],
-          [
-            -0.006,
-            -0.003,
-            0.002,
-            0.0,
-            0.0,
-            0.005
-          ],
-          [
-            0.0,
-            0.0,
-            -0.003,
-            0.0,
-            0.0,
-            0.003
-          ],
-          [
-            -0.008,
-            0.005,
-            -0.003,
-            -0.004,
-            0.0,
-            0.003
-          ],
-          [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            -0.002
-          ]
-        ],
-        "zoneID": 0
-      },
-      {
-        "entityIDs": [
-          "HeavyMetal",
-          "VetiverGrass",
-          "NativePlants",
-          "CitricAcid",
-          "Fish",
-          "PublicPerception"
-        ],
-        "entityMatrix": [
-          [
-            0.001,
-            -0.005,
-            -0.01,
-            -0.005,
-            0.0,
-            -0.008
-          ],
-          [
-            -0.006,
-            -0.003,
-            0.002,
-            0.0,
-            0.0,
-            0.005
-          ],
-          [
-            0.0,
-            0.0,
-            -0.003,
-            0.0,
-            0.0,
-            0.003
-          ],
-          [
-            -0.008,
-            0.005,
-            -0.003,
-            -0.004,
-            0.0,
-            0.003
-          ],
-          [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            -0.002
-          ]
-        ],
-        "zoneID": 1
-      },
       {
         "entityIDs": [
           "HeavyMetal",
@@ -1061,7 +958,129 @@
             -0.002
           ]
         ],
-        "zoneID": 2
+        "zoneIndex": 2
+      },
+      {
+        "entityIDs": [
+          "HeavyMetal",
+          "VetiverGrass",
+          "NativePlants",
+          "CitricAcid",
+          "Fish",
+          "PublicPerception"
+        ],
+        "entityMatrix": [
+          [
+            0.001,
+            -0.005,
+            -0.01,
+            -0.005,
+            0.0,
+            -0.008
+          ],
+          [
+            -0.006,
+            -0.003,
+            0.002,
+            0.0,
+            0.0,
+            0.005
+          ],
+          [
+            0.0,
+            0.0,
+            -0.003,
+            0.0,
+            0.0,
+            0.003
+          ],
+          [
+            -0.008,
+            0.005,
+            -0.003,
+            -0.004,
+            0.0,
+            0.003
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.002
+          ]
+        ],
+        "zoneIndex": 0
+      },
+      {
+        "entityIDs": [
+          "HeavyMetal",
+          "VetiverGrass",
+          "NativePlants",
+          "CitricAcid",
+          "Fish",
+          "PublicPerception"
+        ],
+        "entityMatrix": [
+          [
+            0.001,
+            -0.002,
+            -0.006,
+            -0.003,
+            0.0,
+            -0.005
+          ],
+          [
+            -0.008,
+            -0.002,
+            0.004,
+            0.0,
+            0.0,
+            0.004
+          ],
+          [
+            -0.003,
+            0.002,
+            -0.001,
+            0.0,
+            0.0,
+            0.006
+          ],
+          [
+            -0.006,
+            0.004,
+            -0.001,
+            -0.004,
+            0.0,
+            0.002
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.002
+          ]
+        ],
+        "zoneIndex": 1
       }
     ]
   }
