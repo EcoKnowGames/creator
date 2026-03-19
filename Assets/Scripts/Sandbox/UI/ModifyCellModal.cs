@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private EntityIcon _entityIcon;
         [SerializeField] private TMP_Text _currentPopulationText;
         [SerializeField] private TMP_Text _predictedPopulationText;
+        [SerializeField] private TMP_Text _limitText;
 
         [Header("Text")]
         [SerializeField] private TMP_Text _title;
@@ -42,6 +44,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private TMP_Text _itemChangeTitleText;
         [SerializeField] private ItemWidget _itemWidgetPrefab;
         [SerializeField] private Transform _itemWidgetContainer;
+
+        [Header("Colours")]
+        [SerializeField] private Color _validColour;
+        [SerializeField] private Color _invalidColour;
 
         Action<UnitMode, float> onConfirmPressed;
         Action onCancelPressed;
@@ -322,7 +328,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void UpdateModal(int entityIndex, List<Cell> selectedCells)
+        public void UpdateModal(int entityIndex, List<Cell> selectedCells, int[] currentLimits)
         {
             if ((SandboxManager.Instance.EntityManager == null) || (selectedCells == null))
             {
@@ -344,8 +350,27 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             bool canPerformAction = false;
 
+            int overallLimit = _modifyMode == ModifyMode.HARVEST ? SandboxManager.Instance.EntityManager.GetHarvestLimits(entityIndex) : SandboxManager.Instance.EntityManager.GetIntroduceLimits(entityIndex);
+            int usedLimit = entityIndex >= 0 && entityIndex < currentLimits.Count() ? currentLimits[entityIndex] : 0;
+            int remainingLimit = Mathf.Max(overallLimit - usedLimit - Mathf.Abs(actualDifference), 0);
+            bool withinLimits = overallLimit <= 0 || Mathf.Abs(actualDifference) <= overallLimit - usedLimit;
+
+            if (_limitText != null)
+            {
+                if (overallLimit <= 0)
+                {
+                    _limitText.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _limitText.gameObject.SetActive(true);
+                    _limitText.text = $"Remaining Limit: {remainingLimit}";
+                    _limitText.color = withinLimits && usedLimit != overallLimit ? _validColour : _invalidColour; 
+                }
+            }
+
             Quantity[] requirements = _modifyMode == ModifyMode.HARVEST ? SandboxManager.Instance.EntityManager.GetHarvestRewards(entityIndex) : SandboxManager.Instance.EntityManager.GetIntroduceCosts(entityIndex);
-            if (requirements != null)
+            if (requirements != null && withinLimits)
             {
                 //We have found the entityType and requirements, action is possible
                 canPerformAction = true;
@@ -394,6 +419,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 StartCoroutine(RefreshLayout());
             }
         }
+
 
         private int GetActualDifference(List<Cell> selectedCells)
         {

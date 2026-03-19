@@ -25,6 +25,9 @@ namespace Glitchers.EcoKnow.Sandbox
         bool CanHarvest,
         bool CanIntroduce,
 
+        int HarvestLimit,
+        int IntroduceLimit,
+
         Quantity[] HarvestQuantities,
         Quantity[] IntroduceQuantities
         );
@@ -226,6 +229,28 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             return totalPopulation;
+        }
+
+        public int GetHarvestLimits(int index)
+        {
+            Entity type = GetEntityType(index);
+            if (type != null)
+            {
+                return type.HarvestLimit;
+            }
+
+            return 0;
+        }
+
+        public int GetIntroduceLimits(int index)
+        {
+            Entity type = GetEntityType(index);
+            if (type != null)
+            {
+                return type.IntroduceLimit;
+            }
+
+            return 0;
         }
 
         public Quantity[] GetHarvestRewards(int index)
