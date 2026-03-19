@@ -300,7 +300,8 @@ MonoBehaviour:
   _id: 
   title: Health
   description: ' Keep health above 1200 for 8 rounds.'
-  entityIndex: 1
+  typeIndex: 0
+  targetIndex: 1
   lowerLimit: 1200
   upperLimit: 0
   requiredRounds: 8
