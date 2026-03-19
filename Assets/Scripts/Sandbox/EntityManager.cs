@@ -213,6 +213,11 @@ namespace Glitchers.EcoKnow.Sandbox
             return Array.IndexOf(_entityTypeList, type);
         }
 
+        public int GetEntityIndex(string id)
+        {
+            return Array.IndexOf(_entityTypeList, _entityTypeList.FirstOrDefault(x => x.ID.Equals(id, StringComparison.OrdinalIgnoreCase)));
+        }
+
         public CellEntity[] GetEntitiesForCell(int column, int row)
         {
             CellEntity[] entityCounts = new CellEntity[EntityTypeCount];
