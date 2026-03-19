@@ -25,8 +25,39 @@ namespace Glitchers.EcoKnow.Sandbox
         private int completionScore = 10; //{ get; protected set; }
         public int Score => Completed ? completionScore : 0;
 
-        protected int entityIndex;
-        public int EntityIndex => entityIndex;
+
+        public enum TargetType {
+            Entity,
+            Item,
+            Currency
+        };
+        protected int typeIndex;
+        public int TypeIndex => typeIndex;
+        public TargetType Type => (WinCondition.TargetType)typeIndex;
+
+        protected int targetIndex;
+        public int TargetIndex => targetIndex;
+
+        public Entity TargetEntity
+        {
+            get
+            {
+                if (Type == TargetType.Entity)
+                    return SandboxManager.Instance?.EntityManager?.GetEntityType(targetIndex);
+                else
+                    return null;
+            }
+        }
+        public Item TargetItem
+        {
+            get
+            {
+                if (Type == TargetType.Item)
+                    return SandboxManager.Instance?.PlayerInventory?.GetItemDef(targetIndex);
+                else
+                    return null;
+            }
+        }
 
         public float lowerLimit { get; protected set; }
         public float upperLimit { get; protected set; }
@@ -46,7 +77,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
             title = record.Title;
             description = record.Description;
-            entityIndex = record.EntityIndex;
+            typeIndex = record.TypeIndex;
+            targetIndex = record.TargetIndex;
 
             lowerLimit = record.LowerLimit;
             upperLimit = record.UpperLimit;
@@ -79,28 +111,70 @@ namespace Glitchers.EcoKnow.Sandbox
 
         protected bool HasConditionBeenMet()
         {
+            switch (Type)
+            {
+                case (WinCondition.TargetType.Entity):
+                    {
+                        return HasEntityConditionBeenMet();
+                    }
+                case (WinCondition.TargetType.Item):
+                    {
+                        if (TargetItem != null)
+                            return HasItemConditionBeenMet(TargetItem.ID);
+                        else
+                            return false;
+                    }
+                case (WinCondition.TargetType.Currency):
+                    {
+                        return HasItemConditionBeenMet(PlayerInventory.CurrencyID);
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        private bool HasEntityConditionBeenMet()
+        {
             EntityManager entityManager = SandboxManager.Instance.EntityManager;
             if (entityManager != null)
             {
-
-                Entity entityType = entityManager.GetEntityType(entityIndex);
+                Entity entityType = entityManager.GetEntityType(targetIndex);
                 if (entityType != null)
                 {
-                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(entityIndex);
-                    if ((upperLimit > 0) && (upperLimit >= lowerLimit))
-                    {
-                        if (totalPopulation >= lowerLimit && totalPopulation <= upperLimit)
-                        {
-                            return true;
-                        }
-                    }
-                    else //If the scenario designer has not set an upper limit or if the upper limit is smaller than the lower limit, we should not consider it
-                    {
-                        if (totalPopulation >= lowerLimit)
-                        {
-                            return true;
-                        }
-                    }
+                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(targetIndex);
+                    return IsWithinLimits(totalPopulation);
+                }
+            }
+
+            return false;
+        }
+
+        private bool HasItemConditionBeenMet(string itemID)
+        {
+            PlayerInventory inventory = SandboxManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                int quantity = inventory.GetAmountHeld(itemID);
+                return IsWithinLimits(quantity);
+            }
+
+            return false;
+        }
+
+        private bool IsWithinLimits(int amount)
+        {
+            if ((upperLimit > 0) && (upperLimit >= lowerLimit))
+            {
+                if (amount >= lowerLimit && amount <= upperLimit)
+                {
+                    return true;
+                }
+            }
+            else //If the scenario designer has not set an upper limit or if the upper limit is smaller than the lower limit, we should not consider it
+            {
+                if (amount >= lowerLimit)
+                {
+                    return true;
                 }
             }
 

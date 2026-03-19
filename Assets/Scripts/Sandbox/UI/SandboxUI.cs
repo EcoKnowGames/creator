@@ -17,6 +17,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
         [SerializeField] private ObjectivesPanel _objectivePanel;
+        [SerializeField] private ObjectivesModal _objectivesModal;
         [SerializeField] private ToolPanel _toolPanel;
 
         [Header("Modification Panels")]
@@ -42,6 +43,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void Init(Scenario scenario, EntityManager entityManager, WinCondition[] winConditions, PlayerInventory playerInventory)
         {
             //Initialise our components
+            _objectivesModal?.Init(scenario.Name, scenario.Author, scenario.Description, scenario.CoverImageBase64);
             _entityPanel?.Init(entityManager.GetEntityTypeList());
             _objectivePanel?.Init(winConditions, entityManager);
             _toolPanel?.Init();
@@ -103,6 +105,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         #region Game Lifecycle
         public bool IsFocused()
         {
+            if (_objectivesModal.isActiveAndEnabled)
+            {
+                return true;
+            }
+
             if (_summaryModal.isActiveAndEnabled)
             {
                 return true;
@@ -176,6 +183,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnInventoryUpdated(string id, int amount)
         {
             RefreshInventories();
+            _objectivePanel?.OnInventoryUpdated(id, amount);
         }
 
         private void RefreshInventories()
