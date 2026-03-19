@@ -55,6 +55,7 @@ MonoBehaviour:
   _entityPopulationText: {fileID: 8285322001028808499}
   _harvestButton: {fileID: 4885161946418013736}
   _introduceButton: {fileID: 7034085259657824728}
+  _panelRectTransform: {fileID: 3715940346753889867}
   entityWidgetXOffset: -70
 --- !u!114 &461877068126531994
 MonoBehaviour:
@@ -179,6 +180,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -369,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6808814226080127144, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 191
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6808814226080127144, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
       propertyPath: m_SizeDelta.y
@@ -534,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6808814226080127144, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 191
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6808814226080127144, guid: caa2a33396c9d5f42b829112c7aec494, type: 3}
       propertyPath: m_SizeDelta.y
@@ -667,7 +669,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5459516785672435873, guid: a8eb0dac8c0ed6b44bc60494d08ff8d9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 81.47
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5459516785672435873, guid: a8eb0dac8c0ed6b44bc60494d08ff8d9, type: 3}
       propertyPath: m_SizeDelta.y

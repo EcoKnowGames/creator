@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1384, y: -920}
+  position: {x: 1384, y: -984}
   ports:
     keys:
     - _id
@@ -64,16 +64,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 1
   _canIntroduce: 1
-  _zoneGrowthRates:
-  - 0.005
-  - 0.1
-  - -0.05
-  _zoneMovementRates:
-  - 0.01
-  - 0.02
-  - 0
-  _zoneTransitions: 010100000100000001
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: 0.005
+    MovementRate: 0.01
+    Transitions: 0000000001000000
+  - ZoneID: 1
+    GrowthRate: 0.1
+    MovementRate: 0.02
+    Transitions: 01000000
+  - ZoneID: 2
+    GrowthRate: -0.05
+    MovementRate: 0
+    Transitions: 02000000
 --- !u!114 &-5440223889025535490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,13 +122,13 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: matrix
-        node: {fileID: 49053916092123579}
+        node: {fileID: -5011745194515355450}
         reroutePoints: []
       - fieldName: matrix
         node: {fileID: -4522825393082192115}
         reroutePoints: []
       - fieldName: matrix
-        node: {fileID: -5011745194515355450}
+        node: {fileID: 49053916092123579}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -219,7 +222,7 @@ MonoBehaviour:
   startCurrency: 8000
   _matrix:
     entityIDs: []
-    zoneID: 0
+    zoneIndex: 0
   _map:
     fileName: 
     gridDef:
@@ -230,6 +233,61 @@ MonoBehaviour:
   _winConditions: 
   _items: 
   _seed: 123456
+  _entityPorts:
+  - _fieldName: HeavyMetal
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
+  - _fieldName: VetiverGrass
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
+  - _fieldName: NativePlants
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
+  - _fieldName: CitricAcid
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
+  - _fieldName: Fish
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
+  - _fieldName: PublicPerception
+    _node: {fileID: -5440223889025535490}
+    _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    connections: []
+    _direction: 1
+    _connectionType: 1
+    _typeConstraint: 0
+    _dynamic: 1
 --- !u!114 &-5360933626322087205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +301,7 @@ MonoBehaviour:
   m_Name: Currency Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1144, y: 104}
+  position: {x: 1384, y: 72}
   ports:
     keys:
     - _quantity
@@ -292,7 +350,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   matricesCSV: {fileID: 4900000, guid: 8ae510147b1c040cbbea7ac8d286c792, type: 3}
-  _zoneID: 2
+  _zoneIndex: 2
   matrix:
     entityIDs:
     - HeavyMetal
@@ -301,7 +359,7 @@ MonoBehaviour:
     - CitricAcid
     - Fish
     - PublicPerception
-    zoneID: 2
+    zoneIndex: 2
 --- !u!114 &-4522825393082192115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,7 +391,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   matricesCSV: {fileID: 4900000, guid: a745cb976745c4e90a6aa90a21a8a161, type: 3}
-  _zoneID: 1
+  _zoneIndex: 0
   matrix:
     entityIDs:
     - HeavyMetal
@@ -342,7 +400,7 @@ MonoBehaviour:
     - CitricAcid
     - Fish
     - PublicPerception
-    zoneID: 1
+    zoneIndex: 0
 --- !u!114 &-3400586785500150875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +414,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1384, y: -296}
+  position: {x: 1656, y: -296}
   ports:
     keys:
     - _id
@@ -407,16 +465,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 0
   _canIntroduce: 1
-  _zoneGrowthRates:
-  - 0
-  - 0
-  - 0
-  _zoneMovementRates:
-  - 0.05
-  - 0.04
-  - 0.04
-  _zoneTransitions: 010101000101000001
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: 0
+    MovementRate: 0.05
+    Transitions: 000000000100000002000000
+  - ZoneID: 1
+    GrowthRate: 0
+    MovementRate: 0.04
+    Transitions: 0100000002000000
+  - ZoneID: 2
+    GrowthRate: 0
+    MovementRate: 0.04
+    Transitions: 02000000
 --- !u!114 &-3001016278725234701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +491,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1384, y: 344}
+  position: {x: 1368, y: 344}
   ports:
     keys:
     - _id
@@ -478,16 +539,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 0
   _canIntroduce: 0
-  _zoneGrowthRates:
-  - 0.02
-  - 0.02
-  - 0.02
-  _zoneMovementRates:
-  - 0
-  - 0
-  - 0
-  _zoneTransitions: 010101010101010101
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: 0.02
+    MovementRate: 0
+    Transitions: 000000000100000002000000
+  - ZoneID: 1
+    GrowthRate: 0.02
+    MovementRate: 0
+    Transitions: 000000000100000002000000
+  - ZoneID: 2
+    GrowthRate: 0.02
+    MovementRate: 0
+    Transitions: 000000000100000002000000
 --- !u!114 &-2602617902098400704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,7 +565,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 776, y: -920}
+  position: {x: 792, y: -968}
   ports:
     keys:
     - _id
@@ -549,16 +613,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 0
   _canIntroduce: 0
-  _zoneGrowthRates:
-  - 0.05
-  - 0.01
-  - 0.01
-  _zoneMovementRates:
-  - 0.06
-  - 0.05
-  - 0.05
-  _zoneTransitions: 010100000101000001
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: 0.05
+    MovementRate: 0.06
+    Transitions: 0000000001000000
+  - ZoneID: 1
+    GrowthRate: 0.01
+    MovementRate: 0.05
+    Transitions: 0100000002000000
+  - ZoneID: 2
+    GrowthRate: 0.01
+    MovementRate: 0.05
+    Transitions: 02000000
 --- !u!114 &-1567155832924546111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,16 +687,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 1
   _canIntroduce: 0
-  _zoneGrowthRates:
-  - 0
-  - 0
-  - 0.1
-  _zoneMovementRates:
-  - 0
-  - 0
-  - 0.08
-  _zoneTransitions: 010101000101000001
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: 0
+    MovementRate: 0
+    Transitions: 000000000100000002000000
+  - ZoneID: 1
+    GrowthRate: 0
+    MovementRate: 0
+    Transitions: 0100000002000000
+  - ZoneID: 2
+    GrowthRate: 0.1
+    MovementRate: 0.08
+    Transitions: 02000000
 --- !u!114 &-948477526009654261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +743,7 @@ MonoBehaviour:
   m_Name: Currency Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 552, y: 120}
+  position: {x: 840, y: 152}
   ports:
     keys:
     - _quantity
@@ -792,8 +862,8 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  matricesCSV: {fileID: 4900000, guid: a745cb976745c4e90a6aa90a21a8a161, type: 3}
-  _zoneID: 0
+  matricesCSV: {fileID: 4900000, guid: cb916fb0fa102454f8398a76165f2b37, type: 3}
+  _zoneIndex: 1
   matrix:
     entityIDs:
     - HeavyMetal
@@ -802,7 +872,7 @@ MonoBehaviour:
     - CitricAcid
     - Fish
     - PublicPerception
-    zoneID: 0
+    zoneIndex: 1
 --- !u!114 &644615604423286738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,7 +886,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 776, y: -312}
+  position: {x: 1080, y: -312}
   ports:
     keys:
     - _id
@@ -867,16 +937,19 @@ MonoBehaviour:
   _startPopulation: 100
   _canHarvest: 1
   _canIntroduce: 1
-  _zoneGrowthRates:
-  - -0.02
-  - 0.08
-  - 0.02
-  _zoneMovementRates:
-  - 0.01
-  - 0.03
-  - 0.01
-  _zoneTransitions: 010100000100000001
-  _zoneCount: 3
+  _zoneInformation:
+  - ZoneID: 0
+    GrowthRate: -0.02
+    MovementRate: 0.01
+    Transitions: 0000000001000000
+  - ZoneID: 1
+    GrowthRate: 0.08
+    MovementRate: 0.03
+    Transitions: 01000000
+  - ZoneID: 2
+    GrowthRate: 0.02
+    MovementRate: 0.01
+    Transitions: 02000000
 --- !u!114 &1699193594783117364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -996,7 +1069,7 @@ MonoBehaviour:
   m_Name: Currency Quantity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1160, y: -504}
+  position: {x: 1144, y: -408}
   ports:
     keys:
     - _quantity
