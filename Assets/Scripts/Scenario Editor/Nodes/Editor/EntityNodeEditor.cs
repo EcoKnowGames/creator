@@ -145,7 +145,7 @@ public class EntityNodeEditor : NodeEditor
             _entityNode.CanHarvest = EditorGUILayout.Toggle("Can Harvest?", _entityNode.CanHarvest);
             if (_entityNode.CanHarvest)
             {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_harvestLimit"), new GUIContent("Limit Per-Round"));
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_harvestLimit"), new GUIContent("Limit Per-Action"));
 
                 NodePort inputPort = _entityNode.GetInputPort("_harvestQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
