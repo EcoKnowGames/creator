@@ -139,6 +139,11 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             RefreshInventories();
         }
+
+        public void OnActionCompleted()
+        {
+            _modifyCellManager?.ResetLimits();
+        }
         #endregion
 
         #region Entities
