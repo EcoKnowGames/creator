@@ -157,7 +157,7 @@ public class EntityNodeEditor : NodeEditor
             _entityNode.CanIntroduce = EditorGUILayout.Toggle("Can Introduce?", _entityNode.CanIntroduce);
             if (_entityNode.CanIntroduce)
             {
-                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_introduceLimit"), new GUIContent("Limit Per-Round"));
+                NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_introduceLimit"), new GUIContent("Limit Per-Action"));
 
                 NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
