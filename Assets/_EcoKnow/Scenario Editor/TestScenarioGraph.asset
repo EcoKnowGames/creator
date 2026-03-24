@@ -253,7 +253,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 0
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 60
 --- !u!114 &-1515369370903765867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -702,7 +704,9 @@ MonoBehaviour:
   _autoPlace: 1
   _startPopulation: 400
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
 --- !u!114 &6972771029753438006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,7 +784,7 @@ MonoBehaviour:
   m_Name: Entity
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 632, y: -216}
+  position: {x: 920, y: -312}
   ports:
     keys:
     - _id
@@ -836,7 +840,9 @@ MonoBehaviour:
   _autoPlace: 1
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 50
   _canIntroduce: 1
+  _introduceLimit: 0
 --- !u!114 &9215620791800968014
 MonoBehaviour:
   m_ObjectHideFlags: 0

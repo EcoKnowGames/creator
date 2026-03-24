@@ -331,6 +331,8 @@ namespace Glitchers.EcoKnow.Sandbox
                     Instance.IncrementCurrentPlayer();
                 }
             }
+
+            Instance?._sandboxUI?.OnActionCompleted();
         }
 
         public static bool CanPerformAction()
