@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Glitchers.EcoKnow.Sandbox;
 using UnityEditor;
 using UnityEngine;
@@ -58,6 +59,9 @@ public class EntityNode : Node
     [SerializeField] private int _introduceLimit;
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _introduceQuantity;
 
+    [SerializeField] private List<EntityZoneInformation> _zoneInformation = new List<EntityZoneInformation>();
+    public List<EntityZoneInformation> ZoneInformation => _zoneInformation;
+
     // Use this for initialization
     protected override void Init()
     {
@@ -82,7 +86,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, _harvestLimit, _introduceLimit, GetHarvestQuantities(), GetIntroduceQuantities());
+        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, _harvestLimit, _introduceLimit, GetHarvestQuantities(), GetIntroduceQuantities(), ZoneInformation.ToArray());
     }
 
     private string GetColourFromIndex()
@@ -115,15 +119,62 @@ public class EntityNode : Node
         return null;
     }
 
+    #region Zones
+    public void AdjustZoneRates()
+    {
+        if (!IsConnected())
+            return;
+
+        ZoneDef[] zoneDefs = GetZoneDefs();
+        if (zoneDefs != null && zoneDefs.Count() > 0)
+        {
+            int[] zoneIDs = zoneDefs.Select(x => x.ID).ToArray();
+
+            //Add any we're missing
+            foreach(int id in zoneIDs)
+            {
+                if (!_zoneInformation.Any(x => x.ZoneID == id))
+                {
+                    _zoneInformation.Add(new EntityZoneInformation(id));
+                }
+            }
+
+            //Remove excess
+            _zoneInformation.RemoveAll(x => !zoneIDs.Contains(x.ZoneID));
+        }
+        else
+        {
+            //Clear
+            _zoneInformation.Clear();
+        }
+    }
+
+    private ZoneDef[] GetZoneDefs()
+    {
+        NodePort outputPort = GetInputPort("_id");
+        if (outputPort != null && outputPort.IsConnected)
+        {
+            foreach (var connection in outputPort.GetConnections())
+            {
+                if (connection.node is ScenarioNode scenarioNode)
+                {
+                    return scenarioNode.MapLayout?.gridDef?.zoneDefs;
+                }
+            }
+        }
+        return null;
+    }
+    #endregion
+
     public bool IsConnected()
     {
         NodePort port = GetInputPort("_id");
         if ((port != null) && (port.IsConnected))
         {
-            if (port.Connection.node is ScenarioNode scenario)
+            if (port.Connection != null && port.Connection.node is ScenarioNode scenario)
             {
                 return true;
-            }    
+            }
         }
 
         return false;
@@ -150,13 +201,20 @@ public class EntityNode : Node
     {
         base.OnCreateConnection(from, to);
 
-        _id = GetInputPort("_id").GetInputValue().ToString();
+        if (to == GetInputPort("_id"))
+        {
+            _id = GetInputPort("_id").GetInputValue().ToString();
+            AdjustZoneRates();
+        }
     }
 
     public override void OnRemoveConnection(NodePort port)
     {
         base.OnRemoveConnection(port);
 
-        _id = string.Empty;
+        if (port == GetInputPort("_id"))
+        {
+            _id = string.Empty;
+        }
     }
 }

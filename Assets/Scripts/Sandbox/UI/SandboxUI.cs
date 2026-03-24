@@ -12,6 +12,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private RoundIndicator _roundIndicator;
         [SerializeField] private CurrencyCounter _currencyCounter;
         [SerializeField] private CurrencyCounter _actionPointCounter;
+        [SerializeField] private ZonePanel _zonePanel;
 
         [Header("Entity and Objective Panels")]
         [SerializeField] private EntityPanel _entityPanel;
@@ -49,6 +50,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellManager?.Init();
             _populationGraph?.Init();
             _summaryModal?.HideModal();
+
+            if (scenario.Map.gridDef.HasZones())
+            {
+                _zonePanel?.SetZones(scenario.Map.gridDef.zoneDefs);
+            }
+            else
+            {
+                _zonePanel?.gameObject?.SetActive(false);
+            }
 
             RefreshInventories();
 
