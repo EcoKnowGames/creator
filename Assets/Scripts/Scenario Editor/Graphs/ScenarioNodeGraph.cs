@@ -26,7 +26,8 @@ public record Scenario
         Item[] Items,
         WinConditionRecord[] WinConditions,
         Matrix Matrix,
-        MapLayout Map
+        MapLayout Map,
+        Matrix[] Matrices = null
     );
 
 //Header info
@@ -205,7 +206,8 @@ public class ScenarioNodeGraph : NodeGraph
            scenarioNode.ItemDefs == null ? null : scenarioNode.ItemDefs.ToArray(),
            scenarioNode.WinConditions.ToArray(),
            scenarioNode.Matrix,
-           scenarioNode.MapLayout
+           scenarioNode.MapLayout,
+           scenarioNode.Matrices
            );
 
         //Package it up with any additional header data we might need
@@ -254,7 +256,32 @@ public class ScenarioNodeGraph : NodeGraph
                 return;
             }
 
-            if (scenarioNode.Matrix.entityIDs.Count() != GetEntityList().Count)
+            //Validation for Matrix/Zone count
+            int matrixCount = scenarioNode.Matrices == null ? 1 : scenarioNode.Matrices.Count();
+            if (scenarioNode.MapLayout.gridDef.GetZoneCount() != matrixCount)
+            {
+                EditorUtility.DisplayDialog("ERROR", "Scenario export failed, there is a mismatch between the number of Matrix Nodes and the number of Zones defined by the Map Node. Please ensure one Matrix CSV is provided for each Zone.", "OK");
+                return;
+            }
+
+            if (scenarioNode.Matrices != null)
+            {
+                //Validation for ZoneIndex
+                if (scenarioNode.Matrices.GroupBy(x => x.zoneIndex).Any(x => x.Count() > 1))
+                {
+                    EditorUtility.DisplayDialog("ERROR", "Scenario export failed, multiple Matrix Nodes reference the same Zone ID.", "OK");
+                    return;
+                }
+
+                // Validate entity count against union of all matrix entity IDs
+                int entityCount = scenarioNode.Matrices.SelectMany(x => x.entityIDs).Select(x => x).Distinct().Count();
+                if (entityCount != GetEntityList().Count)
+                {
+                    EditorUtility.DisplayDialog("ERROR", "Scenario export failed, the number of connected Entity Nodes does not match the number of unique Entities across all zone Matrices. Make sure all required Entity Nodes exist and are connected to the Scenario Node.", "OK");
+                    return;
+                }
+            }
+            else if (scenarioNode.Matrix.entityIDs.Count() != GetEntityList().Count)
             {
                 EditorUtility.DisplayDialog("ERROR", "Scenario export failed, the number of connected Entity Nodes does not match the number of Entities defined by the Matrix. Make sure all required Entity Nodes exist and are connected to the Scenario Node.", "OK");
                 return;

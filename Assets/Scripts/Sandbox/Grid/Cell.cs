@@ -33,6 +33,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
     {
         [SerializeField] protected GameObject highlightObject;
         [SerializeField] protected GameObject selectedObject;
+        [SerializeField] protected SpriteRenderer zoneColorRenderer;
 
         [Header("Tokens")]
         [SerializeField] private Cell_Token _cellTokenPrefab;
@@ -52,12 +53,17 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
 
         public GridManager ParentGrid => GetComponentInParent<GridManager>();
 
-        public void Init(int column, int row, int tileID)
+        public void Init(int column, int row, int tileID, Color? zoneColor = null)
         {
             _row = row;
             _column = column;
 
             this.gameObject.name = $"Cell {_column}_{_row}";
+
+            if (zoneColor.HasValue && zoneColorRenderer != null)
+            {
+                zoneColorRenderer.color = zoneColor.Value;
+            }
 
             ShowHighlight(false);
         }
