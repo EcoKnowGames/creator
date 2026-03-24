@@ -128,12 +128,23 @@ namespace Glitchers.EcoKnow.Sandbox
                 _playerInventory?.AddItem(PlayerInventory.CurrencyID, scenario.StartCurrency);
 
                 //Setup entities and items
-                _entityManager.RegisterAlphaMatrix(scenario.Matrix);
-                _entityManager.RegisterEntities(scenario.Entities.ToList());
+                Matrix primaryMatrix = scenario.Matrix;
+                if (primaryMatrix == null && scenario.Matrices != null && scenario.Matrices.Length > 0)
+                {
+                    primaryMatrix = scenario.Matrices[0];
+                }
+                _entityManager?.RegisterAlphaMatrix(primaryMatrix);
+                _entityManager?.RegisterEntities(scenario.Entities.ToList());
+
+                //Setup zone data
+                if (scenario.Matrices != null)
+                {
+                    _entityManager?.RegisterZoneAlphaMatrices(scenario.Matrices);
+                }
 
                 if (scenario.Items != null)
                 {
-                    _playerInventory.RegisterItemDefinitions(scenario.Items.ToList());
+                    _playerInventory?.RegisterItemDefinitions(scenario.Items.ToList());
                 }
 
                 //Setup grid
@@ -141,7 +152,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 _gridManager?.EnableGrid();
                 _gridManager?.SetupGrid(gridDef);
 
-                _entityManager.AddEntitiesToGrid(gridDef, _gridManager);
+                _entityManager?.AddEntitiesToGrid(gridDef, _gridManager);
 
                 //Set up all of our UI
                 _sandboxUI?.Init(scenario, _entityManager, _winConditions.ToArray(), _playerInventory);

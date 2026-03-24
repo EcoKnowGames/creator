@@ -175,9 +175,9 @@ namespace Glitchers.EcoKnow.Sandbox
                         return null;
                     }
 
-                    if (config.Scenario.Matrix == null)
+                    if (config.Scenario.Matrix == null && config.Scenario.Matrices == null)
                     {
-                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Matrix is null! Scenario must have a valid Matrix");
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Matrix is null! Scenario must have a valid Matrix or Matrices array");
                         return null;
                     }
 

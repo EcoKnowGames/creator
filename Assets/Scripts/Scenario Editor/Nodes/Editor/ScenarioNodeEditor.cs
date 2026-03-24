@@ -102,6 +102,17 @@ public class ScenarioNodeEditor : NodeEditor
             NodeEditorGUILayout.PortField(port);
         }
 
+        // Zone/matrix coverage warning
+        int mapZoneCount = _scenarioNode.MapLayout?.gridDef?.zoneDefs?.Length ?? 0;
+        if (mapZoneCount > 1)
+        {
+            int matrixCount = _scenarioNode.Matrices?.Length ?? (_scenarioNode.Matrix != null ? 1 : 0);
+            if (matrixCount < mapZoneCount)
+            {
+                EditorGUILayout.HelpBox($"The connected Map defines {mapZoneCount} zones but only {matrixCount} Matrix node(s) are connected. Each zone should have its own Matrix.",MessageType.Warning);
+            }
+        }
+
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Win Conditions", EditorStyles.centeredGreyMiniLabel);
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("_winConditions"));
