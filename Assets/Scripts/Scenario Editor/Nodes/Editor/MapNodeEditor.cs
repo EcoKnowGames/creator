@@ -1,3 +1,4 @@
+using Glitchers.EcoKnow.Sandbox;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -35,6 +36,30 @@ public class MapNodeEditor : NodeEditor
         EditorGUILayout.TextField("Compatible # of Entities", entityCountStr);
 
         GUI.enabled = true;
+
+        // Zone definitions
+        ZoneDef[] zoneDefs = _mapNode.map?.gridDef?.zoneDefs;
+        if (zoneDefs != null && zoneDefs.Length > 0)
+        {
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Zones", EditorStyles.centeredGreyMiniLabel);
+
+            foreach (ZoneDef zone in zoneDefs)
+            {
+                GUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField($"{zone.Name} [{zone.ID}]", GUILayout.ExpandWidth(false), GUILayout.MaxWidth(100));
+
+                Color zoneColour = Color.white;
+                ColorUtility.TryParseHtmlString(zone.Colour, out zoneColour);
+
+                Rect colourRect = GUILayoutUtility.GetRect(0, 18, GUILayout.ExpandWidth(true));
+                EditorGUI.DrawRect(colourRect, zoneColour);
+
+                GUILayout.EndHorizontal();
+
+            }
+        }
 
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();

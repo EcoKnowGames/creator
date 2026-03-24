@@ -1,3 +1,5 @@
+using System.Linq;
+using Glitchers.EcoKnow.Sandbox;
 using UnityEditor;
 using UnityEngine;
 using XNode;
@@ -9,6 +11,7 @@ public class EntityNodeEditor : NodeEditor
     private EntityNode _entityNode;
 
     private bool showMore = false;
+    private bool showZones = false;
 
     private Sprite entityIcon;
     private ColourPaletteObject.ColourSwatch entityColour;
@@ -158,6 +161,78 @@ public class EntityNodeEditor : NodeEditor
                 EditorGUILayout.Space();
             }
 
+            ZoneDef[] zoneDefs = GetZoneDefs();
+            if (zoneDefs != null && zoneDefs.Length > 1)
+            {
+                _entityNode.AdjustZoneRates();
+
+                EditorGUILayout.Space();
+                showZones = EditorGUILayout.Foldout(showZones, "Zones");
+                if (showZones)
+                {
+                    EditorGUILayout.Space();
+
+                    foreach (EntityZoneInformation zoneRate in _entityNode.ZoneInformation)
+                    {
+                        if (zoneRate.ZoneID < 0 || zoneRate.ZoneID >= zoneDefs.Count())
+                        {
+                            continue;
+                        }
+
+                        ZoneDef zone = zoneDefs[zoneRate.ZoneID];
+
+                        //Draw our title
+
+                        GUILayout.BeginHorizontal();
+                        Color zoneColour = Color.white;
+                        ColorUtility.TryParseHtmlString(zone.Colour, out zoneColour);
+
+                        Rect colourRect = GUILayoutUtility.GetRect(18, 18, GUILayout.ExpandWidth(false));
+                        EditorGUI.DrawRect(colourRect, zoneColour);
+                        EditorGUILayout.LabelField($"{zone.Name} [{zone.ID}]", EditorStyles.boldLabel, GUILayout.ExpandWidth(true), GUILayout.MaxWidth(100));
+                        GUILayout.EndHorizontal();
+
+                        EditorGUILayout.Space();
+
+                        zoneRate.GrowthRate = EditorGUILayout.FloatField("  Growth Rate", zoneRate.GrowthRate);
+                        zoneRate.MovementRate = EditorGUILayout.FloatField("  Movement Rate", zoneRate.MovementRate);
+
+                        EditorGUILayout.LabelField("Transitions", EditorStyles.centeredGreyMiniLabel);
+                        foreach(ZoneDef other in zoneDefs)
+                        {
+                            bool shouldTransition = true;
+
+                            if (other.ID != zone.ID)
+                            {
+                                shouldTransition = zoneRate.Transitions.Contains(other.ID);
+                                EditorGUILayout.BeginHorizontal();
+                                EditorGUILayout.LabelField($"{zone.Name} [{zone.ID}] -> {other.Name} [{other.ID}]");
+                                shouldTransition = EditorGUILayout.Toggle(shouldTransition, GUILayout.Width(16));
+                                EditorGUILayout.EndHorizontal();
+                            }
+
+                            if (shouldTransition)
+                            {
+                                if (!zoneRate.Transitions.Contains(other.ID))
+                                {
+                                    zoneRate.Transitions.Add(other.ID);
+                                }
+                            }
+                            else
+                            {
+                                if (zoneRate.Transitions.Contains(other.ID))
+                                {
+                                    zoneRate.Transitions.Remove(other.ID);
+                                }
+                            }
+                        }
+
+                        zoneRate.Transitions = zoneRate.Transitions.OrderBy(x => x).ToList();
+                        EditorGUILayout.Space(20);
+                    }
+                }
+            }
+
             // Warnings
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Warning Ranges", EditorStyles.centeredGreyMiniLabel);
@@ -180,6 +255,7 @@ public class EntityNodeEditor : NodeEditor
                 NodePort inputPort = _entityNode.GetInputPort("_introduceQuantity");
                 NodeEditorGUILayout.PortField(inputPort);
             }
+
         }
 
         // Apply changes
@@ -211,6 +287,22 @@ public class EntityNodeEditor : NodeEditor
             }
         }
 
+        return null;
+    }
+
+    private ZoneDef[] GetZoneDefs()
+    {
+        NodePort outputPort = _entityNode.GetInputPort("_id");
+        if (outputPort != null && outputPort.IsConnected)
+        {
+            foreach (var connection in outputPort.GetConnections())
+            {
+                if (connection.node is ScenarioNode scenarioNode)
+                {
+                    return scenarioNode.MapLayout?.gridDef?.zoneDefs;
+                }
+            }
+        }
         return null;
     }
 
