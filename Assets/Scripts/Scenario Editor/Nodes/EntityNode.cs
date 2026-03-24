@@ -50,10 +50,13 @@ public class EntityNode : Node
 
     [SerializeField] private bool _canHarvest;
     public bool CanHarvest { get { return _canHarvest; } set { _canHarvest = value; } }
+    [SerializeField] private int _harvestLimit;
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _harvestQuantity;
 
     [SerializeField] private bool _canIntroduce;
     public bool CanIntroduce { get { return _canIntroduce; } set { _canIntroduce = value; } }
+
+    [SerializeField] private int _introduceLimit;
     [Input(ShowBackingValue.Never, ConnectionType.Multiple)] [SerializeField] private Quantity _introduceQuantity;
 
     [SerializeField] private List<EntityZoneInformation> _zoneInformation = new List<EntityZoneInformation>();
@@ -83,7 +86,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, GetHarvestQuantities(), GetIntroduceQuantities(), ZoneInformation.ToArray());
+        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, _harvestLimit, _introduceLimit, GetHarvestQuantities(), GetIntroduceQuantities(), ZoneInformation.ToArray());
     }
 
     private string GetColourFromIndex()
