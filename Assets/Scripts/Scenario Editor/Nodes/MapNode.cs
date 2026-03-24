@@ -30,9 +30,15 @@ public class MapNode : Node
     protected override void Init()
     {
         base.Init();
+        ProcessMap();
     }
 
     private void OnValidate()
+    {
+        ProcessMap();
+    }
+
+    private void ProcessMap()
     {
         if (mapCSV != null)
         {

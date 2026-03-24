@@ -9,12 +9,15 @@ public class Matrix
 {
     public string[] entityIDs;
     public float[,] entityMatrix;
+    [HideInInspector] public int zoneIndex;
 
     [JsonConstructor]
     public Matrix() { }
 
-    public Matrix(TextAsset matrixCSV)
+    public Matrix(TextAsset matrixCSV, int zoneIndex = 0)
     {
+        this.zoneIndex = zoneIndex;
+
         string rawCSV = matrixCSV.text;
         rawCSV = rawCSV.Trim(' ', '\n', '\r');
 
@@ -45,17 +48,33 @@ public class Matrix
             }
         }
 
-        Debug.Log($"Matrix: {matrixCSV.name} / Entities: {entityIDs.Length}");
+        Debug.Log($"Matrix: {matrixCSV.name} / Entities: {entityIDs.Length} / Zone: {zoneIndex}");
     }
 }
 
-
+[NodeWidth(260)]
 public class MatrixNode : Node
 {
 
     [SerializeField] private TextAsset matricesCSV;
+    [SerializeField] private int _zoneIndex;
+    public int ZoneIndex
+    {
+        get
+        {
+            return _zoneIndex;
+        }
+        set
+        {
+            if (_zoneIndex != value)
+            {
+                _zoneIndex = value;
+                ProcessMatrix();
+            }
+        }
+    }
 
-    [Output(ShowBackingValue.Always)] public Matrix matrix;
+    [Output(ShowBackingValue.Never)] public Matrix matrix;
 
 
     // Use this for initialization
@@ -67,15 +86,28 @@ public class MatrixNode : Node
 
     private void OnValidate()
     {
+        ProcessMatrix();
+    }
+
+    public bool IsCsvValid()
+    {
+        return matricesCSV != null && !string.IsNullOrEmpty(matricesCSV.text);
+    }
+
+    public void ProcessMatrix()
+    {
         if (matricesCSV != null)
         {
-            matrix = new Matrix(matricesCSV);
+            matrix = new Matrix(matricesCSV, _zoneIndex);
 
             if (GetOutputPort("matrix").IsConnected)
             {
-                if (GetOutputPort("matrix").Connection.node is ScenarioNode scenario)
+                foreach (var connection in GetOutputPort("matrix").GetConnections())
                 {
-                    scenario.ProcessMatrix();
+                    if (connection.node is ScenarioNode scenario)
+                    {
+                        scenario.ProcessMatrix();
+                    }
                 }
             }
         }
@@ -92,6 +124,19 @@ public class MatrixNode : Node
         {
             return null;
         }
+    }
+    public bool IsConnected()
+    {
+        NodePort port = GetOutputPort("matrix");
+        if ((port != null) && (port.IsConnected))
+        {
+            if (port.Connection != null && port.Connection.node is ScenarioNode scenario)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override void OnCreateConnection(NodePort from, NodePort to)
