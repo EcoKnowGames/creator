@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.Grid
 {
@@ -17,6 +18,30 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public int columns;
         public int[,] tileIDs;
         public int[,][] tilePopulations;
+        public ZoneDef[] zoneDefs; // null = legacy single-zone map
+        public string bgColour; // null = no background color specified
+
+        public bool HasZones()
+        {
+            return zoneDefs != null && zoneDefs.Count() > 0;
+        }
+
+        public int GetZoneType(int column, int row)
+        {
+            if (tileIDs != null
+                && column >= 0 && column < tileIDs.GetLength(0)
+                && row >= 0 && row < tileIDs.GetLength(1))
+            {
+                int id = tileIDs[column, row];
+                return id >= 0 ? id : 0;
+            }
+            return 0;
+        }
+
+        public int GetZoneCount()
+        {
+            return zoneDefs != null ? zoneDefs.Length : 1;
+        }
 
         public bool HasPopulations()
         {
@@ -63,9 +88,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         [Header("Camera")]
         [SerializeField] protected GridCamera gridCamera;
 
+        [Header("Background")]
+        [SerializeField] private Image _background;
+        [SerializeField] private Color _defaultBackgroundColour;
+
         [Header("Grid")]
         [SerializeField] protected int rows;
         [SerializeField] protected int columns;
+        private int[,] _tileZones;
 
         [Header("Cells")]
         [SerializeField] protected Transform cellContainer;
@@ -99,15 +129,61 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             string rawCSV = mapCSV.text;
             rawCSV = rawCSV.Trim(' ', '\n', '\r');
 
-            var regex = @",(?![^[]*\])"; //Look ahead, ignore commas within [] parentheses
-            string[] IDs = Regex.Split(rawCSV.Replace("\r", string.Empty).Replace("\n", ","), regex);
+            // Separate header lines (#-prefixed) from data rows
+            string[] allLines = rawCSV.Replace("\r", string.Empty).Split('\n');
+            List<string> headerLines = new List<string>();
+            List<string> dataLines = new List<string>();
+            foreach (string line in allLines)
+            {
+                if (line.TrimStart().StartsWith("#"))
+                    headerLines.Add(line.TrimStart());
+                else
+                    dataLines.Add(line);
+            }
 
-            def.rows = rawCSV.Split('\n').Length;
+            // Parse headers
+            foreach (string header in headerLines)
+            {
+                if (header.StartsWith("#bg:"))
+                {
+                    def.bgColour = header.Substring("#bg:".Length).Trim();
+                }
+                else if (header.StartsWith("#zones:"))
+                {
+                    string zonesStr = header.Substring("#zones:".Length);
+                    string[] zoneParts = zonesStr.Split(',');
+                    List<ZoneDef> zones = new List<ZoneDef>();
+                    foreach (string part in zoneParts)
+                    {
+                        // Format: "0=Land:#2ed669"
+                        string[] idAndRest = part.Split('=');
+                        if (idAndRest.Length >= 2 && int.TryParse(idAndRest[0], out int zoneId))
+                        {
+                            string[] nameAndColour = idAndRest[1].Split(':');
+                            string zoneName = nameAndColour[0];
+                            string zoneColour = nameAndColour.Length > 1 ? nameAndColour[1] : "";
+                            zones.Add(new ZoneDef(zoneId, zoneName, zoneColour));
+                        }
+                    }
+                    if (zones.Count > 0)
+                    {
+                        def.zoneDefs = zones.ToArray();
+                    }
+                }
+            }
+
+            // Rebuild CSV data from data lines only
+            string dataCSV = string.Join("\n", dataLines);
+
+            var regex = @",(?![^[]*\])"; //Look ahead, ignore commas within [] parentheses
+            string[] IDs = Regex.Split(dataCSV.Replace("\n", ","), regex);
+
+            def.rows = dataLines.Count;
             def.columns = IDs.Length / def.rows;
 
             def.tileIDs = new int[def.columns, def.rows];
 
-            bool hasPopulations = rawCSV.Contains('[');
+            bool hasPopulations = dataCSV.Contains('[');
             def.tilePopulations = hasPopulations ? new int[def.columns, def.rows][] : null;
 
 
@@ -119,7 +195,7 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     string[] tileDef = IDs[tileIndex].Replace("]", string.Empty).Split('[');
 
                     int tileID = -1;
-                    int.TryParse(IDs[tileIndex], out tileID);
+                    int.TryParse(tileDef[0], out tileID);
 
                     if (def.tilePopulations != null)
                     {
@@ -132,7 +208,8 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 }
             }
 
-            Debug.Log($"Map: {mapCSV.name} / Rows: {def.rows} Columns: {def.columns}");
+            string zoneInfo = def.zoneDefs != null ? $" / Zones: {def.zoneDefs.Length}" : "";
+            Debug.Log($"Map: {mapCSV.name} / Rows: {def.rows} Columns: {def.columns}{zoneInfo}");
 
             return def;
         }
@@ -175,6 +252,24 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
             rows = gridDef.rows;
             columns = gridDef.columns;
 
+            RegisterTileZones(gridDef.tileIDs);
+
+            SetBackgroundColour(gridDef.bgColour);
+
+            // Build zone color lookup from zoneDefs
+            Dictionary<int, Color> zoneColors = null;
+            if (gridDef.zoneDefs != null)
+            {
+                zoneColors = new Dictionary<int, Color>();
+                foreach (ZoneDef zone in gridDef.zoneDefs)
+                {
+                    if (ColorUtility.TryParseHtmlString(zone.Colour, out Color color))
+                    {
+                        zoneColors[zone.ID] = color;
+                    }
+                }
+            }
+
             //Clear all test/debug/old cells
             foreach (Transform cell in cellContainer)
             {
@@ -198,7 +293,13 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     cell.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
                     cell.transform.localPosition = new Vector2(x * (cellWidth + cellGap), y * -(cellHeight + cellGap));
 
-                    cell.GetComponent<Cell>()?.Init(x, y, tileID);
+                    Color? zoneColor = null;
+                    if (zoneColors != null && zoneColors.TryGetValue(tileID, out Color c))
+                    {
+                        zoneColor = c;
+                    }
+
+                    cell.GetComponent<Cell>()?.Init(x, y, tileID, zoneColor);
                     cellList[x, y] = cell.GetComponent<Cell>();
                 }
             }
@@ -339,6 +440,27 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         }
         #endregion
 
+
+        #region Background
+        private void SetBackgroundColour(string hexColour)
+        {
+            if (_background == null)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(hexColour))
+            {
+                _background.color = _defaultBackgroundColour;
+            }
+
+            if (ColorUtility.TryParseHtmlString(hexColour, out Color bgColor))
+            {
+                _background.color = bgColor;
+            }
+        }
+        #endregion
+
         #region Entities
         public IEnumerator OnEntitiesAdded()
         {
@@ -379,6 +501,39 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                     cell.UpdateEntityCount();
                 }
             }
+        }
+        #endregion
+
+        #region Zones
+        public void RegisterTileZones(int[,] tileIDs)
+        {
+            if (tileIDs == null)
+            {
+                return;
+            }
+
+            int cols = tileIDs.GetLength(0);
+            int rows = tileIDs.GetLength(1);
+            _tileZones = new int[cols, rows];
+            for (int x = 0; x < cols; x++)
+            {
+                for (int y = 0; y < rows; y++)
+                {
+                    int id = tileIDs[x, y];
+                    _tileZones[x, y] = id >= 0 ? id : 0;
+                }
+            }
+        }
+
+        public int GetZoneType(int column, int row)
+        {
+            if (_tileZones != null
+                && column >= 0 && column < _tileZones.GetLength(0)
+                && row >= 0 && row < _tileZones.GetLength(1))
+            {
+                return _tileZones[column, row];
+            }
+            return 0;
         }
         #endregion
     }

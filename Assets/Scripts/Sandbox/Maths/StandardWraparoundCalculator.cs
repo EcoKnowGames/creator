@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
 
@@ -52,14 +53,15 @@ namespace Glitchers.EcoKnow.Sandbox
                         continue;
                     }
 
-                    float[,] A = entityManager.AlphaMatrix;
+                    int zone = entityManager.GetZoneType(column, row);
+                    float[,] A = entityManager.GetAlphaMatrixForZone(zone);
                     if ((A.GetLongLength(0) != entityManager.EntityTypeCount) || (A.GetLongLength(1) != entityManager.EntityTypeCount))
                     {
                         Debug.LogError($"[{Name()} Calculator] Entity count [{entityList.Length}] does not match the entity count of the Alpha Matrix. Aborting calculations...");
                         return;
                     }
 
-                    float[] r = entityManager.GetEntityTypeList().Select(x => x.GrowthRate).ToArray();
+                    float[] r = entityManager.GetEntityTypeList().Select(x => x.ZoneInformation != null && x.ZoneInformation.FirstOrDefault(z => z.ZoneID == zone) != null ? x.ZoneInformation.FirstOrDefault(z => z.ZoneID == zone).GrowthRate : x.GrowthRate).ToArray();
                     float[] N = entityList.Select(x => (float)x.Population).ToArray();
 
                     //AN
@@ -107,7 +109,7 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 Entity entity = entityManager.GetEntityTypeList()[i];
 
-                if (entity.MovementRate > 0f)
+                if (entity.MovementRate > 0f || (entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.MovementRate > 0f)))
                 {
                     int[,,] movementTable = new int[entityLookupTable.GetLongLength(0), entityLookupTable.GetLongLength(1), entityLookupTable.GetLongLength(2)];
 
@@ -123,14 +125,50 @@ namespace Glitchers.EcoKnow.Sandbox
                                 continue;
                             }
 
-                            int neighbouringCellCount = entityManager.GetValidNeighbourCount(column, row, i);
+                            int currentZone = entityManager.GetZoneType(column, row);
+                            float movementRate = entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.ZoneID == currentZone) ? entity.ZoneInformation.FirstOrDefault(x => x.ZoneID == currentZone).MovementRate : entity.MovementRate;
+
+                            if (movementRate <= 0f)
+                            {
+                                continue;
+                            }
+
+
+                            // Get valid neighbors for this cell, filtering by zone transitions
+                            List<Vector2Int> validNeighbors = GetValidNeighbors(entityManager, entityLookupTable, column, row, i, entity, currentZone);
+                            int neighbouringCellCount = validNeighbors.Count;
+
                             Vector2[] edgeCells = entityManager.FindOppositeEdges(column, row, i, true);
+
+                            // Filter edges by zone transitions
+                            if (entity.ZoneInformation != null)
+                            {
+                                // Filter edge cells
+                                List<Vector2> filteredEdges = new List<Vector2>();
+                                foreach (Vector2 edge in edgeCells)
+                                {
+                                    int edgeZone = entityManager.GetZoneType((int)edge.x, (int)edge.y);
+
+                                    bool canTransition = entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(edgeZone));
+                                    if (canTransition)
+                                    {
+                                        filteredEdges.Add(edge);
+                                    }
+                                }
+
+                                edgeCells = filteredEdges.ToArray();
+                            }
+
+                            if (neighbouringCellCount == 0 && edgeCells.Count() == 0)
+                            {
+                                continue;
+                            }
 
                             //get number of entities to move
                             int entitiesToMove = 0;
                             for (int j = 0; j < currentPopulation; j++)
                             {
-                                entitiesToMove += UnityEngine.Random.Range(0f, 1f) <= entity.MovementRate ? 1 : 0;
+                                entitiesToMove += UnityEngine.Random.Range(0f, 1f) <= movementRate ? 1 : 0;
                             }
 
                             //divide moving entities by the number of valid neighbours
@@ -153,10 +191,21 @@ namespace Glitchers.EcoKnow.Sandbox
                                             yPos >= 0 &&
                                             yPos < entityLookupTable.GetLongLength(1))
                                     {
-                                        //Check for valid cell
+                                        //Check for valid cell and zone transition
                                         if (entityLookupTable[xPos, yPos, i] >= 0)
                                         {
-                                            movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                            if (entity.ZoneInformation != null)
+                                            {
+                                                int neighbourZone = entityManager.GetZoneType(xPos, yPos);
+                                                if (entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone)))
+                                                {
+                                                    movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                            }
                                         }
                                     }
                                 }
@@ -184,6 +233,49 @@ namespace Glitchers.EcoKnow.Sandbox
                     }
                 }
             }
+        }
+
+        // Helper method to get valid neighbor coordinates, with zone transition filtering
+        private List<Vector2Int> GetValidNeighbors(EntityManager entityManager, int[,,] entityLookupTable, int column, int row, int entityIndex, Entity entity = null, int currentZone = 0)
+        {
+            List<Vector2Int> validNeighbors = new List<Vector2Int>();
+
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    int xPos = column + x;
+                    int yPos = row + y;
+
+                    // Skip the center cell and check boundaries
+                    if ((x == 0 && y == 0) ||
+                        xPos < 0 || xPos >= entityLookupTable.GetLongLength(0) ||
+                        yPos < 0 || yPos >= entityLookupTable.GetLongLength(1))
+                    {
+                        continue;
+                    }
+
+                    // Check if the target cell is valid for this entity
+                    if (entityLookupTable[xPos, yPos, entityIndex] >= 0)
+                    {
+                        // Check zone transition rules
+                        if (entity != null && entity.ZoneInformation != null)
+                        {
+                            int neighbourZone = entityManager.GetZoneType(xPos, yPos);
+
+                            bool canTransition = entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone));
+                            if (!canTransition)
+                            {
+                                continue;
+                            }
+                        }
+
+                        validNeighbors.Add(new Vector2Int(xPos, yPos));
+                    }
+                }
+            }
+
+            return validNeighbors;
         }
     }
 }

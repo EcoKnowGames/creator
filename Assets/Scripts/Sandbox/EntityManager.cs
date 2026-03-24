@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-
     [System.Serializable]
     public record Entity
         (
@@ -29,8 +28,22 @@ namespace Glitchers.EcoKnow.Sandbox
         int IntroduceLimit,
 
         Quantity[] HarvestQuantities,
-        Quantity[] IntroduceQuantities
+        Quantity[] IntroduceQuantities,
+
+        EntityZoneInformation[] ZoneInformation
         );
+
+
+    [System.Serializable]
+    public class EntityZoneInformation
+    {
+        [SerializeField] public int ZoneID;
+        [SerializeField] public float GrowthRate;
+        [SerializeField] public float MovementRate;
+        [SerializeField] public List<int> Transitions;
+
+        public EntityZoneInformation(int zoneID) { ZoneID = zoneID; Transitions = new List<int>(); }
+    }
 
     public delegate void EntityEvent(int column, int row, int id);
 
@@ -42,6 +55,8 @@ namespace Glitchers.EcoKnow.Sandbox
         public IEntityCalculator Calculator => _entityCalculator;
 
         private Matrix _entityMatrix;
+        private Dictionary<int, float[,]> _zoneAlphaMatrices;
+
         public float[,] AlphaMatrix => _entityMatrix.entityMatrix;
         private Entity[] _entityTypeList;
         public int EntityTypeCount => _entityTypeList.Length;
@@ -99,6 +114,77 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             StartCoroutine(gridManager.OnEntitiesAdded());
+        }
+        #endregion
+
+        #region Zones
+        public void RegisterZoneAlphaMatrices(Matrix[] matrices)
+        {
+            if (matrices == null || _entityTypeList == null)
+            {
+                return;
+            }
+
+            _zoneAlphaMatrices = new Dictionary<int, float[,]>();
+
+            // Also set _entityMatrix to the first matrix for legacy compat
+            if (matrices.Length > 0)
+            {
+                _entityMatrix = matrices[0];
+            }
+
+            int entityCount = _entityTypeList.Length;
+            string[] masterIDs = _entityTypeList.Select(x => x.ID).ToArray();
+
+            foreach (Matrix m in matrices)
+            {
+                float[,] zoneMatrix = new float[entityCount, entityCount];
+
+                if (m.entityIDs != null && m.entityMatrix != null)
+                {
+                    // Map each matrix entity ID to master index
+                    int[] indexMap = new int[m.entityIDs.Length];
+                    for (int i = 0; i < m.entityIDs.Length; i++)
+                    {
+                        indexMap[i] = Array.IndexOf(masterIDs, m.entityIDs[i]);
+                    }
+
+                    for (int row = 0; row < m.entityIDs.Length; row++)
+                    {
+                        for (int col = 0; col < m.entityIDs.Length; col++)
+                        {
+                            int masterRow = indexMap[row];
+                            int masterCol = indexMap[col];
+                            if (masterRow >= 0 && masterCol >= 0)
+                            {
+                                zoneMatrix[masterCol, masterRow] = m.entityMatrix[col, row];
+                            }
+                        }
+                    }
+                }
+
+                _zoneAlphaMatrices[m.zoneIndex] = zoneMatrix;
+            }
+        }
+
+        public float[,] GetAlphaMatrixForZone(int zoneID)
+        {
+            if (_zoneAlphaMatrices != null && _zoneAlphaMatrices.TryGetValue(zoneID, out float[,] matrix))
+            {
+                return matrix;
+            }
+
+            return _entityMatrix?.entityMatrix;
+        }
+
+        public int GetZoneType(int column, int row)
+        {
+            if (SandboxManager.Instance.GridManager == null)
+            {
+                return 0;
+            }
+
+            return SandboxManager.Instance.GridManager.GetZoneType(column, row);
         }
         #endregion
 
@@ -437,11 +523,11 @@ namespace Glitchers.EcoKnow.Sandbox
             {
                 if (_entityLookupTable[column, j, entity] >= 0)
                 {
-                    if (j < column)
+                    if (j < row)
                     {
                         edgeTop = false;
                     }
-                    else if (j > column)
+                    else if (j > row)
                     {
                         edgeBottom = false;
                     }
