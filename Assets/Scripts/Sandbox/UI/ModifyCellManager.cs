@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox.Grid;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
 {
@@ -23,7 +22,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ModifyCellModal _modifyCellModal;
         private SandboxUI _sandboxUI => this.GetComponentInParent<SandboxUI>();
         private int SelectedEntityIndex => _sandboxUI != null ? _sandboxUI.SelectedEntityIndex : 0; //The parent UI should be the authority here
-
+        private int[] _harvestLimits;
+        private int[] _introduceLimits;
 
 
         private ModifyMode _modifyMode = ModifyMode.NONE;
@@ -42,6 +42,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void Init()
         {
             ExitModifyMode();
+            ResetLimits();
 
             if (SandboxManager.Instance.GridManager != null)
             {
@@ -115,13 +116,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     ClearSelectedCells();
                 }
 
-                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
+                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
             }
         }
 
         public void OnInputModified()
         {
-            _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
+            _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
         }
 
         public void OnCellClicked(Cell cell)
@@ -139,7 +140,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     cell.ShowSelected(true);
                 }
 
-                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
+                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
             }
         }
 
@@ -267,12 +268,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
+        public void ResetLimits()
+        {
+            int size = 0;
+            if (SandboxManager.Instance.EntityManager != null)
+            {
+                size = SandboxManager.Instance.EntityManager.EntityTypeCount;
+            }
+
+            _harvestLimits = new int[size];
+            _introduceLimits = new int[size];
+        }
+
         #region Harvest
         private IEnumerator ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnInputModified, OnHarvestConfirmed, OnModifyCancelled);
             yield return new WaitForEndOfFrame();
-            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells, _harvestLimits);
         }
 
         protected void OnHarvestConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -280,12 +293,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.HideModal();
 
             int successCount = 0;
+            int totalAmount = 0;
             if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
             {
                 foreach (Cell cell in _selectedCells)
                 {
                     int cellPopulation = SandboxManager.Instance.EntityManager.GetPopulationInCell(cell.Column, cell.Row, SelectedEntityIndex);
                     int actualAmount = unitMode == ModifyCellModal.UnitMode.DISCRETE ? Mathf.FloorToInt(amount) : Mathf.FloorToInt(cellPopulation * (amount / 100f));
+                    totalAmount += actualAmount;
                     if (SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, SelectedEntityIndex, actualAmount))
                     {
                         successCount += 1;
@@ -295,6 +310,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (successCount > 0)
             {
+                _harvestLimits[SelectedEntityIndex] += totalAmount;
                 OnModifySuccess(ModifyMode.HARVEST);
             }
             else
@@ -309,7 +325,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnInputModified, OnIntroduceConfirmed, OnModifyCancelled);
             yield return new WaitForEndOfFrame();
-            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells, _introduceLimits);
         }
 
         protected void OnIntroduceConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -317,11 +333,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.HideModal();
 
             int successCount = 0;
+            int totalAmount = 0;
             if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
             {
                 foreach (Cell cell in _selectedCells)
                 {
                     int actualAmount = Mathf.FloorToInt(amount);
+                    totalAmount += actualAmount;
                     if (SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, SelectedEntityIndex, actualAmount))
                     {
                         successCount += 1;
@@ -331,6 +349,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
             if (successCount > 0)
             {
+                _introduceLimits[SelectedEntityIndex] += totalAmount;
                 OnModifySuccess(ModifyMode.INTRODUCE);
             }
             else
