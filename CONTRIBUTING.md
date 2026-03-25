@@ -2,15 +2,17 @@
 
 Thank you for your interest in contributing to EcoKnow Creator! This document outlines the different ways you can contribute and the processes we follow.
 
-## 3 Ways to Contribute
+This document is a guide to keep this project maintainable.
+
+## 4 Ways to Contribute
 
 ### 1. Playing Scenarios (Data Contributions) [Easy]
 
 By playing scenarios you generate valuable data that helps improve the simulation.
 
-TODO: Where should scenario data exports be sent?
+TODO: Where it can be played? Releases?
 
-TODO: Agree next steps for scenario data submission pipeline.
+TODO: Where should scenario data exports be sent?
 
 ### 2. Creating Scenarios [Medium]
 
@@ -24,38 +26,48 @@ TODO: Who will produce video content / guides?
 
 This is the primary focus of this guide. We follow a structured process to keep the codebase stable and collaborative.
 
+### 4. Attend Planning Meetings
+
+TODO: Changes the scope of GLITCHERS involvement based on ongoing grant funding.
+
 ## Source Code Contribution Process
 
 ### Overview
 
 All source code contributions go through:
 
-**Issue → Branch → Pull Request → Review → Merge**.
+**Issue → Branch → Pull Request → Review → Merge → Delete Branch**.
+
+TODO: Add Issue template for GitHub
+TODO: Merge rules
+TODO: What you're looking for as a reviewer - when you're a reviewer look and see if the vars are well named, is the logic consistent, if you're not sure what the code is doing, does it run, does it make sense, is it readable?
+TODO: Warn users of breaking changes and provide documentation on how to resolve / update
+
 
 ### Step-by-Step
 
-1. **Open or claim an Issue** - Before writing any code, ensure there is a GitHub Issue describing the work. If one doesn't exist, create it and wait for discussion/approval from the team.
+1. **Open or claim an Issue** - Before writing any code, ensure there is a GitHub Issue describing the work. If one doesn't exist, create it and wait for discussion/approval from the team. Label the issue with the relevant 'Bug', 'Question' or 'Task' etc.
 2. **Create a relevant branch** - Branch from `main` using the naming convention: `feat/<issue-number>-short-description` (e.g. `feat/21-environment-zones`).
 
 Full branchlist:
 * bugfix: use 'fix'
 * feature: use 'feat'
-* spike: clone repo to your own github
+* spike: fork repo to your own private GitHub
 
-3. **Develop on your branch** - Make your changes, committing regularly with clear messages.
-4. **Open a Pull Request** - When your work is ready, open a PR against `main`. Reference the issue number in the PR description.
-5. **Code Review** - At least one other contributor must review and approve the PR before it can be merged.
+3. **Develop on your branch** - Make your changes, committing regularly with clear messages (see [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for naming standards)
+4. **Open a Pull Request** - When your work is ready, open a PR against `main`. Reference the issue number in the PR description e.g. 'Issue #21: Environment Zones' and add the relevant reviewers.
+5. **Code Review** - At least one other contributor must review and approve the PR before it can be merged. The merge is the responsibility of the Pull Request owner.
 6. **Merge** - Once approved, the PR is merged into `main`.
 
-### Decisions
+### Unity Version
 
-TODO: When is an issue required? (all changes, or only features/bugs?)
+Upgrading Unity should be reserved when project is stable and initially, spiked to ensure no breaking changes. Unlike most software updates, Unity updates can introduce breaking changes that will require code refactors, so only undertake this when you have time to consider that.
 
-TODO: Branch naming conventions - confirm or revise `feat/<issue-number>-short-description`.
+TIP: Stick to LTS (Long Term Service) versions or the process will be additionally complex.
 
-TODO: PR expectations - what makes a good PR? (description, screenshots, testing notes?)
+### License Requirements
 
-TODO: Who reviews? How many approvals are required before merge?
+All items need to be considerate of the GPL-3.0 license, so no copyright, use limited or private assets to be included in this repository. All rights must be obtained and compatible with GPL-3.0 - including images, audio, plugins and libraries - even external dependencies.
 
 ## Spike Work Policy
 
@@ -67,19 +79,11 @@ We definitely want to encourage exploratory, experimental work - we call this **
 
 If you've done spike work that you think should become a feature, open an issue describing what you learned and proposing the change. The team will discuss it and, if agreed, it will follow the standard contribution process above.
 
+### Scale of the issues
 
+Issues should be scaled and targeted, they shouldn't take more than a couple of hours to review thoroughly. A good example of Issue size was [Issue #26: Currency Win Conditions critera](https://github.com/EcoKnowGames/creator/pull/28).
 
-### Decisions
-
-TODO: What counts as spike work?
-
-TODO: Where should spike work live? (forks?)
-
-TODO: How does a spike become a feature proposal?
-
-TODO: How big should a feature request be?
-
-TODO: How do we make sure people feel spikes are valued, not discouraged?
+Anything bigger than this is considered an overhaul and may have far reaching consequences such as backwards compatibility. These larger ideas should be considered as project goals and can be attacked as part of a larger block of work, probably with funding. Most of the time, an overhaul can be broken down into smaller chunks.
 
 ## Project Areas and Ownership
 
@@ -87,7 +91,7 @@ The codebase is organised into several key areas. When contributing, it helps to
 
 ### Calculators (Simulation)
 
-The mathematical models and logic that determine how entities interact with each other during the simulation. Changes here affect the core simulation behaviour.
+The mathematical models and logic that determine how entities interact with each other during the simulation. Changes here affect the core simulation behaviour. If you are intending to change the model, create a new calculator.
 
 ### Sandbox (Visualisation)
 
@@ -102,12 +106,6 @@ The tooling used to construct scenarios. We are working towards a node-based ver
 The Map Editor is a vital part of the EcoKnow Creator project, but is maintained on it's own [GitHub page](https://github.com/EcoKnowGames/map).
 
 The Map Editor is responsible for drawing map layouts, zoning areas and then populating them with entities.
-
-### Decisions
-
-TODO: Should specific people own or be responsible for each area?
-
-TODO: Define ownership/responsibility for: Calculators, Sandbox, Scenario Editor, Map Editor.
 
 ## Versioning and Releases
 
