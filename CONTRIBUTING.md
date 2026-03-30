@@ -10,9 +10,14 @@ This document is a guide to keep this project maintainable.
 
 By playing scenarios you generate valuable data that helps improve the simulation.
 
-TODO: Where it can be played? Releases?
+Releases are played from the EcoKnowGames website. A canonical version will exist alongside a directory of additional versions for specific use cases.
+[26th March 2026: Brad to setup a list of versions linking to WebGL versions]
+[Future: showcase all possible games and how they related to each other]
 
-TODO: Where should scenario data exports be sent?
+There's no way to send data to anyone if you play publically dy default.
+
+[Future: Data export options need to be decided]
+[Future: Ted: Future data customisation options]
 
 ### 2. Creating Scenarios [Medium]
 
@@ -38,10 +43,9 @@ All source code contributions go through:
 
 **Issue → Branch → Pull Request → Review → Merge → Delete Branch**.
 
-TODO: Add Issue template for GitHub
-TODO: Merge rules
-TODO: What you're looking for as a reviewer - when you're a reviewer look and see if the vars are well named, is the logic consistent, if you're not sure what the code is doing, does it run, does it make sense, is it readable?
-TODO: Warn users of breaking changes and provide documentation on how to resolve / update
+What you're looking for as a reviewer - when you're a reviewer look and see if the vars are well named, is the logic consistent, if you're not sure what the code is doing, does it run, does it make sense, is it readable?
+
+Warn users of breaking changes and provide documentation on how to resolve / update
 
 
 ### Step-by-Step
