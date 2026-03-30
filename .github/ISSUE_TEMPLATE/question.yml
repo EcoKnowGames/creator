@@ -1,0 +1,38 @@
+name: Question
+description: Ask a question about usage or behavior
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking, please check the [documentation](../docs) and [existing issues](../../issues?q=is%3Aissue) to see if your question has already been answered.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What would you like to know?
+      placeholder: How do I...?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to accomplish? This helps us give a more useful answer.
+      placeholder: I'm building... and I need to understand how...
+    validations:
+      required: false
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: Any docs, code, or approaches you've already explored.
+    validations:
+      required: false
+  - type: textarea
+    id: version
+    attributes:
+      label: Version / environment
+      description: If relevant, what version are you using?
+    validations:
+      required: false
