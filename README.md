@@ -10,7 +10,7 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **Win conditions**: Keep target species totals within thresholds for required consecutive rounds (with a grace allowance).
 
 ### Project layout (key paths)
-- **Scene**: `Assets/Scenes/scene_Sandbox.unity`
+- **Scenes**: `Assets/Scenes/` (`scene_Start.unity`, `scene_Sandbox.unity`)
 - **Scripts (runtime)**: `Assets/Scripts/Sandbox/`
 - **UI**: `Assets/_EcoKnow/UI/`
 - **Icons/Resources**: `Assets/_EcoKnow/Resources/`
@@ -19,11 +19,11 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **Scenario Graph assets**: `Assets/_EcoKnow/Scenario Editor/` (e.g., `TestScenarioGraph.asset`)
 
 ### FIRST TIME SETUP
-- **Unity Editor version**: Use Unity `6000.0.60f1` (Unity 6). Opening with a different version may cause compatibility issues.
+- **Unity Editor version**: Use Unity `6000.0.68f1` (Unity 6). Opening with a different version may cause compatibility issues.
 - **Steps**:
   1. Clone the repository.
   2. Ensure GIT LFS is enabled or assets will be blank
-  3. Open Unity Hub, add the project folder, and select Editor `6000.0.49f1`.
+  3. Open Unity Hub, add the project folder, and select Editor `6000.0.68f1`.
   4. Unity will import and resolve packages automatically (internet required for Git-based packages).
   5. Open the sandbox scene: `Assets/Scenes/scene_Sandbox.unity`.
   6. Press Play.
@@ -33,16 +33,23 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - **com.yasirkula.simplefilebrowser**: MIT — Runtime file dialogs for loading/saving JSON.
 - **com.unity.uiextensions**: BSD-3-Clause — Additional UI components used by the in-game UI.
 - **com.unity.nuget.newtonsoft-json**: MIT — JSON serialization (Newtonsoft.Json via Unity NuGet bridge).
+- **com.monitor1394.xcharts**: MIT — Feature-rich charting library. Source: [XCharts GitHub repository](https://github.com/XCharts-Team/XCharts).
 - **Unity official packages** (e.g., `com.unity.ugui`, `com.unity.feature.2d`, `com.unity.timeline`, `com.unity.test-framework`, `com.unity.visualscripting`, editor integrations, and `com.unity.modules.*`): Licensed by Unity (typically under the Unity Companion License and/or Unity Terms). See each package’s License entry in the Unity Package Manager for details.
 
 ### Art and icon assets
 - **Microsoft Fluent 3 Emoji (Fluent Emoji/Fluent 3D Emoji)**: MIT — Open-source emoji/icon set by Microsoft. Source: [Fluent Emoji GitHub repository](https://github.com/microsoft/fluentui-emoji).
 - Icons included in this project live under `Assets/_EcoKnow/Resources/Icons/` (high-contrast PNG variants are used in UI).
+- To browse available icons, visit [fluentemoji.com](https://fluentemoji.com/) and select the **High Contrast** style to match the variants used in the project.
 - When creating scenarios, please only reference icons from this provided set to ensure licensing compliance and that assets are available in builds.
 
 ### Scenario authoring (Graph Editor)
 - Author scenarios using the node graph system (xNode-based): assets live under `Assets/_EcoKnow/Scenario Editor/`.
 - A scenario includes: name, rounds, actions per round, start currency, seed, Entities, Items, Win Conditions, Matrix, and Map Layout.
+
+### Creating map files
+- Map CSV files are required by the Scenario Editor’s Map Layout node.
+- Use the [EcoKnow Map Editor](https://github.com/EcoKnowGames/map) to create and export map CSV files.
+- Place exported maps in `Assets/_EcoKnow/Maps/`.
 
 ### CREATING YOUR FIRST SCENARIO
 - Scenarios are saved in the `Assets/_EcoKnow/Scenario Editor/` folder.
@@ -73,7 +80,7 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 
 ### Troubleshooting
 - If Git-based packages fail to resolve, ensure you have network access and that Unity Hub/Editor can access Git URLs.
-- If the wrong Unity version is used, upgrade/downgrade in Unity Hub to `6000.0.49f1` and reopen the project.
+- If the wrong Unity version is used, upgrade/downgrade in Unity Hub to `6000.0.68f1` and reopen the project.
 
 ### Collaborators
 - This project is a collaboration between **GLITCHERS** and the **University of Stirling**.
@@ -81,6 +88,9 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 #### Project collaborators (holding)
 - Name — Role (Affiliation)
 - Name — Role (Affiliation)
+
+### Contributing
+- See `CONTRIBUTING.md` for contribution guidelines, branching conventions, and code review expectations.
 
 ### License
 - **Project license**: GPL-3.0-only. See the `LICENSE` file for full terms.
