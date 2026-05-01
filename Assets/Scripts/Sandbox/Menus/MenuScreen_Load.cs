@@ -1,10 +1,16 @@
 using UnityEngine;
+using System.Runtime.InteropServices;
 using TMPro;
 
 namespace Glitchers.EcoKnow.Sandbox.Menus
 {
     public class MenuScreen_Load : MenuScreen
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")]
+        private static extern void ReadClipboardText(string gameObjectName, string callbackMethod);
+#endif
+
         [Header("Raw JSON Input")]
         [SerializeField] private TMP_InputField _rawJsonInput;
         [SerializeField] private CanvasGroup _inputFeedbackText;
@@ -35,6 +41,37 @@ namespace Glitchers.EcoKnow.Sandbox.Menus
             if (_rawJsonInput != null)
             {
                 ValidateJson(_rawJsonInput.text);
+            }
+        }
+
+        public void OnPasteFromClipboardPressed()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            ReadClipboardText(gameObject.name, nameof(OnClipboardTextReceived));
+#else
+            // Fallback for editor/standalone: read from system clipboard
+            string text = GUIUtility.systemCopyBuffer;
+            if (!string.IsNullOrEmpty(text))
+            {
+                ValidateJson(text);
+            }
+#endif
+        }
+
+        // Called from JavaScript via SendMessage
+        public void OnClipboardTextReceived(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                ValidateJson(text);
+            }
+            else
+            {
+                Debug.LogWarning("[MenuScreen_Load] Clipboard was empty or read failed");
+                if (_inputFeedbackText != null)
+                {
+                    _inputFeedbackText.alpha = 1.0f;
+                }
             }
         }
 
