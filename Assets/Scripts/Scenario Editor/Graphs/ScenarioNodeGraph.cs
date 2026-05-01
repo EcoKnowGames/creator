@@ -103,7 +103,7 @@ public class ScenarioNodeGraph : NodeGraph
 
         if (showWarning)
         {
-            EditorUtility.DisplayDialog("ERROR", warningStr, "OK");
+            Debug.LogWarning(warningStr);
         }
 #endif
     }
