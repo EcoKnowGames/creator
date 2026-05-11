@@ -141,7 +141,7 @@ namespace Glitchers.EcoKnow.Sandbox
                             Vector2[] edgeCells = entityManager.FindOppositeEdges(column, row, i, true);
 
                             // Filter edges by zone transitions
-                            if (entity.ZoneInformation != null)
+                            if (entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
                             {
                                 // Filter edge cells
                                 List<Vector2> filteredEdges = new List<Vector2>();
@@ -194,7 +194,7 @@ namespace Glitchers.EcoKnow.Sandbox
                                         //Check for valid cell and zone transition
                                         if (entityLookupTable[xPos, yPos, i] >= 0)
                                         {
-                                            if (entity.ZoneInformation != null)
+                                            if (entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
                                             {
                                                 int neighbourZone = entityManager.GetZoneType(xPos, yPos);
                                                 if (entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone)))
@@ -259,7 +259,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     if (entityLookupTable[xPos, yPos, entityIndex] >= 0)
                     {
                         // Check zone transition rules
-                        if (entity != null && entity.ZoneInformation != null)
+                        if (entity != null && entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
                         {
                             int neighbourZone = entityManager.GetZoneType(xPos, yPos);
 
