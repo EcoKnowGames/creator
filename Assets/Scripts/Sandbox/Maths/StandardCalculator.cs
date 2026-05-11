@@ -202,7 +202,7 @@ namespace Glitchers.EcoKnow.Sandbox
                     if (entityLookupTable[xPos, yPos, entityIndex] >= 0)
                     {
                         // Check zone transition rules
-                        if (entity != null && entity.ZoneInformation != null)
+                        if (entity != null && entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
                         {
                             int neighbourZone = entityManager.GetZoneType(xPos, yPos);
 
