@@ -94,7 +94,7 @@ public class ScenarioNode : Node
     [SerializeField] private int _seed;
     public int Seed => _seed;
 
-    [SerializeField] private List<NodePort> _entityPorts = new List<NodePort>();
+    private List<NodePort> _entityPorts = new List<NodePort>();
     public List<NodePort> EntityPorts => _entityPorts;
 
     public string Name => scenarioName;
@@ -141,15 +141,12 @@ public class ScenarioNode : Node
     {
         base.Init();
 
-        //NOTE -> This doesn't always work as we have no guarantee what order the nodes initialise in
-
-        // Rebuild _entityPorts from xNode's serialized dynamic ports.
-        // _entityPorts is not serialized, so it resets to empty on domain reload,
-        // but xNode's internal port dictionary preserves the dynamic ports and
-        // their connections. Re-syncing here keeps the editor drawing them.
+        // _entityPorts is rebuilt each load from xNode's persisted DynamicOutputs.
+        // Don't filter by Connection.node — neighbouring nodes may not be deserialised
+        // yet at this point, which would silently drop ports whose connections still exist.
         if (DynamicOutputs != null)
         {
-            _entityPorts = new List<NodePort>(DynamicOutputs.Where(x => x.Connection != null && x.Connection.node is EntityNode));
+            _entityPorts = new List<NodePort>(DynamicOutputs);
         }
     }
 
