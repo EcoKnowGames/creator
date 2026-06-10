@@ -131,7 +131,7 @@ namespace Glitchers.EcoKnow.Sandbox.Data
                     path = Application.persistentDataPath + "/" + fileName + "_data.json";
                 }
 
-                System.IO.File.WriteAllText(path, json);
+                FileBrowserHelpers.WriteTextToFile(path, json);
                 Debug.Log("Data Exported!");
             }
         }
