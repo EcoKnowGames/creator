@@ -88,4 +88,10 @@ TimeManager.asset -text
 *.preset text
 *.lfs_test filter=lfs diff=lfs merge=lfs -text
 
+# WebGL build artifacts (path-scoped so we don't pull every .js into LFS)
+Builds/webgl/Build/*.data         filter=lfs diff=lfs merge=lfs -text
+Builds/webgl/Build/*.wasm         filter=lfs diff=lfs merge=lfs -text
+Builds/webgl/Build/*.framework.js filter=lfs diff=lfs merge=lfs -text
+Builds/webgl/Build/*.loader.js    filter=lfs diff=lfs merge=lfs -text
+
 
