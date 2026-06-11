@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>EcoKnows Creator</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'eco-dark': '#282828',
+              'eco-green': '#c5e6a8',
+              'eco-blue': '#2b47a6',
+              'eco-white': '#eef0f9',
+            },
+            borderRadius: {
+              'panel': '10px',
+            },
+            fontFamily: {
+              'nav': ['Inter', 'Albert Sans', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="m-0 p-0 bg-eco-dark min-h-screen flex flex-col">
+    <nav class="sticky top-0 z-50 flex w-full items-center justify-between bg-eco-dark px-4 py-3">
+      <div class="flex items-center gap-2">
+        <span
+          class="font-nav text-sm text-white no-underline transition-opacity hover:opacity-80"
+        >
+          EcoKnows Creator
+      </class>
+        <span class="font-nav text-sm text-white/50">1.1.0</span>
+      </div>
+      <div class="hidden items-center gap-5 sm:flex">
+        <a
+          href="https://ecoknowgames.github.io/"
+          class="flex items-center gap-1.5 font-nav text-[10px] font-bold text-eco-green no-underline transition-opacity hover:opacity-80"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          EcoKnow Project Site
+        </a>
+        <button
+          id="nav-fullscreen-button"
+          class="flex items-center gap-1.5 cursor-pointer rounded-panel border-2 border-eco-green bg-transparent px-2.5 py-1 font-nav text-[10px] font-bold text-eco-green no-underline transition-opacity hover:opacity-80"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          Fullscreen
+        </button>
+      </div>
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-toggle"
+        class="cursor-pointer border-none bg-transparent p-0 text-eco-green sm:hidden"
+        aria-label="Toggle menu"
+      >
+        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </nav>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden flex-col gap-1 bg-eco-dark px-4 pb-4 sm:hidden">
+      <a
+        href="https://ecoknowgames.github.io/briefings/"
+        class="flex items-center gap-2 rounded-panel px-3 py-2.5 font-nav text-[11px] font-bold text-eco-green no-underline transition-colors hover:bg-white/5"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Get Involved
+      </a>
+      <button
+        id="mobile-fullscreen-button"
+        class="flex items-center gap-2 cursor-pointer rounded-panel border-2 border-eco-green bg-transparent px-3 py-2.5 font-nav text-[11px] font-bold text-eco-green no-underline transition-colors hover:bg-white/5"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        Fullscreen
+      </button>
+    </div>
+
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+    </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      // Mobile menu toggle
+      var menuToggle = document.querySelector("#mobile-menu-toggle");
+      var mobileMenu = document.querySelector("#mobile-menu");
+      var menuIconOpen = document.querySelector("#menu-icon-open");
+      var menuIconClose = document.querySelector("#menu-icon-close");
+      menuToggle.addEventListener("click", function() {
+        var isOpen = !mobileMenu.classList.contains("hidden");
+        if (isOpen) {
+          mobileMenu.classList.add("hidden");
+          mobileMenu.classList.remove("flex");
+          menuIconOpen.classList.remove("hidden");
+          menuIconClose.classList.add("hidden");
+        } else {
+          mobileMenu.classList.remove("hidden");
+          mobileMenu.classList.add("flex");
+          menuIconOpen.classList.add("hidden");
+          menuIconClose.classList.remove("hidden");
+        }
+      });
+
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/webgl.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/webgl.data",
+        frameworkUrl: buildUrl + "/webgl.framework.js",
+        codeUrl: buildUrl + "/webgl.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "EcoKnows Creator",
+        productVersion: "1.1.0",
+        showBanner: unityShowBanner,
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          document.querySelector("#unity-loading-bar").style.display = "none";
+          // Wire up fullscreen buttons in navbar
+          document.querySelector("#nav-fullscreen-button").onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+          document.querySelector("#mobile-fullscreen-button").onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
