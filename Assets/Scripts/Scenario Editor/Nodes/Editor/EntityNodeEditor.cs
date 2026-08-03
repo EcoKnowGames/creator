@@ -118,6 +118,13 @@ public class EntityNodeEditor : NodeEditor
                 _entityNode.ColourIndex = colourIndex;
             }
 
+            EditorGUILayout.Space();
+
+            // Player Visibility
+            EditorGUILayout.LabelField("Player Visibility", EditorStyles.centeredGreyMiniLabel);
+            _entityNode.HiddenFromCellToken = EditorGUILayout.Toggle("Hide Grid Token?", _entityNode.HiddenFromCellToken);
+            _entityNode.HiddenFromEntityPanel = EditorGUILayout.Toggle("Hide From Panel?", _entityNode.HiddenFromEntityPanel);
+
 
             // Rates
             EditorGUILayout.LabelField("Rates", EditorStyles.centeredGreyMiniLabel);
