@@ -1,0 +1,147 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace Glitchers.EcoKnow.Sandbox
+{
+    public class WraparoundDispersal : IMovementModel
+    {
+        public string Name() => "Wraparound Dispersal";
+
+        public void Move(EntityManager entityManager, int[,,] entityLookupTable)
+        {
+            if (entityManager == null) return;
+
+            //We want to calculate the entity count change in each cell, THEN apply that difference to the entire grid
+            //Perform this per-entity, following the maths provided
+            for (int i = 0; i < entityManager.EntityTypeCount; i++)
+            {
+                Entity entity = entityManager.GetEntityTypeList()[i];
+
+                if (entity.MovementRate > 0f || (entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.MovementRate > 0f)))
+                {
+                    int[,,] movementTable = new int[entityLookupTable.GetLongLength(0), entityLookupTable.GetLongLength(1), entityLookupTable.GetLongLength(2)];
+
+                    //Move our requested entity in each cell
+                    for (int column = 0; column < entityLookupTable.GetLongLength(0); column++)
+                    {
+                        for (int row = 0; row < entityLookupTable.GetLongLength(1); row++)
+                        {
+                            int currentPopulation = entityLookupTable[column, row, i];
+                            if (currentPopulation < 0)
+                            {
+                                //This cell/entity is empty, do not perform movement calculations
+                                continue;
+                            }
+
+                            int currentZone = entityManager.GetZoneType(column, row);
+                            float movementRate = entity.ZoneInformation != null && entity.ZoneInformation.Any(x => x.ZoneID == currentZone) ? entity.ZoneInformation.FirstOrDefault(x => x.ZoneID == currentZone).MovementRate : entity.MovementRate;
+
+                            if (movementRate <= 0f)
+                            {
+                                continue;
+                            }
+
+
+                            // Get valid neighbors for this cell, filtering by zone transitions
+                            List<Vector2Int> validNeighbors = DispersalSampling.GetValidNeighbors(entityManager, entityLookupTable, column, row, i, entity, currentZone);
+                            int neighbouringCellCount = validNeighbors.Count;
+
+                            Vector2[] edgeCells = entityManager.FindOppositeEdges(column, row, i, true);
+
+                            // Filter edges by zone transitions
+                            if (entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
+                            {
+                                // Filter edge cells
+                                List<Vector2> filteredEdges = new List<Vector2>();
+                                foreach (Vector2 edge in edgeCells)
+                                {
+                                    int edgeZone = entityManager.GetZoneType((int)edge.x, (int)edge.y);
+
+                                    bool canTransition = entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(edgeZone));
+                                    if (canTransition)
+                                    {
+                                        filteredEdges.Add(edge);
+                                    }
+                                }
+
+                                edgeCells = filteredEdges.ToArray();
+                            }
+
+                            if (neighbouringCellCount == 0 && edgeCells.Count() == 0)
+                            {
+                                continue;
+                            }
+
+                            //get number of entities to move
+                            int entitiesToMove = 0;
+                            for (int j = 0; j < currentPopulation; j++)
+                            {
+                                entitiesToMove += UnityEngine.Random.Range(0f, 1f) <= movementRate ? 1 : 0;
+                            }
+
+                            //divide moving entities by the number of valid neighbours
+                            int entitiesMovingPerCell = Mathf.FloorToInt((float)entitiesToMove / (float)(neighbouringCellCount + edgeCells.Count()));
+
+                            //Add to neighbouring cells and remove from current cell respectively
+                            for (int x = -1; x < 2; x++)
+                            {
+                                for (int y = -1; y < 2; y++)
+                                {
+                                    int xPos = column + x;
+                                    int yPos = row + y;
+
+                                    if (x == 0 && y == 0)
+                                    {
+                                        movementTable[xPos, yPos, i] -= (entitiesMovingPerCell * (neighbouringCellCount + edgeCells.Count()));
+                                    }
+                                    else if (xPos >= 0 &&
+                                            xPos < entityLookupTable.GetLongLength(0) &&
+                                            yPos >= 0 &&
+                                            yPos < entityLookupTable.GetLongLength(1))
+                                    {
+                                        //Check for valid cell and zone transition
+                                        if (entityLookupTable[xPos, yPos, i] >= 0)
+                                        {
+                                            if (entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
+                                            {
+                                                int neighbourZone = entityManager.GetZoneType(xPos, yPos);
+                                                if (entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone)))
+                                                {
+                                                    movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                movementTable[xPos, yPos, i] += entitiesMovingPerCell;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            //Wrap around edges
+                            foreach(Vector2 cell in edgeCells)
+                            {
+                                movementTable[(int)cell.x, (int)cell.y, i] += entitiesMovingPerCell;
+                            }
+                        }
+                    }
+
+                    //Apply the movementTable numbers to our actual cells
+                    for (int column = 0; column < entityLookupTable.GetLongLength(0); column++)
+                    {
+                        for (int row = 0; row < entityLookupTable.GetLongLength(1); row++)
+                        {
+                            //Check for valid cell
+                            if (entityLookupTable[column, row, i] >= 0)
+                            {
+                                entityLookupTable[column, row, i] = Mathf.Max(0, Mathf.Max(entityLookupTable[column, row, i] + movementTable[column, row, i], 0));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
