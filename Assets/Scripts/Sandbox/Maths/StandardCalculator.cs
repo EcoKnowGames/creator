@@ -7,7 +7,7 @@ namespace Glitchers.EcoKnow.Sandbox
 {
     public class StandardCalculator : IEntityCalculator
     {
-        public string Name() => "Standard";
+        public string Name() => "Lotka-Volterra";
         public string Version() => "1.0";
 
         public void CalculatePopulations(EntityManager entityManager, int[,,] entityLookupTable)

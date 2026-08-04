@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    public class StructuredCalculator : IEntityCalculator
+    public class StructuredPopCalculator : IEntityCalculator
     {
-        public string Name() => "Standard";
+        public string Name() => "Structured";
         public string Version() => "1.0";
 
         public void CalculatePopulations(EntityManager entityManager, int[,,] entityLookupTable)
