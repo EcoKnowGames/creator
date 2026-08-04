@@ -135,7 +135,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
 
                             // Get valid neighbors for this cell, filtering by zone transitions
-                            List<Vector2Int> validNeighbors = GetValidNeighbors(entityManager, entityLookupTable, column, row, i, entity, currentZone);
+                            List<Vector2Int> validNeighbors = DispersalSampling.GetValidNeighbors(entityManager, entityLookupTable, column, row, i, entity, currentZone);
                             int neighbouringCellCount = validNeighbors.Count;
 
                             Vector2[] edgeCells = entityManager.FindOppositeEdges(column, row, i, true);
@@ -233,49 +233,6 @@ namespace Glitchers.EcoKnow.Sandbox
                     }
                 }
             }
-        }
-
-        // Helper method to get valid neighbor coordinates, with zone transition filtering
-        private List<Vector2Int> GetValidNeighbors(EntityManager entityManager, int[,,] entityLookupTable, int column, int row, int entityIndex, Entity entity = null, int currentZone = 0)
-        {
-            List<Vector2Int> validNeighbors = new List<Vector2Int>();
-
-            for (int x = -1; x < 2; x++)
-            {
-                for (int y = -1; y < 2; y++)
-                {
-                    int xPos = column + x;
-                    int yPos = row + y;
-
-                    // Skip the center cell and check boundaries
-                    if ((x == 0 && y == 0) ||
-                        xPos < 0 || xPos >= entityLookupTable.GetLongLength(0) ||
-                        yPos < 0 || yPos >= entityLookupTable.GetLongLength(1))
-                    {
-                        continue;
-                    }
-
-                    // Check if the target cell is valid for this entity
-                    if (entityLookupTable[xPos, yPos, entityIndex] >= 0)
-                    {
-                        // Check zone transition rules
-                        if (entity != null && entity.ZoneInformation != null && entity.ZoneInformation.Length > 0)
-                        {
-                            int neighbourZone = entityManager.GetZoneType(xPos, yPos);
-
-                            bool canTransition = entity.ZoneInformation.Any(x => x.ZoneID == currentZone && x.Transitions.Contains(neighbourZone));
-                            if (!canTransition)
-                            {
-                                continue;
-                            }
-                        }
-
-                        validNeighbors.Add(new Vector2Int(xPos, yPos));
-                    }
-                }
-            }
-
-            return validNeighbors;
         }
     }
 }
