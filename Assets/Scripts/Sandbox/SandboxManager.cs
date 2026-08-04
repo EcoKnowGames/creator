@@ -135,6 +135,7 @@ namespace Glitchers.EcoKnow.Sandbox
                 }
                 _entityManager?.RegisterAlphaMatrix(primaryMatrix);
                 _entityManager?.RegisterEntities(scenario.Entities.ToList());
+                _entityManager?.RegisterCalculator(CalculatorRegistry.Create(scenario.CalculatorId));
 
                 //Setup zone data
                 if (scenario.Matrices != null)

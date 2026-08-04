@@ -27,7 +27,8 @@ public record Scenario
         WinConditionRecord[] WinConditions,
         Matrix Matrix,
         MapLayout Map,
-        Matrix[] Matrices = null
+        Matrix[] Matrices = null,
+        string CalculatorId = CalculatorRegistry.DefaultId
     );
 
 //Header info
@@ -207,7 +208,8 @@ public class ScenarioNodeGraph : NodeGraph
            scenarioNode.WinConditions.ToArray(),
            scenarioNode.Matrix,
            scenarioNode.MapLayout,
-           scenarioNode.Matrices
+           scenarioNode.Matrices,
+           scenarioNode.CalculatorId
            );
 
         //Package it up with any additional header data we might need
