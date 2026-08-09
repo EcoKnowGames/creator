@@ -41,11 +41,18 @@ namespace Glitchers.EcoKnow.Sandbox
         public static bool Contains(string id) => Find(id) != null;
 
         /// <summary>
-        /// Create a fresh calculator instance for the given id. Falls back to the default
-        /// (with a warning) when the id is null, empty, or unknown.
+        /// Create a fresh calculator instance for the given id. A null or empty id means
+        /// "no calculator specified" (for example a scenario saved before the field
+        /// existed) and resolves to the default silently. A non-empty but unknown id
+        /// falls back to the default and logs a warning.
         /// </summary>
         public static IEntityCalculator Create(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Find(DefaultId).Factory();
+            }
+
             CalculatorInfo info = Find(id);
             if (info == null)
             {

@@ -90,6 +90,22 @@ public class ScenarioNodeEditor : NodeEditor
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("actionsPerRound"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("startCurrency"));
 
+        // Calculator dropdown: choose which population model this scenario runs.
+        // The stable id (not the display name) is stored in calculatorId.
+        SerializedProperty calculatorIdProp = serializedObject.FindProperty("calculatorId");
+        string[] calculatorNames = CalculatorRegistry.All.Select(c => c.DisplayName).ToArray();
+        int calculatorIndex = 0;
+        for (int i = 0; i < CalculatorRegistry.All.Count; i++)
+        {
+            if (CalculatorRegistry.All[i].Id == calculatorIdProp.stringValue)
+            {
+                calculatorIndex = i;
+                break;
+            }
+        }
+        calculatorIndex = EditorGUILayout.Popup("Model", calculatorIndex, calculatorNames);
+        calculatorIdProp.stringValue = CalculatorRegistry.All[calculatorIndex].Id;
+
         EditorGUILayout.Space();
         string supportedPlayers = GetCompatiblePlayers(_scenarioNode.ActionsPerRound);
         EditorGUILayout.HelpBox($"This Scenario will support {supportedPlayers} player(s)", MessageType.Info);
