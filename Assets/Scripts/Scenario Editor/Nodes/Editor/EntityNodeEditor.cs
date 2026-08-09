@@ -124,6 +124,7 @@ public class EntityNodeEditor : NodeEditor
             EditorGUILayout.LabelField("Player Visibility", EditorStyles.centeredGreyMiniLabel);
             _entityNode.HiddenFromCellToken = DrawRightAlignedToggle("Hide Grid Token?", _entityNode.HiddenFromCellToken);
             _entityNode.HiddenFromEntityPanel = DrawRightAlignedToggle("Hide From Panel?", _entityNode.HiddenFromEntityPanel);
+            _entityNode.HiddenFromGraph = DrawRightAlignedToggle("Hide From Graph?", _entityNode.HiddenFromGraph);
 
 
             // Rates
