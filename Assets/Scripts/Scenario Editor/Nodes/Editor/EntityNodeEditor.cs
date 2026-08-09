@@ -122,8 +122,8 @@ public class EntityNodeEditor : NodeEditor
 
             // Player Visibility
             EditorGUILayout.LabelField("Player Visibility", EditorStyles.centeredGreyMiniLabel);
-            _entityNode.HiddenFromCellToken = EditorGUILayout.Toggle("Hide Grid Token?", _entityNode.HiddenFromCellToken);
-            _entityNode.HiddenFromEntityPanel = EditorGUILayout.Toggle("Hide From Panel?", _entityNode.HiddenFromEntityPanel);
+            _entityNode.HiddenFromCellToken = DrawRightAlignedToggle("Hide Grid Token?", _entityNode.HiddenFromCellToken);
+            _entityNode.HiddenFromEntityPanel = DrawRightAlignedToggle("Hide From Panel?", _entityNode.HiddenFromEntityPanel);
 
 
             // Rates
@@ -273,6 +273,18 @@ public class EntityNodeEditor : NodeEditor
 
         // Apply changes
         serializedObject.ApplyModifiedProperties();
+    }
+
+    // Draws a labelled toggle as a row with the checkbox right-aligned, so longer
+    // labels are not clipped by the checkbox in the narrow node body.
+    private bool DrawRightAlignedToggle(string label, bool value)
+    {
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(label);
+        GUILayout.FlexibleSpace();
+        bool result = EditorGUILayout.Toggle(value, GUILayout.Width(16));
+        EditorGUILayout.EndHorizontal();
+        return result;
     }
 
     public int WrapIndex(int value, int min, int max)
