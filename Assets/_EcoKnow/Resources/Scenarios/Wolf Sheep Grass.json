@@ -1,0 +1,104 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Wolf Sheep Grass",
+    "Author": "EcoKnow",
+    "Description": "Agent-based wolf-sheep-grass predation demo. Sheep start in a few cells, a couple of wolves roam to find them, grass is a static food field.",
+    "Rounds": 50,
+    "ActionsPerRound": 4,
+    "StartCurrency": 100,
+    "Seed": 12345,
+    "CalculatorId": "wolf-sheep",
+    "Entities": [
+      {
+        "ID": "grass",
+        "Icon": "Icons/fallen_leaf_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 5.0,
+        "AbundanceThreshold": 30.0,
+        "AutoPlace": false,
+        "StartPopulation": 0,
+        "CanHarvest": false,
+        "CanIntroduce": false,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "sheep",
+        "Icon": "Icons/ewe_high_contrast",
+        "Colour": "E8E4D8FF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 3.0,
+        "AbundanceThreshold": 40.0,
+        "AutoPlace": false,
+        "StartPopulation": 0,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      },
+      {
+        "ID": "wolf",
+        "Icon": "Icons/fox_high_contrast",
+        "Colour": "6E6E78FF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 2.0,
+        "AbundanceThreshold": 20.0,
+        "AutoPlace": false,
+        "StartPopulation": 0,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": null
+      }
+    ],
+    "Items": [],
+    "WinConditions": [
+      {
+        "Title": "Keep the sheep alive",
+        "Description": "Do not let the sheep die out.",
+        "TypeIndex": 0,
+        "TargetIndex": 1,
+        "LowerLimit": 5.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 3
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [ "grass", "sheep", "wolf" ],
+      "entityMatrix": [
+        [ -0.001, 0.0, 0.0 ],
+        [ 0.0, -0.001, 0.0 ],
+        [ 0.0, 0.0, -0.001 ]
+      ]
+    },
+    "Map": {
+      "fileName": "wolf_sheep_grass_map",
+      "gridDef": {
+        "rows": 6,
+        "columns": 6,
+        "tileIDs": [
+          [ 0, 0, 0, 0, 0, 0 ],
+          [ 0, 0, 0, 0, 0, 0 ],
+          [ 0, 0, 0, 0, 0, 0 ],
+          [ 0, 0, 0, 0, 0, 0 ],
+          [ 0, 0, 0, 0, 0, 0 ],
+          [ 0, 0, 0, 0, 0, 0 ]
+        ],
+        "tilePopulations": [
+          [ [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0] ],
+          [ [40,0,0], [40,15,0], [40,0,0], [40,0,0], [40,10,0], [40,0,0] ],
+          [ [40,0,0], [40,0,0], [40,15,0], [40,0,0], [40,0,0], [40,0,0] ],
+          [ [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0] ],
+          [ [40,0,0], [40,0,3], [40,0,0], [40,0,0], [40,0,3], [40,0,0] ],
+          [ [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0], [40,0,0] ]
+        ]
+      }
+    }
+  }
+}
