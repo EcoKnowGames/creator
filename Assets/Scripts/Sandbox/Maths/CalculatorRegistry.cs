@@ -33,6 +33,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 displayName: "Structured",
                 factory: () => new StructuredPopCalculator()),
             new CalculatorInfo(
+                id: "logistic",
+                displayName: "Logistic Growth",
+                factory: () => new LogisticCalculator()),
+            new CalculatorInfo(
                 id: "wolf-sheep",
                 displayName: "Wolf-Sheep-Grass (Agent-Based)",
                 factory: () => new WolfSheepCalculator()),
