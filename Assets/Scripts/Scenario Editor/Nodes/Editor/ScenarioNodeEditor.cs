@@ -103,7 +103,7 @@ public class ScenarioNodeEditor : NodeEditor
                 break;
             }
         }
-        calculatorIndex = EditorGUILayout.Popup("Calculator", calculatorIndex, calculatorNames);
+        calculatorIndex = EditorGUILayout.Popup("Model", calculatorIndex, calculatorNames);
         calculatorIdProp.stringValue = CalculatorRegistry.All[calculatorIndex].Id;
 
         EditorGUILayout.Space();
