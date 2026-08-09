@@ -36,6 +36,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 id: "logistic",
                 displayName: "Logistic Growth",
                 factory: () => new LogisticCalculator()),
+            new CalculatorInfo(
+                id: "wolf-sheep",
+                displayName: "Wolf-Sheep-Grass (Agent-Based)",
+                factory: () => new WolfSheepCalculator()),
         };
 
         /// <summary>All registered calculators, in registration order (for dropdowns).</summary>
