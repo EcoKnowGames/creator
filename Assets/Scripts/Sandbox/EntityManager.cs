@@ -36,7 +36,8 @@ namespace Glitchers.EcoKnow.Sandbox
         // them) deserialise unchanged. Presentational only: hidden entities still simulate,
         // count towards win/lose conditions, and appear in the data export.
         bool HiddenFromCellToken = false,   // no per-cell grid token; still listed in the panel
-        bool HiddenFromEntityPanel = false  // absent from the panel; grid tokens still render
+        bool HiddenFromEntityPanel = false, // absent from the panel; grid tokens still render
+        bool HiddenFromGraph = false        // absent from the population graph; still simulates
         );
 
 
