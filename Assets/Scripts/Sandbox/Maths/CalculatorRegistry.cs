@@ -32,6 +32,10 @@ namespace Glitchers.EcoKnow.Sandbox
                 id: "structured",
                 displayName: "Structured",
                 factory: () => new StructuredPopCalculator()),
+            new CalculatorInfo(
+                id: "logistic",
+                displayName: "Logistic Growth",
+                factory: () => new LogisticCalculator()),
         };
 
         /// <summary>All registered calculators, in registration order (for dropdowns).</summary>
