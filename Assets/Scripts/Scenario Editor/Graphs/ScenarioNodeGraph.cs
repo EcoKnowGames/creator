@@ -22,6 +22,7 @@ public record Scenario
         int ActionsPerRound,
         int StartCurrency,
         int Seed,
+        string CalculatorId,
         Entity[] Entities,
         Item[] Items,
         WinConditionRecord[] WinConditions,
@@ -202,6 +203,7 @@ public class ScenarioNodeGraph : NodeGraph
            scenarioNode.ActionsPerRound,
            scenarioNode.StartCurrency,
            scenarioNode.Seed,
+           scenarioNode.CalculatorId,
            GetEntityList().ToArray(),                //NOTE: Would prefer to get this from the scenarioNode rather than the graph, but there are issues with the connections on dynamic ports (disconnecting each time code recompiles) that makes this hard to test otherwise
            scenarioNode.ItemDefs == null ? null : scenarioNode.ItemDefs.ToArray(),
            scenarioNode.WinConditions.ToArray(),

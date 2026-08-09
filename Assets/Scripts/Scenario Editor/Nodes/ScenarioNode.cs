@@ -16,6 +16,7 @@ public class ScenarioNode : Node
     [SerializeField] protected int rounds;
     [SerializeField] protected int actionsPerRound;
     [SerializeField] protected int startCurrency;
+    [SerializeField] protected string calculatorId = CalculatorRegistry.DefaultId;
 
     private Texture2D coverImageCache;
 
@@ -135,6 +136,7 @@ public class ScenarioNode : Node
     public int ActionsPerRound => actionsPerRound;
 
     public int StartCurrency => startCurrency;
+    public string CalculatorId => string.IsNullOrEmpty(calculatorId) ? CalculatorRegistry.DefaultId : calculatorId;
 
     // Use this for initialization
     protected override void Init()
