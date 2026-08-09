@@ -57,7 +57,7 @@ namespace Glitchers.EcoKnow.Sandbox
     //Data can be requested or modified here
     public class EntityManager : MonoBehaviour
     {
-        private IEntityCalculator _entityCalculator = new StandardCalculator(); //Swap this out for different mathematics
+        private IEntityCalculator _entityCalculator = CalculatorRegistry.Create(CalculatorRegistry.DefaultId); // Default; overridden per scenario via RegisterCalculator
         public IEntityCalculator Calculator => _entityCalculator;
 
         private Matrix _entityMatrix;
@@ -81,6 +81,17 @@ namespace Glitchers.EcoKnow.Sandbox
         public void RegisterAlphaMatrix(Matrix matrix)
         {
             _entityMatrix = matrix;
+        }
+
+        public void RegisterCalculator(IEntityCalculator calculator)
+        {
+            if (calculator == null)
+            {
+                Debug.LogWarning("[EntityManager] RegisterCalculator called with null; keeping the current calculator.");
+                return;
+            }
+
+            _entityCalculator = calculator;
         }
 
         public void RegisterEntities(List<Entity> entityRecords)
