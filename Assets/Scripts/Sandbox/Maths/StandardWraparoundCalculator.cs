@@ -7,7 +7,7 @@ namespace Glitchers.EcoKnow.Sandbox
 {
     public class StandardWraparoundCalculator : IEntityCalculator
     {
-        public string Name() => "Standard (Wraparound)";
+        public string Name() => "Lotka-Volterra (Wraparound)";
         public string Version() => "1.0";
 
         public void CalculatePopulations(EntityManager entityManager, int[,,] entityLookupTable)
