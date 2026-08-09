@@ -196,6 +196,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
                         foreach(Entity entity in entityTypes)
                         {
+                            if (entity.HiddenFromGraph) continue;
+
                             //Create array of populations from the event data that match entity type id
                             int[] populations = eventData.Where(x => x.Populations.ContainsKey(entity.ID)).Select(x => x.Populations[entity.ID]).ToArray();
 

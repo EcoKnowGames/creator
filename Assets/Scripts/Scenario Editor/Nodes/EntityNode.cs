@@ -68,6 +68,9 @@ public class EntityNode : Node
     [SerializeField] private bool _hiddenFromEntityPanel;
     public bool HiddenFromEntityPanel { get { return _hiddenFromEntityPanel; } set { _hiddenFromEntityPanel = value; } }
 
+    [SerializeField] private bool _hiddenFromGraph;
+    public bool HiddenFromGraph { get { return _hiddenFromGraph; } set { _hiddenFromGraph = value; } }
+
     // Use this for initialization
     protected override void Init()
     {
@@ -92,7 +95,7 @@ public class EntityNode : Node
 
     public Entity GetEntity()
     {
-        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, _harvestLimit, _introduceLimit, GetHarvestQuantities(), GetIntroduceQuantities(), ZoneInformation.ToArray(), _hiddenFromCellToken, _hiddenFromEntityPanel);
+        return new Entity(_id, _iconPath, GetColourFromIndex(), _growthRate, _movementRate, _vulnerable, _abundance, _autoPlace, _startPopulation, _canHarvest, _canIntroduce, _harvestLimit, _introduceLimit, GetHarvestQuantities(), GetIntroduceQuantities(), ZoneInformation.ToArray(), _hiddenFromCellToken, _hiddenFromEntityPanel, _hiddenFromGraph);
     }
 
     private string GetColourFromIndex()
