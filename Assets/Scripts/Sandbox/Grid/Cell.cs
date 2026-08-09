@@ -161,7 +161,38 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
         public void UpdateEntityCount()
         {
             CellEntity[] entities = GetCellEntities();
-            UpdateTokens(entities);
+            UpdateTokens(FilterHiddenEntities(entities));
+        }
+
+        // Removes entities flagged HiddenFromCellToken so the list length matches the number of
+        // tokens SetupEntityTokens actually spawned. Without this, UpdateTokens' childCount vs
+        // length guard fails and aborts the per-frame refresh.
+        private CellEntity[] FilterHiddenEntities(CellEntity[] entities)
+        {
+            if (entities == null)
+            {
+                return entities;
+            }
+
+            EntityManager entityManager = SandboxManager.Instance?.EntityManager;
+            if (entityManager == null)
+            {
+                return entities;
+            }
+
+            List<CellEntity> visible = new List<CellEntity>(entities.Length);
+            for (int i = 0; i < entities.Length; i++)
+            {
+                Entity type = entityManager.GetEntityType(entities[i].Index);
+                if (type != null && type.HiddenFromCellToken)
+                {
+                    continue;
+                }
+
+                visible.Add(entities[i]);
+            }
+
+            return visible.ToArray();
         }
 
         public void ClearEntityTokens()
@@ -195,6 +226,14 @@ namespace Glitchers.EcoKnow.Sandbox.Grid
                 for (int i = 0; i < cellEntities.Length; i++)
                 {
                     Entity type = entityManager.GetEntityType(i);
+                    // Opt-out via scenario JSON: hidden entities skip the per-cell token but
+                    // still appear in the entity panel. Kept in step with FilterHiddenEntities
+                    // so the spawned token count and the update list stay equal.
+                    if (type != null && type.HiddenFromCellToken)
+                    {
+                        continue;
+                    }
+
                     int totalPopulation = entityManager.GetTotalPopulationOfEntityType(i);
 
                     Cell_Token token = Instantiate(_cellTokenPrefab, _cellTokenContainer.transform);

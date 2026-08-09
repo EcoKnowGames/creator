@@ -51,6 +51,14 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 int entityIndex = i;
 
+                // Opt-out via scenario JSON: hidden entities are left out of the panel list.
+                // The loop index is still the real entity index, so selection and lookups
+                // elsewhere stay aligned with EntityManager's entity list.
+                if (entities[i] != null && entities[i].HiddenFromEntityPanel)
+                {
+                    continue;
+                }
+
                 EntityWidget widget = Instantiate(_entityWidgetPrefab, _entityButtonContainer);
                 if (widget != null)
                 {
