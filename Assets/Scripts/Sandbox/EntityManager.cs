@@ -30,7 +30,13 @@ namespace Glitchers.EcoKnow.Sandbox
         Quantity[] HarvestQuantities,
         Quantity[] IntroduceQuantities,
 
-        EntityZoneInformation[] ZoneInformation
+        EntityZoneInformation[] ZoneInformation,
+
+        // Player-visibility flags. Both default false so existing scenario JSONs (which omit
+        // them) deserialise unchanged. Presentational only: hidden entities still simulate,
+        // count towards win/lose conditions, and appear in the data export.
+        bool HiddenFromCellToken = false,   // no per-cell grid token; still listed in the panel
+        bool HiddenFromEntityPanel = false  // absent from the panel; grid tokens still render
         );
 
 
