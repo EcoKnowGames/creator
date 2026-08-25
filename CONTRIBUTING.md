@@ -71,7 +71,7 @@ TIP: Stick to LTS (Long Term Service) versions or the process will be additional
 
 ### License Requirements
 
-All items need to be considerate of the GPL-3.0 license, so no copyright, use limited or private assets to be included in this repository. All rights must be obtained and compatible with GPL-3.0 - including images, audio, plugins and libraries - even external dependencies.
+All items need to be compatible with the EcoKnowGames Creator Software Licence Agreement (non-commercial research use). No copyrighted, licensed, or restricted assets should be included in this repository without appropriate rights. All contributions — including images, audio, plugins, and libraries — must be compatible with non-commercial research use.
 
 ## Spike Work Policy
 

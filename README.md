@@ -29,7 +29,7 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
   6. Press Play.
 
 ### Packages used (auto-installed via Package Manager)
-- **com.github.siccity.xnode**: BSD-3-Clause — Graph editor framework used by the Scenario Editor.
+- **com.github.siccity.xnode**: MIT — Graph editor framework used by the Scenario Editor.
 - **com.yasirkula.simplefilebrowser**: MIT — Runtime file dialogs for loading/saving JSON.
 - **com.unity.uiextensions**: BSD-3-Clause — Additional UI components used by the in-game UI.
 - **com.unity.nuget.newtonsoft-json**: MIT — JSON serialization (Newtonsoft.Json via Unity NuGet bridge).
@@ -93,5 +93,5 @@ EcoKnow is a Unity-based, turn‑based ecosystem sandbox/puzzle. You load or aut
 - See `CONTRIBUTING.md` for contribution guidelines, branching conventions, and code review expectations.
 
 ### License
-- **Project license**: GPL-3.0-only. See the `LICENSE` file for full terms.
-- **Third-party licenses**: See the Packages section for per‑package license notes (e.g., xNode — BSD-3-Clause; Unity UI Extensions — BSD-3-Clause; SimpleFileBrowser — MIT; Newtonsoft.Json — MIT). Unity official packages are licensed by Unity; refer to their entries in the Package Manager.
+- **Project license**: EcoKnowGames Creator Software Licence Agreement. Non-commercial research use only. See the `LICENSE` file for full terms.
+- **Third-party licenses**: See the Packages section for per‑package license notes (e.g., xNode — MIT; Unity UI Extensions — BSD-3-Clause; SimpleFileBrowser — MIT; Newtonsoft.Json — MIT; XCharts — MIT). Unity official packages are licensed by Unity; refer to their entries in the Package Manager.
