@@ -1,0 +1,46 @@
+name: Deploy WebGL to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['Builds/webgl/**']   # only redeploy when the build actually changes
+  workflow_dispatch: {}          # allow manual runs from the Actions tab
+
+# Permissions required by the Pages deploy action
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; cancel an in-flight run if a newer push lands
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout (with LFS so binaries are real, not pointers)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # Belt-and-braces: ensure all LFS objects are materialised before upload
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Builds/webgl
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
