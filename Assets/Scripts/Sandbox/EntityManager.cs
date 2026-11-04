@@ -381,8 +381,10 @@ namespace Glitchers.EcoKnow.Sandbox
         #endregion
 
         #region Data Manipulation
-        public bool TryHarvestEntityFromCell(int column, int row, int index, int amount)
+        public bool TryHarvestEntityFromCell(int column, int row, int index, int amount, out int changed)
         {
+            changed = 0;
+
             if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
             {
                 Debug.LogError($"{LogChannel} Failed to harvest entity from Cell [{column}, {row}], location out of bounds!");
@@ -417,6 +419,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 onEntityHarvested?.Invoke(column, row, index);
 
+                changed = Math.Abs(difference);
                 return true;
             }
             else
@@ -427,8 +430,10 @@ namespace Glitchers.EcoKnow.Sandbox
             return false;
         }
 
-        public bool TryIntroduceEntityToCell(int column, int row, int index, int amount)
+        public bool TryIntroduceEntityToCell(int column, int row, int index, int amount, out int changed)
         {
+            changed = 0;
+
             if (column < 0 || row < 0 || column >= _entityLookupTable.GetLongLength(0) || row >= _entityLookupTable.GetLongLength(1))
             {
                 Debug.LogError($"{LogChannel} Failed to introduce entity to Cell [{column}, {row}], location out of bounds!");
@@ -462,6 +467,7 @@ namespace Glitchers.EcoKnow.Sandbox
 
                 onEntityIntroduced?.Invoke(column, row, index);
 
+                changed = amount;
                 return true;
             }
             else

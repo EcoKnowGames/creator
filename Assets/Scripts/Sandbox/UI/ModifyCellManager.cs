@@ -22,8 +22,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ModifyCellModal _modifyCellModal;
         private SandboxUI _sandboxUI => this.GetComponentInParent<SandboxUI>();
         private int SelectedEntityIndex => _sandboxUI != null ? _sandboxUI.SelectedEntityIndex : 0; //The parent UI should be the authority here
-        private int[] _harvestLimits;
-        private int[] _introduceLimits;
 
 
         private ModifyMode _modifyMode = ModifyMode.NONE;
@@ -42,7 +40,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         public void Init()
         {
             ExitModifyMode();
-            ResetLimits();
 
             if (SandboxManager.Instance.GridManager != null)
             {
@@ -116,13 +113,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     ClearSelectedCells();
                 }
 
-                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
+                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
             }
         }
 
         public void OnInputModified()
         {
-            _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
+            _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
         }
 
         public void OnCellClicked(Cell cell)
@@ -140,7 +137,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     cell.ShowSelected(true);
                 }
 
-                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells, _modifyMode == ModifyMode.HARVEST ? _harvestLimits : _introduceLimits);
+                _modifyCellModal?.UpdateModal(SelectedEntityIndex, _selectedCells);
             }
         }
 
@@ -268,24 +265,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void ResetLimits()
-        {
-            int size = 0;
-            if (SandboxManager.Instance.EntityManager != null)
-            {
-                size = SandboxManager.Instance.EntityManager.EntityTypeCount;
-            }
-
-            _harvestLimits = new int[size];
-            _introduceLimits = new int[size];
-        }
-
         #region Harvest
         private IEnumerator ShowHarvestModal(int entityIndex)
         {
             _modifyCellModal?.ShowModal(ModifyMode.HARVEST, entityIndex, OnInputModified, OnHarvestConfirmed, OnModifyCancelled);
             yield return new WaitForEndOfFrame();
-            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells, _harvestLimits);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnHarvestConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -293,24 +278,46 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.HideModal();
 
             int successCount = 0;
-            int totalAmount = 0;
-            if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+            if ((entityManager != null) && (_selectedCells.Count > 0))
             {
-                foreach (Cell cell in _selectedCells)
+                //Work out what each cell would actually lose before applying anything
+                int[] requestedAmounts = new int[_selectedCells.Count];
+                int totalToChange = 0;
+                for (int i = 0; i < _selectedCells.Count; i++)
                 {
-                    int cellPopulation = SandboxManager.Instance.EntityManager.GetPopulationInCell(cell.Column, cell.Row, SelectedEntityIndex);
-                    int actualAmount = unitMode == ModifyCellModal.UnitMode.DISCRETE ? Mathf.FloorToInt(amount) : Mathf.FloorToInt(cellPopulation * (amount / 100f));
-                    totalAmount += actualAmount;
-                    if (SandboxManager.Instance.EntityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, SelectedEntityIndex, actualAmount))
+                    Cell cell = _selectedCells[i];
+                    int cellPopulation = entityManager.GetPopulationInCell(cell.Column, cell.Row, SelectedEntityIndex);
+                    requestedAmounts[i] = ModifyCellModal.GetRequestedAmount(unitMode, amount, cellPopulation);
+                    totalToChange += Mathf.Min(requestedAmounts[i], Mathf.Max(cellPopulation, 0));
+                }
+
+                //The modal already disables Confirm when the limit is exceeded, this is a safety net
+                int harvestLimit = entityManager.GetHarvestLimits(SelectedEntityIndex);
+                if ((harvestLimit > 0) && (totalToChange > harvestLimit))
+                {
+                    Debug.LogWarning($"{LogChannel} Cannot harvest {totalToChange} of Entity {SelectedEntityIndex}, exceeds the per-action limit of {harvestLimit}!");
+                    OnModifyCancelled();
+                    return;
+                }
+
+                int totalChanged = 0;
+                for (int i = 0; i < _selectedCells.Count; i++)
+                {
+                    Cell cell = _selectedCells[i];
+                    if (entityManager.TryHarvestEntityFromCell(cell.Column, cell.Row, SelectedEntityIndex, requestedAmounts[i], out int changed))
                     {
                         successCount += 1;
                     }
+
+                    totalChanged += changed;
                 }
+
+                Debug.Log($"{LogChannel} Harvested {totalChanged} of Entity {SelectedEntityIndex}");
             }
 
             if (successCount > 0)
             {
-                _harvestLimits[SelectedEntityIndex] += totalAmount;
                 OnModifySuccess(ModifyMode.HARVEST);
             }
             else
@@ -325,7 +332,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         {
             _modifyCellModal?.ShowModal(ModifyMode.INTRODUCE, entityIndex, OnInputModified, OnIntroduceConfirmed, OnModifyCancelled);
             yield return new WaitForEndOfFrame();
-            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells, _introduceLimits);
+            _modifyCellModal?.UpdateModal(entityIndex, _selectedCells);
         }
 
         protected void OnIntroduceConfirmed(ModifyCellModal.UnitMode unitMode, float amount)
@@ -333,23 +340,38 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellModal?.HideModal();
 
             int successCount = 0;
-            int totalAmount = 0;
-            if ((SandboxManager.Instance.EntityManager != null) && (_selectedCells.Count > 0))
+            EntityManager entityManager = SandboxManager.Instance.EntityManager;
+            if ((entityManager != null) && (_selectedCells.Count > 0))
             {
+                //Introduce is always discrete, so every cell receives the same amount
+                int requestedAmount = ModifyCellModal.GetRequestedAmount(ModifyCellModal.UnitMode.DISCRETE, amount, 0);
+                int totalToChange = requestedAmount * _selectedCells.Count;
+
+                //The modal already disables Confirm when the limit is exceeded, this is a safety net
+                int introduceLimit = entityManager.GetIntroduceLimits(SelectedEntityIndex);
+                if ((introduceLimit > 0) && (totalToChange > introduceLimit))
+                {
+                    Debug.LogWarning($"{LogChannel} Cannot introduce {totalToChange} of Entity {SelectedEntityIndex}, exceeds the per-action limit of {introduceLimit}!");
+                    OnModifyCancelled();
+                    return;
+                }
+
+                int totalChanged = 0;
                 foreach (Cell cell in _selectedCells)
                 {
-                    int actualAmount = Mathf.FloorToInt(amount);
-                    totalAmount += actualAmount;
-                    if (SandboxManager.Instance.EntityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, SelectedEntityIndex, actualAmount))
+                    if (entityManager.TryIntroduceEntityToCell(cell.Column, cell.Row, SelectedEntityIndex, requestedAmount, out int changed))
                     {
                         successCount += 1;
                     }
+
+                    totalChanged += changed;
                 }
+
+                Debug.Log($"{LogChannel} Introduced {totalChanged} of Entity {SelectedEntityIndex}");
             }
 
             if (successCount > 0)
             {
-                _introduceLimits[SelectedEntityIndex] += totalAmount;
                 OnModifySuccess(ModifyMode.INTRODUCE);
             }
             else

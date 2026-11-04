@@ -328,7 +328,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void UpdateModal(int entityIndex, List<Cell> selectedCells, int[] currentLimits)
+        public void UpdateModal(int entityIndex, List<Cell> selectedCells)
         {
             if ((SandboxManager.Instance.EntityManager == null) || (selectedCells == null))
             {
@@ -343,7 +343,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 _currentPopulationText.text = totalPopulation.ToString("n0");
             }
 
-            if (_predictedPopulationText.text != null)
+            if (_predictedPopulationText != null)
             {
                 _predictedPopulationText.text = (totalPopulation + actualDifference).ToString("n0");
             }
@@ -351,9 +351,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             bool canPerformAction = false;
 
             int overallLimit = _modifyMode == ModifyMode.HARVEST ? SandboxManager.Instance.EntityManager.GetHarvestLimits(entityIndex) : SandboxManager.Instance.EntityManager.GetIntroduceLimits(entityIndex);
-            int usedLimit = entityIndex >= 0 && entityIndex < currentLimits.Count() ? currentLimits[entityIndex] : 0;
-            int remainingLimit = Mathf.Max(overallLimit - usedLimit - Mathf.Abs(actualDifference), 0);
-            bool withinLimits = overallLimit <= 0 || Mathf.Abs(actualDifference) <= overallLimit - usedLimit;
+            int actual = Mathf.Abs(actualDifference);
+            int remainingLimit = Mathf.Max(overallLimit - actual, 0);
+            bool withinLimits = overallLimit <= 0 || actual <= overallLimit;
 
             if (_limitText != null)
             {
@@ -365,7 +365,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 {
                     _limitText.gameObject.SetActive(true);
                     _limitText.text = $"Remaining Limit: {remainingLimit}";
-                    _limitText.color = withinLimits && usedLimit != overallLimit ? _validColour : _invalidColour; 
+                    _limitText.color = withinLimits ? _validColour : _invalidColour;
                 }
             }
 
@@ -438,17 +438,27 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 foreach (Cell cell in selectedCells)
                 {
                     int cellPopulation = SandboxManager.Instance.EntityManager.GetPopulationInCell(cell.Column, cell.Row, _selectedEntityIndex);
-                    int modifyAmount = _unitMode == UnitMode.DISCRETE ? Mathf.FloorToInt(InputValue) : Mathf.FloorToInt(cellPopulation * (InputValue / 100f));
+                    int modifyAmount = GetRequestedAmount(_unitMode, InputValue, cellPopulation);
                     int newPopulation = Mathf.Max(cellPopulation - modifyAmount, 0);
                     actualDifference += newPopulation - cellPopulation;
                 }
             }
             else if (_modifyMode == ModifyMode.INTRODUCE)
             {
-                actualDifference = Mathf.FloorToInt(InputValue) * selectedCells.Count; //Discrete only in Introduce Mode
+                actualDifference = GetRequestedAmount(UnitMode.DISCRETE, InputValue, 0) * selectedCells.Count; //Discrete only in Introduce Mode
             }
 
             return actualDifference;
+        }
+
+        /// <summary>
+        /// Single source for converting the modal input into the number of units requested from one cell.
+        /// Introduce always uses DISCRETE. The result is never negative.
+        /// </summary>
+        public static int GetRequestedAmount(UnitMode unitMode, float input, int cellPopulation)
+        {
+            int requestedAmount = unitMode == UnitMode.DISCRETE ? Mathf.FloorToInt(input) : Mathf.FloorToInt(cellPopulation * (input / 100f));
+            return Mathf.Max(requestedAmount, 0);
         }
 
         public void SetItemWidgetsVisibile(bool value)
