@@ -14,48 +14,8 @@ namespace Glitchers.EcoKnow.Sandbox
         }
     }
 
-    public class MultiplayerManager : MonoBehaviour
+    public class MultiplayerManager : PersistentSingleton<MultiplayerManager>
     {
-        #region Singleton
-        protected static MultiplayerManager instance;
-        public static MultiplayerManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = GetInstance();
-
-                    if (instance == null)
-                    {
-                        Debug.LogError("An instance of " + typeof(MultiplayerManager) +
-                            " is needed in the scene, but there is none.");
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        public static bool Exists
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
-        private static MultiplayerManager GetInstance()
-        {
-            if (instance == null)
-            {
-                return FindFirstObjectByType<MultiplayerManager>();
-            }
-            return instance;
-        }
-        #endregion
-
-
         [SerializeField] private ColourPaletteObject _multiplayerColourPalette;
         private PlayerDef[] _playerDefs = null;
 
@@ -68,9 +28,8 @@ namespace Glitchers.EcoKnow.Sandbox
 
         private const string LogChannel = "[ScenarioLoader]";
 
-        private void Awake()
+        protected override void OnSingletonAwake()
         {
-            DontDestroyOnLoad(gameObject);
             SetMaxPlayers(1); //Default
         }
 
