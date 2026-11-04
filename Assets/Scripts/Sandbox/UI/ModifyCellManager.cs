@@ -235,18 +235,24 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         private void OnModifySuccess(ModifyMode modifyMode)
         {
             ExitModifyMode();
-            SandboxManager.SpendActionPoint();
 
+            Data.EventType eventType;
             if (modifyMode == ModifyMode.HARVEST)
             {
-                Data.DataManager.Instance.RecordEvent(Data.EventType.HARVEST);
+                eventType = Data.EventType.HARVEST;
             }
             else if (modifyMode == ModifyMode.INTRODUCE)
             {
-                Data.DataManager.Instance.RecordEvent(Data.EventType.INTRODUCE);
+                eventType = Data.EventType.INTRODUCE;
+            }
+            else
+            {
+                //Only harvest and introduce count as actions, so no action is completed for any other mode
+                Debug.LogWarning($"{LogChannel} Modify success reported for unsupported mode {modifyMode}, no action completed");
+                return;
             }
 
-            SandboxManager.OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
+            SandboxManager.CompleteAction(eventType);
             onModifySuccess?.Invoke();
         }
 
