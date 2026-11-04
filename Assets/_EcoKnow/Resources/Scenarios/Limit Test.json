@@ -1,0 +1,340 @@
+{
+  "AppVersion": "1.0",
+  "UnityVersion": "6000.0.49f1",
+  "Scenario": {
+    "Name": "Limit Test",
+    "Author": "University of Stirling",
+    "Description": "TEST SCENARIO (not shipped): copy of Hare, Fox, and Rocks for testing per-action Harvest/Introduce limits (issue #84). Hare: Harvest Limit 50, Introduce Limit 30. Fox and Rock: no limits (0 = unlimited). Load it from the main menu Load screen. Expected: an action whose actual total exceeds the limit cannot be confirmed; every action gets the full limit again; Remaining Limit = limit minus the action's actual total.",
+    "Rounds": 12,
+    "ActionsPerRound": 4,
+    "StartCurrency": 2000,
+    "Seed": 123456,
+    "Entities": [
+      {
+        "ID": "Hare",
+        "Icon": "Icons/rabbit_high_contrast",
+        "Colour": "FC9F4EFF",
+        "GrowthRate": 0.6,
+        "MovementRate": 0.3,
+        "VulnerableThreshold": 30.0,
+        "AbundanceThreshold": 300.0,
+        "AutoPlace": true,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestLimit": 50,
+        "IntroduceLimit": 30,
+        "HarvestQuantities": [
+          {
+            "ID": "Rabbit Foot",
+            "Value": 4
+          },
+          {
+            "ID": "Meat",
+            "Value": 1
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 50
+          },
+          {
+            "ID": "Rabbit Foot",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "ID": "Fox",
+        "Icon": "Icons/fox_high_contrast",
+        "Colour": "B0D01EFF",
+        "GrowthRate": -0.3,
+        "MovementRate": 0.2,
+        "VulnerableThreshold": 10.0,
+        "AbundanceThreshold": 150.0,
+        "AutoPlace": true,
+        "StartPopulation": 100,
+        "CanHarvest": true,
+        "CanIntroduce": true,
+        "HarvestLimit": 0,
+        "IntroduceLimit": 0,
+        "HarvestQuantities": [
+          {
+            "ID": "Meat",
+            "Value": 5
+          }
+        ],
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 50
+          },
+          {
+            "ID": "Rabbit Foot",
+            "Value": 2
+          }
+        ]
+      },
+      {
+        "ID": "Rock",
+        "Icon": "Icons/rock_high_contrast",
+        "Colour": "FC6969FF",
+        "GrowthRate": 0.0,
+        "MovementRate": 0.0,
+        "VulnerableThreshold": 0.0,
+        "AbundanceThreshold": 200.0,
+        "AutoPlace": false,
+        "StartPopulation": 100,
+        "CanHarvest": false,
+        "CanIntroduce": true,
+        "HarvestLimit": 0,
+        "IntroduceLimit": 0,
+        "HarvestQuantities": null,
+        "IntroduceQuantities": [
+          {
+            "ID": "currency",
+            "Value": 1
+          }
+        ]
+      }
+    ],
+    "Items": [
+      {
+        "ID": "Meat",
+        "Icon": null,
+        "Value": 5,
+        "CanSell": true
+      },
+      {
+        "ID": "Rabbit Foot",
+        "Icon": null,
+        "Value": 10,
+        "CanSell": true
+      },
+      {
+        "ID": "Wood",
+        "Icon": null,
+        "Value": 60,
+        "CanSell": true
+      }
+    ],
+    "WinConditions": [
+      {
+        "Title": "Fox Population",
+        "Description": "Keep Fox Population above 400 for 3 rounds!",
+        "EntityIndex": 1,
+        "LowerLimit": 400.0,
+        "UpperLimit": 0.0,
+        "RequiredRounds": 3
+      },
+      {
+        "Title": "Hare Population",
+        "Description": "Keep Hares within the range of 1000-5000",
+        "EntityIndex": 0,
+        "LowerLimit": 1000.0,
+        "UpperLimit": 5000.0,
+        "RequiredRounds": -1
+      }
+    ],
+    "Matrix": {
+      "entityIDs": [
+        "Hare",
+        "Fox",
+        "Rock"
+      ],
+      "entityMatrix": [
+        [
+          -0.01,
+          0.04,
+          0.0
+        ],
+        [
+          -0.01,
+          -0.01,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "Map": {
+      "fileName": "Map_PopulationTest",
+      "gridDef": {
+        "rows": 6,
+        "columns": 5,
+        "tileIDs": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            0
+          ],
+          [
+            -1,
+            -1,
+            0,
+            -1,
+            -1,
+            -1
+          ]
+        ],
+        "tilePopulations": [
+          [
+            [
+              50,
+              0,
+              1
+            ],
+            [
+              50,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            null
+          ],
+          [
+            [
+              50,
+              0,
+              0
+            ],
+            [
+              50,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              20,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              0,
+              0
+            ],
+            [
+              20,
+              20,
+              5
+            ]
+          ],
+          [
+            null,
+            null,
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              20,
+              0,
+              0
+            ],
+            null,
+            [
+              20,
+              20,
+              5
+            ]
+          ],
+          [
+            null,
+            null,
+            [
+              20,
+              0,
+              0
+            ],
+            null,
+            null,
+            null
+          ]
+        ]
+      }
+    }
+  }
+}

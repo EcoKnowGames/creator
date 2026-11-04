@@ -143,16 +143,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _entityPanel?.UpdateAllWidgets();
 
             _modifyCellManager?.ExitModifyMode();
-            _modifyCellManager?.ResetLimits();
 
             _inventoryModal?.HideModal();
 
             RefreshInventories();
-        }
-
-        public void OnActionCompleted()
-        {
-            _modifyCellManager?.ResetLimits();
         }
         #endregion
 
