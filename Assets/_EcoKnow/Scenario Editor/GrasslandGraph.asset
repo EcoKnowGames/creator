@@ -69,7 +69,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-8174407131446057570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +142,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-6457743791950346658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +370,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   matricesCSV: {fileID: 4900000, guid: e7f8fa53b08a8ed4aa4cf243949de26a, type: 3}
+  _zoneIndex: 0
   matrix:
     entityIDs:
     - big_bluestem
@@ -367,6 +380,7 @@ MonoBehaviour:
     - prairie_dropseed
     - purple_loosestrife
     - corn
+    zoneIndex: 0
 --- !u!114 &-527584339705775600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,7 +648,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &2180374334951858952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,7 +718,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &3338455722579156287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -735,6 +761,8 @@ MonoBehaviour:
     gridDef:
       rows: 7
       columns: 7
+      zoneDefs: []
+      bgColour: 
 --- !u!114 &3480141112155190525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,7 +800,7 @@ MonoBehaviour:
         node: {fileID: -1705689603022999336}
         reroutePoints: []
       _direction: 0
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: _map
@@ -821,7 +849,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 6161588048843491870}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -830,7 +861,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 2180374334951858952}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -839,7 +873,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 1904938143151288559}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -848,7 +885,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 5681963542889662052}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -857,7 +897,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 5667732518961894655}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -866,7 +909,10 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -8325682067447612029}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -875,23 +921,32 @@ MonoBehaviour:
       _node: {fileID: 3480141112155190525}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -8174407131446057570}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
   scenarioName: Grasslands
   authorName: University of Stirling
+  description: 
+  coverImageBase64: 
   rounds: 32
   actionsPerRound: 4
   startCurrency: 40
+  calculatorId: lotka-volterra
   _matrix:
     entityIDs: []
+    zoneIndex: 0
   _map:
     fileName: 
     gridDef:
       rows: 0
       columns: 0
+      zoneDefs: []
+      bgColour: 
   _winConditions: 
   _items: 
   _seed: 123456
@@ -995,7 +1050,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &5681963542889662052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1062,7 +1123,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &6161588048843491870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,7 +1196,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &6624999883628372407
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -45,7 +45,7 @@ MonoBehaviour:
         node: {fileID: 49053916092123579}
         reroutePoints: []
       _direction: 0
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: _winConditions
@@ -85,7 +85,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -2726126907051347721}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -94,7 +97,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 8368680822340120736}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -103,7 +109,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 4452621898610726545}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -115,13 +124,17 @@ MonoBehaviour:
   rounds: 12
   actionsPerRound: 4
   startCurrency: 8000
+  calculatorId: lotka-volterra
   _matrix:
     entityIDs: []
+    zoneIndex: 0
   _map:
     fileName: 
     gridDef:
       rows: 0
       columns: 0
+      zoneDefs: []
+      bgColour: 
   _winConditions: 
   _items: 
   _seed: 123456
@@ -256,6 +269,10 @@ MonoBehaviour:
   _harvestLimit: 0
   _canIntroduce: 1
   _introduceLimit: 60
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-1515369370903765867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,11 +479,13 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   matricesCSV: {fileID: 4900000, guid: ba536ef5de4111d48ab3d34ca9c37723, type: 3}
+  _zoneIndex: 0
   matrix:
     entityIDs:
     - Hare
     - Fox
     - House
+    zoneIndex: 0
 --- !u!114 &1576632361664831712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,6 +651,8 @@ MonoBehaviour:
     gridDef:
       rows: 6
       columns: 12
+      zoneDefs: []
+      bgColour: 
 --- !u!114 &4452621898610726545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,6 +728,10 @@ MonoBehaviour:
   _harvestLimit: 0
   _canIntroduce: 1
   _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &6972771029753438006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,6 +868,10 @@ MonoBehaviour:
   _harvestLimit: 50
   _canIntroduce: 1
   _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &9215620791800968014
 MonoBehaviour:
   m_ObjectHideFlags: 0
