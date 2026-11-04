@@ -202,15 +202,19 @@
       {
         "Title": "Purple Loosestrife Population",
         "Description": "Remove all purple loosetrife for 5 rounds",
-        "EntityIndex": 5,
+        "TypeIndex": 0,
+        "TargetIndex": 5,
+        "TargetId": "purple_loosestrife",
         "LowerLimit": 0.0,
         "UpperLimit": 1.0,
         "RequiredRounds": 5
       },
       {
-        "Title": "Blig bluestem",
+        "Title": "Big bluestem",
         "Description": "Keep it above 500",
-        "EntityIndex": 0,
+        "TypeIndex": 0,
+        "TargetIndex": 0,
+        "TargetId": "big_bluestem",
         "LowerLimit": 500.0,
         "UpperLimit": 0.0,
         "RequiredRounds": -1

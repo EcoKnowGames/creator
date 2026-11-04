@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.UI
@@ -9,6 +9,9 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [Header("Widgets")]
         [SerializeField] private ObjectiveWidget _widgetPrefab;
         [SerializeField] private Transform _widgetContainer;
+
+        //One widget per win condition; each widget holds its own condition
+        private readonly List<ObjectiveWidget> _widgets = new List<ObjectiveWidget>();
 
         private const string LogChannel = "[ObjectivesPanel]";
 
@@ -25,38 +28,15 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 Destroy(child.gameObject);
             }
+            _widgets.Clear();
 
             //Instantiate new ones
             foreach (WinCondition condition in winConditions)
             {
                 ObjectiveWidget widget = Instantiate(_widgetPrefab, _widgetContainer);
                 widget.ResultsTracker.Init(null, -1, -1); //Not ideal but works for now
-
-                switch ((WinCondition.TargetType)condition.TypeIndex)
-                {
-                    case (WinCondition.TargetType.Entity):
-                        {
-                            if (condition.TargetEntity != null)
-                                widget.SetEntity(condition.TargetIndex, condition.TargetEntity);
-                            break;
-                        }
-                    case (WinCondition.TargetType.Item):
-                        {
-                            if (condition.TargetItem != null)
-                                widget.SetItem(condition.TargetIndex, condition.TargetItem);
-                            break;
-                        }
-                    case (WinCondition.TargetType.Currency):
-                        {
-                            widget.SetCurrency();
-                            break;
-                        }
-                    default:
-                        {
-                            Debug.LogError($"{LogChannel} Failed setup, Type not recognised!");
-                            break;
-                        }
-                }
+                widget.Init(condition);
+                _widgets.Add(widget);
             }
         }
 
@@ -68,93 +48,47 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                 return;
             }
 
-            if (SandboxManager.Instance != null)
+            foreach (ObjectiveWidget widget in _widgets)
             {
-                foreach(WinCondition condition in SandboxManager.Instance.WinConditions)
+                if (widget != null)
                 {
-                    ObjectiveWidget widget = GetWidgetByIndex(condition.Type, condition.TargetIndex);
-                    if (widget != null)
-                    {
-                        widget.UpdateObjective(currentRound, maxRounds);
-                    }
+                    widget.UpdateObjective(currentRound, maxRounds);
                 }
             }
         }
 
-        private ObjectiveWidget GetWidgetByIndex(WinCondition.TargetType type, int index)
+        //Refresh every widget whose condition matches the target (several conditions may share one)
+        private void RefreshWidgetsTargeting(WinCondition.TargetType type, string id)
         {
-            if (_widgetContainer != null)
+            foreach (ObjectiveWidget widget in _widgets)
             {
-                ObjectiveWidget[] widgets = _widgetContainer.GetComponentsInChildren<ObjectiveWidget>();
-                if ((widgets != null) && (widgets.Count() > 0))
+                if ((widget != null) && (widget.WinCondition != null) && widget.WinCondition.Targets(type, id))
                 {
-                    return widgets.FirstOrDefault(x => x.Type == type && x.TargetIndex == index);
+                    widget.OnQuantityUpdated();
                 }
             }
-
-            return null;
         }
 
-        private ObjectiveWidget GetWidgetById(WinCondition.TargetType type, string id)
+        public void OnEntityUpdated(int column, int row, int index)
         {
-            int index = -1;
-
-            switch(type)
+            //Convert the runtime (matrix-sorted) index to the entity's ID
+            EntityManager entityManager = SandboxManager.Instance != null ? SandboxManager.Instance.EntityManager : null;
+            if (entityManager == null)
             {
-                case (WinCondition.TargetType.Entity):
-                    {
-                        if (SandboxManager.Instance.EntityManager != null)
-                            index = SandboxManager.Instance.EntityManager.GetEntityIndex(id);
-                        break;
-                    }
-                case (WinCondition.TargetType.Item):
-                    {
-                        if (SandboxManager.Instance.PlayerInventory != null)
-                            index = SandboxManager.Instance.PlayerInventory.GetItemIndex(id);
-                        break;
-                    }
-                case (WinCondition.TargetType.Currency):
-                    {
-                        index = 0;
-                        break;
-                    }
-                default:
-                    return null;
+                return;
             }
 
-            //Try find widget
-            if (index >= 0)
+            Entity entity = entityManager.GetEntityType(index);
+            if (entity != null)
             {
-                if (_widgetContainer != null)
-                {
-                    ObjectiveWidget[] widgets = _widgetContainer.GetComponentsInChildren<ObjectiveWidget>();
-                    if ((widgets != null) && (widgets.Count() > 0))
-                    {
-                        return widgets.FirstOrDefault(x => x.Type == type && x.TargetIndex == index);
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public void OnEntityUpdated(int column, int row, int id)
-        {
-            ObjectiveWidget widget = GetWidgetByIndex(WinCondition.TargetType.Entity, id);
-            if (widget != null)
-            {
-                widget.OnQuantityUpdated();
+                RefreshWidgetsTargeting(WinCondition.TargetType.Entity, entity.ID);
             }
         }
 
         public void OnInventoryUpdated(string id, int amount)
         {
             bool isCurrency = id.Equals(PlayerInventory.CurrencyID, StringComparison.OrdinalIgnoreCase);
-            ObjectiveWidget widget = GetWidgetById(isCurrency ? WinCondition.TargetType.Currency : WinCondition.TargetType.Item, id);
-            if (widget != null)
-            {
-                widget.OnQuantityUpdated();
-            }
+            RefreshWidgetsTargeting(isCurrency ? WinCondition.TargetType.Currency : WinCondition.TargetType.Item, id);
         }
     }
 }

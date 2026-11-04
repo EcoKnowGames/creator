@@ -202,6 +202,12 @@ namespace Glitchers.EcoKnow.Sandbox
                     {
                         Debug.LogWarning($"{LogChannel} Invalid number of actions per round ({config.Scenario.Rounds}) found in Scenario {config.Scenario.Name}. Using default value");
                     }
+
+                    if (!NormaliseWinConditionTargets(config.Scenario))
+                    {
+                        Debug.LogError($"{LogChannel} Failed to load ScenarioConfig from JSON. Scenario {config.Scenario.Name} has an invalid Win Condition target");
+                        return null;
+                    }
                 }
 
                 //If we have reached this point we are valid
@@ -212,6 +218,138 @@ namespace Glitchers.EcoKnow.Sandbox
             }
 
             return config;
+        }
+
+        //Resolve every Win Condition's target to an ID (the single authoritative reference used at runtime).
+        //Handles legacy JSON (EntityIndex key, or TypeIndex/TargetIndex without TargetId). Idempotent.
+        //Replaces elements of scenario.WinConditions in place. Returns false if any target cannot be resolved.
+        public static bool NormaliseWinConditionTargets(Scenario scenario)
+        {
+            if ((scenario == null) || (scenario.WinConditions == null))
+            {
+                Debug.LogError($"{LogChannel} Failed to normalise Win Condition targets, scenario or its Win Conditions are null!");
+                return false;
+            }
+
+            WinConditionRecord[] records = scenario.WinConditions;
+            for (int i = 0; i < records.Length; i++)
+            {
+                WinConditionRecord record = records[i];
+                if (record == null)
+                {
+                    Debug.LogError($"{LogChannel} Win Condition at index [{i}] is null!");
+                    return false;
+                }
+
+                WinConditionRecord normalised = ResolveWinConditionTarget(scenario, record);
+                if (normalised == null)
+                {
+                    return false;
+                }
+
+                records[i] = normalised with { EntityIndex = null };
+            }
+
+            return true;
+        }
+
+        private static WinConditionRecord ResolveWinConditionTarget(Scenario scenario, WinConditionRecord record)
+        {
+            //Already has an ID: validate it
+            if (!string.IsNullOrEmpty(record.TargetId))
+            {
+                bool exists;
+                switch ((WinCondition.TargetType)record.TypeIndex)
+                {
+                    case WinCondition.TargetType.Entity:
+                        exists = (scenario.Entities != null) && scenario.Entities.Any(x => (x != null) && !string.IsNullOrEmpty(x.ID) && string.Equals(x.ID, record.TargetId, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case WinCondition.TargetType.Item:
+                        exists = (scenario.Items != null) && scenario.Items.Any(x => (x != null) && !string.IsNullOrEmpty(x.ID) && string.Equals(x.ID, record.TargetId, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case WinCondition.TargetType.Currency:
+                        exists = string.Equals(record.TargetId, PlayerInventory.CurrencyID, StringComparison.OrdinalIgnoreCase);
+                        break;
+                    default:
+                        Debug.LogError($"{LogChannel} Win Condition [{record.Title}] has an unknown target type [{record.TypeIndex}]!");
+                        return null;
+                }
+
+                if (!exists)
+                {
+                    Debug.LogError($"{LogChannel} Win Condition [{record.Title}] targets [{record.TargetId}] ({(WinCondition.TargetType)record.TypeIndex}), which does not exist in the scenario!");
+                    return null;
+                }
+
+                return record;
+            }
+
+            //Legacy key: always an entity, indexed in JSON order
+            if (record.EntityIndex != null)
+            {
+                int entityIndex = record.EntityIndex.Value;
+                Entity entity = GetWinConditionEntity(scenario, entityIndex, record.Title);
+                if (entity == null)
+                {
+                    return null;
+                }
+
+                return record with
+                {
+                    TypeIndex = (int)WinCondition.TargetType.Entity,
+                    TargetIndex = entityIndex,
+                    TargetId = entity.ID
+                };
+            }
+
+            //Resolve from TypeIndex/TargetIndex
+            switch ((WinCondition.TargetType)record.TypeIndex)
+            {
+                case WinCondition.TargetType.Entity:
+                    {
+                        //JSON order is the editor's order (deliberately NOT the matrix-sorted runtime order in EntityManager)
+                        Entity entity = GetWinConditionEntity(scenario, record.TargetIndex, record.Title);
+                        return entity == null ? null : record with { TargetId = entity.ID };
+                    }
+                case WinCondition.TargetType.Item:
+                    {
+                        //Same ordering as PlayerInventory.ItemDefs and the editor's item popup
+                        List<Item> items = scenario.Items == null ? null : scenario.Items.Where(x => x != null).OrderBy(x => x.ID).ToList();
+                        if ((items == null) || (record.TargetIndex < 0) || (record.TargetIndex >= items.Count))
+                        {
+                            Debug.LogError($"{LogChannel} Win Condition [{record.Title}] targets item index [{record.TargetIndex}], which is out of range!");
+                            return null;
+                        }
+                        if (string.IsNullOrEmpty(items[record.TargetIndex].ID))
+                        {
+                            Debug.LogError($"{LogChannel} Win Condition [{record.Title}] targets item index [{record.TargetIndex}], which has a blank ID!");
+                            return null;
+                        }
+                        return record with { TargetId = items[record.TargetIndex].ID };
+                    }
+                case WinCondition.TargetType.Currency:
+                    return record with { TargetId = PlayerInventory.CurrencyID };
+                default:
+                    Debug.LogError($"{LogChannel} Win Condition [{record.Title}] has an unknown target type [{record.TypeIndex}]!");
+                    return null;
+            }
+        }
+
+        private static Entity GetWinConditionEntity(Scenario scenario, int index, string title)
+        {
+            if ((scenario.Entities == null) || (index < 0) || (index >= scenario.Entities.Length) || (scenario.Entities[index] == null))
+            {
+                Debug.LogError($"{LogChannel} Win Condition [{title}] targets entity index [{index}], which is out of range!");
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(scenario.Entities[index].ID))
+            {
+                Debug.LogError($"{LogChannel} Win Condition [{title}] targets entity index [{index}], which has a blank ID!");
+                return null;
+            }
+
+            return scenario.Entities[index];
         }
 
         public void SetLoadedConfig(ScenarioConfig config)
@@ -271,7 +409,7 @@ namespace Glitchers.EcoKnow.Sandbox
         public void RequestStartActiveGraph()
         {
             ScenarioConfig config = GetCurrentGraphConfig();
-            if (config != null)
+            if ((config != null) && NormaliseWinConditionTargets(config.Scenario))
             {
                 _loadedConfig = config;
                 StartLoadedConfig();

@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Glitchers.EcoKnow.Sandbox;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XNode;
 
 public record WinConditionRecord
@@ -11,7 +14,17 @@ public record WinConditionRecord
     int TargetIndex,
     float LowerLimit,
     float UpperLimit,
-    int RequiredRounds
+    int RequiredRounds,
+
+    // Authoritative target (Entity/Item ID, or PlayerInventory.CurrencyID). Older JSONs omit it;
+    // ScenarioLoader.NormaliseWinConditionTargets fills it from the indices on load.
+    string TargetId = null,
+
+    // Legacy, read-only: the pre-11-Mar-2026 key (commit 4054a39 renamed it to TypeIndex/TargetIndex
+    // without a migration). Converted to TargetId on load by ScenarioLoader.NormaliseWinConditionTargets,
+    // then cleared so it is never re-serialised. Repo scenarios still using it as of this change:
+    // Autoplace Example, Emissions, Hares Foxes and Houses, Rock Paper Scissors, example_scenario.
+    [property: JsonProperty(NullValueHandling = NullValueHandling.Ignore)] int? EntityIndex = null
 );
 
 public class WinConditionNode : Node
@@ -26,8 +39,27 @@ public class WinConditionNode : Node
     [SerializeField, HideInInspector] protected int typeIndex;
     public int TypeIndex { get { return typeIndex; } set { typeIndex = value; } }
 
-    [SerializeField, HideInInspector] protected int targetIndex;
+    //Legacy: kept only to migrate graphs saved before #76 (FormerlySerializedAs recovers the older entityIndex field too).
+    //targetId is authoritative; this is never read once targetId is set.
+    [SerializeField, HideInInspector, FormerlySerializedAs("entityIndex")] protected int targetIndex;
     public int TargetIndex { get { return targetIndex; } set { targetIndex = value; } }
+
+    //Authoritative target: Entity/Item ID, or PlayerInventory.CurrencyID
+    [SerializeField, HideInInspector] protected string targetId;
+    public string TargetId
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(targetId))
+            {
+                return targetId;
+            }
+
+            //Lazy migration of graphs saved before #76: derive (without writing) from the legacy index
+            return GetLegacyTargetId();
+        }
+        set { targetId = value; }
+    }
 
     [SerializeField] protected float lowerLimit;
     [SerializeField] protected float upperLimit;
@@ -96,9 +128,65 @@ public class WinConditionNode : Node
         return null;
     }
 
+    //Uses the orders the pre-#76 popups used: Entities in graph node order, Items ID-sorted (ScenarioNode.ItemDefs)
+    private string GetLegacyTargetId()
+    {
+        if (targetIndex < 0)
+        {
+            return null;
+        }
+
+        switch ((WinCondition.TargetType)typeIndex)
+        {
+            case (WinCondition.TargetType.Entity):
+                {
+                    List<Entity> entities = AvailableEntities;
+                    return ((entities != null) && (targetIndex < entities.Count)) ? entities[targetIndex]?.ID : null;
+                }
+            case (WinCondition.TargetType.Item):
+                {
+                    List<Item> items = AvailableItems;
+                    return ((items != null) && (targetIndex < items.Count)) ? items[targetIndex]?.ID : null;
+                }
+            case (WinCondition.TargetType.Currency):
+                return PlayerInventory.CurrencyID;
+            default:
+                return null;
+        }
+    }
+
+    //Index of TargetId in the current list for its type (-1 if not found). Derived, never stored as the reference.
+    public int GetTargetIndex()
+    {
+        string id = TargetId;
+        if (string.IsNullOrEmpty(id))
+        {
+            return -1;
+        }
+
+        switch ((WinCondition.TargetType)typeIndex)
+        {
+            case (WinCondition.TargetType.Entity):
+                {
+                    List<Entity> entities = AvailableEntities;
+                    return entities == null ? -1 : entities.FindIndex(x => (x != null) && string.Equals(x.ID, id, StringComparison.OrdinalIgnoreCase));
+                }
+            case (WinCondition.TargetType.Item):
+                {
+                    List<Item> items = AvailableItems;
+                    return items == null ? -1 : items.FindIndex(x => (x != null) && string.Equals(x.ID, id, StringComparison.OrdinalIgnoreCase));
+                }
+            case (WinCondition.TargetType.Currency):
+                return 0;
+            default:
+                return -1;
+        }
+    }
+
     public WinConditionRecord GetWinCondition()
     {
-        return new WinConditionRecord(title, description, typeIndex, targetIndex, lowerLimit, upperLimit, requiredRounds);
+        //TargetIndex is exported only for older readers; ScenarioLoader prefers TargetId
+        return new WinConditionRecord(title, description, typeIndex, GetTargetIndex(), lowerLimit, upperLimit, requiredRounds, TargetId);
     }
 
     public bool IsConnected()

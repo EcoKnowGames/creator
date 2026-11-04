@@ -19,24 +19,54 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ResultsTracker _resultsTracker;
         public ResultsTracker ResultsTracker => _resultsTracker;
 
-        private WinCondition.TargetType _type;
-        public WinCondition.TargetType Type => _type;
-
-        private int _targetIndex; //Safety
-        public int TargetIndex => _targetIndex;
+        //The condition this widget displays. Its TargetId is the only target reference; nothing is copied.
+        private WinCondition _winCondition;
+        public WinCondition WinCondition => _winCondition;
 
         private const string LogChannel = "[ObjectiveWidget]";
 
-        public void SetEntity(int index, Entity entity)
+        public void Init(WinCondition condition)
         {
-            if (entity == null)
+            _winCondition = condition;
+            if (condition == null)
             {
-                Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
+                Debug.LogError($"{LogChannel} Failed setup, Win Condition is null!");
                 return;
             }
 
-            _targetIndex = index;
-            _type = WinCondition.TargetType.Entity;
+            //Visuals only: a failed lookup leaves the icon unset but the widget stays bound to its own condition
+            switch (condition.Type)
+            {
+                case (WinCondition.TargetType.Entity):
+                    {
+                        SetEntity(condition.TargetEntity, condition);
+                        break;
+                    }
+                case (WinCondition.TargetType.Item):
+                    {
+                        SetItem(condition.TargetItem, condition);
+                        break;
+                    }
+                case (WinCondition.TargetType.Currency):
+                    {
+                        SetCurrency();
+                        break;
+                    }
+                default:
+                    {
+                        Debug.LogError($"{LogChannel} Failed setup of [{condition.title}], Type not recognised!");
+                        break;
+                    }
+            }
+        }
+
+        private void SetEntity(Entity entity, WinCondition condition)
+        {
+            if (entity == null)
+            {
+                Debug.LogError($"{LogChannel} Failed setup of [{condition.title}], Entity [{condition.TargetId}] not found!");
+                return;
+            }
 
             if (_entityIcon != null)
             {
@@ -44,16 +74,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void SetItem(int index, Item itemDef)
+        private void SetItem(Item itemDef, WinCondition condition)
         {
             if (itemDef == null)
             {
-                Debug.LogError($"{LogChannel} Failed setup, Item is null!");
+                Debug.LogError($"{LogChannel} Failed setup of [{condition.title}], Item [{condition.TargetId}] not found!");
                 return;
             }
-
-            _targetIndex = index;
-            _type = WinCondition.TargetType.Item;
 
             if (_entityIcon != null)
             {
@@ -61,20 +88,17 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        public void SetCurrency()
+        private void SetCurrency()
         {
             if (_entityIcon != null)
             {
                 _entityIcon.SetCurrency();
             }
-
-            _targetIndex = 0;
-            _type = WinCondition.TargetType.Currency;
         }
 
         public void UpdateObjective(int currentRound, int maxRound)
         {
-            WinCondition condition = GetWinCondition();
+            WinCondition condition = _winCondition;
             if (condition != null)
             {
                 if (condition.Completed)
@@ -113,7 +137,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public void OnQuantityUpdated()
         {
-            WinCondition condition = GetWinCondition();
+            WinCondition condition = _winCondition;
             if (condition != null)
             {
                 UpdateQuantity(condition);
@@ -128,13 +152,18 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             int quantity = 0;
-            switch (_type)
+            switch (condition.Type)
             {
                 case (WinCondition.TargetType.Entity):
                     {
-                        if (SandboxManager.Instance.EntityManager != null)
+                        EntityManager entityManager = SandboxManager.Instance.EntityManager;
+                        if (entityManager != null)
                         {
-                            quantity = SandboxManager.Instance.EntityManager.GetTotalPopulationOfEntityType(TargetIndex);
+                            int entityIndex = entityManager.GetEntityIndex(condition.TargetId);
+                            if (entityIndex >= 0)
+                            {
+                                quantity = entityManager.GetTotalPopulationOfEntityType(entityIndex);
+                            }
                         }
                         break;
                     }
@@ -142,7 +171,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                     {
                         if (SandboxManager.Instance.PlayerInventory != null)
                         {
-                            Item itemDef = SandboxManager.Instance.PlayerInventory.GetItemDef(TargetIndex);
+                            Item itemDef = SandboxManager.Instance.PlayerInventory.GetItemDef(condition.TargetId);
                             if (itemDef != null)
                             {
                                 quantity = SandboxManager.Instance.PlayerInventory.GetAmountHeld(itemDef.ID);
@@ -163,27 +192,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
 
             _resultsTracker?.UpdateActiveWidget(quantity, condition.lowerLimit, condition.upperLimit);
-        }
-
-
-        private WinCondition GetWinCondition()
-        {
-            if (SandboxManager.Instance.WinConditions != null)
-            {
-                switch (_type)
-                {
-                    case (WinCondition.TargetType.Entity):
-                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Entity && x.TargetIndex == TargetIndex);
-                    case (WinCondition.TargetType.Item):
-                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Item && x.TargetIndex == TargetIndex);
-                    case (WinCondition.TargetType.Currency):
-                        return SandboxManager.Instance.WinConditions.FirstOrDefault(x => x.TypeIndex == (int)WinCondition.TargetType.Currency);
-                    default:
-                        return null;
-                }
-            }
-
-            return null;
         }
 
 
