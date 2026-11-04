@@ -323,7 +323,15 @@ namespace Glitchers.EcoKnow.Sandbox
         #endregion
 
         #region Actions
-        public static void OnActionCompleted()
+        public static void CompleteAction(Data.EventType eventType)
+        {
+            //The action point must be spent before the event is recorded, as the event captures the remaining action count
+            SpendActionPoint();
+            DataManager.Instance?.RecordEvent(eventType);
+            OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
+        }
+
+        private static void OnActionCompleted()
         {
             if (MultiplayerManager.Instance != null)
             {
@@ -346,7 +354,7 @@ namespace Glitchers.EcoKnow.Sandbox
             return false;
         }
 
-        public static int SpendActionPoint()
+        private static int SpendActionPoint()
         {
             int actionsRemaining = 0;
             if ((Instance != null) && (Instance.PlayerInventory != null))

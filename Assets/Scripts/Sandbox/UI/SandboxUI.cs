@@ -37,6 +37,10 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         public int SelectedEntityIndex => _entityPanel == null ? -1 : _entityPanel.SelectedEntityIndex;
 
+        //Stored so Cleanup unsubscribes from the same instances Init subscribed to
+        private EntityManager _entityManager;
+        private PlayerInventory _playerInventory;
+
         private const string LogChannel = "[SandboxUI]";
 
         #region Setup
@@ -71,14 +75,16 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _inventoryModal.onSellSuccess += OnSellSuccess;
 
             //Subscribe to other events
-            if (entityManager != null)
+            _entityManager = entityManager;
+            _playerInventory = playerInventory;
+            if (_entityManager != null)
             {
-                entityManager.onEntityHarvested += OnEntityUpdated;
-                entityManager.onEntityIntroduced += OnEntityUpdated;
+                _entityManager.onEntityHarvested += OnEntityUpdated;
+                _entityManager.onEntityIntroduced += OnEntityUpdated;
             }
-            if (playerInventory != null)
+            if (_playerInventory != null)
             {
-                playerInventory.onItemSold += OnInventoryUpdated;
+                _playerInventory.onItemSold += OnInventoryUpdated;
             }
 
             //Force rebuild
@@ -96,6 +102,22 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _modifyCellManager.onEnterModifyMode -= OnEnterModifyMode;
             _modifyCellManager.onExitModifyMode -= OnExitModifyMode;
             _modifyCellManager.onModifySuccess -= OnModifySuccess;
+            if (_inventoryModal != null)
+            {
+                _inventoryModal.onSellSuccess -= OnSellSuccess;
+            }
+
+            if (_entityManager != null)
+            {
+                _entityManager.onEntityHarvested -= OnEntityUpdated;
+                _entityManager.onEntityIntroduced -= OnEntityUpdated;
+            }
+            if (_playerInventory != null)
+            {
+                _playerInventory.onItemSold -= OnInventoryUpdated;
+            }
+            _entityManager = null;
+            _playerInventory = null;
 
             _entityPanel?.Cleanup();
             _modifyCellManager?.Cleanup();
@@ -206,10 +228,8 @@ namespace Glitchers.EcoKnow.Sandbox.UI
 
         private void OnSellSuccess()
         {
-            SandboxManager.SpendActionPoint();
+            SandboxManager.CompleteAction(Data.EventType.SELL);
             RefreshInventories();
-            Data.DataManager.Instance.RecordEvent(Data.EventType.SELL);
-            SandboxManager.OnActionCompleted(); //We only want to increment multiplayer index after the data event is recorded to maintain the correct index in data
         }
         #endregion
 
