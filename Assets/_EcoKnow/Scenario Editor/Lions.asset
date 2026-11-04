@@ -125,7 +125,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 0
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +261,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &3275706426837797897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +304,8 @@ MonoBehaviour:
     gridDef:
       rows: 15
       columns: 15
+      zoneDefs: []
+      bgColour: 
 --- !u!114 &4082507238245862782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +339,7 @@ MonoBehaviour:
         node: {fileID: 7623599397512871711}
         reroutePoints: []
       _direction: 0
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: _map
@@ -371,7 +385,10 @@ MonoBehaviour:
       _node: {fileID: 4082507238245862782}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 6178689593257591662}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -380,7 +397,10 @@ MonoBehaviour:
       _node: {fileID: 4082507238245862782}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 2227470233318794940}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -389,23 +409,32 @@ MonoBehaviour:
       _node: {fileID: 4082507238245862782}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -147655420377779003}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 1
   scenarioName: Lions
   authorName: Brad
+  description: 
+  coverImageBase64: 
   rounds: 24
   actionsPerRound: 4
   startCurrency: 40
+  calculatorId: lotka-volterra
   _matrix:
     entityIDs: []
+    zoneIndex: 0
   _map:
     fileName: 
     gridDef:
       rows: 0
       columns: 0
+      zoneDefs: []
+      bgColour: 
   _winConditions: 
   _items: 
   _seed: 0
@@ -504,7 +533,13 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
+  _zoneInformation: []
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &6926614864469985507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,8 +641,10 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   matricesCSV: {fileID: 4900000, guid: 1ed7bf89f7240d9cfb9eb79ab071f99d, type: 3}
+  _zoneIndex: 0
   matrix:
     entityIDs:
     - Lions
     - Livestock
     - Fence
+    zoneIndex: 0

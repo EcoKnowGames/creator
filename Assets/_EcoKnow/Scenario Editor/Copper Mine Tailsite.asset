@@ -63,7 +63,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: 0.005
@@ -77,6 +79,9 @@ MonoBehaviour:
     GrowthRate: -0.05
     MovementRate: 0
     Transitions: 02000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-5440223889025535490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +170,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -3001016278725234701}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -174,7 +182,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -1567155832924546111}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -183,7 +194,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -3400586785500150875}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -192,7 +206,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: 644615604423286738}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -201,7 +218,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -6088557403932670847}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -210,7 +230,10 @@ MonoBehaviour:
       _node: {fileID: -5440223889025535490}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: _id
+        node: {fileID: -2602617902098400704}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -222,6 +245,7 @@ MonoBehaviour:
   rounds: 12
   actionsPerRound: 4
   startCurrency: 8000
+  calculatorId: lotka-volterra
   _matrix:
     entityIDs: []
     zoneIndex: 0
@@ -235,7 +259,6 @@ MonoBehaviour:
   _winConditions: 
   _items: 
   _seed: 123456
-  _entityPorts: []
 --- !u!114 &-5360933626322087205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,7 +435,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 0
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: 0
@@ -426,6 +451,9 @@ MonoBehaviour:
     GrowthRate: 0
     MovementRate: 0.04
     Transitions: 02000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-3001016278725234701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +514,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 0
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: 0.02
@@ -500,6 +530,9 @@ MonoBehaviour:
     GrowthRate: 0.02
     MovementRate: 0
     Transitions: 000000000100000002000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-2602617902098400704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,7 +593,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 0
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: 0.05
@@ -574,6 +609,9 @@ MonoBehaviour:
     GrowthRate: 0.01
     MovementRate: 0.05
     Transitions: 02000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-1567155832924546111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,7 +672,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 0
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: 0
@@ -648,6 +688,9 @@ MonoBehaviour:
     GrowthRate: 0.1
     MovementRate: 0.08
     Transitions: 02000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &-948477526009654261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,7 +928,9 @@ MonoBehaviour:
   _autoPlace: 0
   _startPopulation: 100
   _canHarvest: 1
+  _harvestLimit: 0
   _canIntroduce: 1
+  _introduceLimit: 0
   _zoneInformation:
   - ZoneID: 0
     GrowthRate: -0.02
@@ -899,6 +944,9 @@ MonoBehaviour:
     GrowthRate: 0.02
     MovementRate: 0.01
     Transitions: 02000000
+  _hiddenFromCellToken: 0
+  _hiddenFromEntityPanel: 0
+  _hiddenFromGraph: 0
 --- !u!114 &1699193594783117364
 MonoBehaviour:
   m_ObjectHideFlags: 0
