@@ -98,6 +98,11 @@ public class ScenarioNode : Node
     private List<NodePort> _entityPorts = new List<NodePort>();
     public List<NodePort> EntityPorts => _entityPorts;
 
+    // True between Init and OnDisable. xNode's Node.OnEnable runs UpdatePorts before Init, and
+    // UpdatePorts clears stale static ports (e.g. _matrix) one connection at a time before
+    // re-adding and reconnecting them; connection callbacks during that phase must be ignored.
+    [NonSerialized] private bool _initialised;
+
     public string Name => scenarioName;
     public string Author => string.IsNullOrEmpty(authorName) ? "Unknown Author" : authorName;
     public string Description => string.IsNullOrEmpty(description) ? null : description;
@@ -146,10 +151,15 @@ public class ScenarioNode : Node
         // _entityPorts is rebuilt each load from xNode's persisted DynamicOutputs.
         // Don't filter by Connection.node — neighbouring nodes may not be deserialised
         // yet at this point, which would silently drop ports whose connections still exist.
-        if (DynamicOutputs != null)
-        {
-            _entityPorts = new List<NodePort>(DynamicOutputs);
-        }
+        RefreshEntityPortCache();
+
+        _initialised = true;
+    }
+
+    // xNode's Node defines no OnDisable, so there is no base implementation to call
+    private void OnDisable()
+    {
+        _initialised = false;
     }
 
     private void OnValidate()
@@ -171,35 +181,94 @@ public class ScenarioNode : Node
         return null;
     }
 
+    // Updates the entity ports in place. Existing ports (and their connections) are never
+    // removed and re-added: removing a dynamic port clears its connections, which blanks the
+    // connected EntityNode's ID.
     public void ProcessMatrix()
     {
-        if (GetInputPort("_matrix").IsConnected)
+        NodePort matrixPort = GetInputPort("_matrix");
+        if (matrixPort == null)
         {
-            ClearEntityPorts();
+            return;
+        }
 
-            // Union entity IDs across all connected matrices
-            var allMatrixNodes = GetInputPort("_matrix").GetConnections()
-                .Select(x => x.node).OfType<MatrixNode>().ToList();
+        int rawCount = matrixPort.ConnectionCount;
 
-            var entityIDs = allMatrixNodes.SelectMany(x => x.matrix.entityIDs).Select(x => x).Distinct().ToList();
+        List<MatrixNode> matrixNodes = matrixPort.GetConnections()
+            .Select(x => x.node).OfType<MatrixNode>().ToList();
 
-            if (_entityPorts != null)
+        // Matrices without a parsed CSV contribute no entity IDs
+        List<MatrixNode> parsedMatrixNodes = matrixNodes
+            .Where(x => x.matrix != null && x.matrix.entityIDs != null && x.matrix.entityIDs.Length > 0)
+            .ToList();
+
+        // Union entity IDs across all parsed matrices, in first-seen (CSV) order
+        List<string> requiredIDs = new List<string>();
+        HashSet<string> requiredSet = new HashSet<string>(StringComparer.Ordinal);
+        foreach (MatrixNode matrixNode in parsedMatrixNodes)
+        {
+            foreach (string id in matrixNode.matrix.entityIDs)
             {
-                foreach (string id in entityIDs)
+                if (!string.IsNullOrEmpty(id) && requiredSet.Add(id))
                 {
-                    if (_entityPorts.FirstOrDefault(x => x.fieldName.Equals(id)) == null)
-                    {
-                        _entityPorts.Add(AddDynamicOutput(typeof(string), fieldName: id, connectionType: ConnectionType.Override));
-                    }
+                    requiredIDs.Add(id);
                 }
             }
         }
-        else
+
+        foreach (string id in requiredIDs)
         {
-            ClearEntityPorts();
+            if (!HasPort(id))
+            {
+                AddDynamicOutput(typeof(string), fieldName: id, connectionType: ConnectionType.Override);
+            }
         }
 
-        Debug.Log("DYNAMIC PORTS: " + DynamicPorts.Count());
+        // Only remove ports when the full set of required IDs is known: at least one matrix is
+        // connected and every connection resolved to a parsed matrix. Otherwise only add.
+        // - No matrix connected: never remove. On every load xNode's NodeDataCache.UpdatePorts
+        //   clears the static _matrix port when its serialized settings differ from the declared
+        //   ones (e.g. old graphs saved with ConnectionType.Override), which fires
+        //   OnRemoveConnection with zero connections before re-adding and reconnecting the port.
+        //   Removing here would wipe every entity port and blank every EntityNode's ID. As a
+        //   result, disconnecting the last matrix deliberately keeps the entity ports and their
+        //   connections; export validation still requires a connected matrix.
+        // - Unresolved or unparsed matrices (possible while loading): removing would wipe
+        //   connections to entities that are still valid.
+        bool canRemove = rawCount > 0
+            && matrixNodes.Count == rawCount
+            && parsedMatrixNodes.Count == matrixNodes.Count;
+
+        if (canRemove)
+        {
+            foreach (NodePort port in DynamicOutputs.ToList())
+            {
+                if (!requiredSet.Contains(port.fieldName))
+                {
+                    RemoveDynamicPort(port);
+                }
+            }
+        }
+
+        RefreshEntityPortCache(requiredIDs);
+    }
+
+    // Rebuilds _entityPorts from xNode's persisted DynamicOutputs (the source of truth).
+    // When an order is given, ports are sorted by it and any others follow in their existing order.
+    public void RefreshEntityPortCache(IList<string> order = null)
+    {
+        List<NodePort> ports = DynamicOutputs.ToList();
+
+        if (order != null)
+        {
+            ports = ports.OrderBy(x =>
+            {
+                int index = order.IndexOf(x.fieldName);
+                return index < 0 ? int.MaxValue : index;
+            }).ToList();
+        }
+
+        _entityPorts = ports;
     }
 
     public bool DoesMapPopulationCountMatchMatrix()
@@ -231,18 +300,6 @@ public class ScenarioNode : Node
 
         return 0;
     }
-    private void ClearEntityPorts()
-    {
-        if ((_entityPorts != null) && (_entityPorts.Count > 0))
-        {
-            foreach (NodePort port in _entityPorts)
-            {
-                RemoveDynamicPort(port);
-            }
-        }
-
-        _entityPorts.Clear();
-    }
     #endregion
 
     #region Cover Image
@@ -269,9 +326,11 @@ public class ScenarioNode : Node
     {
         base.OnRemoveConnection(port);
 
-        if (port == GetInputPort("_matrix"))
+        // Skip while xNode's UpdatePorts (pre-Init) clears a stale _matrix port: with several
+        // matrices connected, the partial connection set would remove still-valid entity ports
+        if (_initialised && port == GetInputPort("_matrix"))
         {
-            ClearEntityPorts();
+            ProcessMatrix();
         }
     }
 }
