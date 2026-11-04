@@ -9,54 +9,10 @@ using UnityEngine;
 
 namespace Glitchers.EcoKnow.Sandbox.Data
 {
-    public class DataManager : MonoBehaviour
+    public class DataManager : PersistentSingleton<DataManager>
     {
-        #region Singleton
-        protected static DataManager instance;
-        public static DataManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = GetInstance();
-
-                    if (instance == null)
-                    {
-                        Debug.LogError("An instance of " + typeof(DataManager) +
-                            " is needed in the scene, but there is none.");
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        public static bool Exists
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
-        private static DataManager GetInstance()
-        {
-            if (instance == null)
-            {
-                return FindFirstObjectByType<DataManager>();
-            }
-            return instance;
-        }
-        #endregion
-
         private List<EventDataObject> _eventLog;
         public int RecordedEventCount => _eventLog.Count;
-
-        private void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
 
         void Update()
         {
@@ -114,6 +70,18 @@ namespace Glitchers.EcoKnow.Sandbox.Data
         #region Export Data
         private void ExportData(string filePath = null)
         {
+            if ((_eventLog == null) || (_eventLog.Count == 0))
+            {
+                Debug.LogWarning("No game data recorded yet, nothing to export.");
+                return;
+            }
+
+            if ((ScenarioLoader.Instance == null) || (ScenarioLoader.Instance.LoadedConfig == null))
+            {
+                Debug.LogWarning("No scenario loaded, nothing to export.");
+                return;
+            }
+
             GameDataObject data = new GameDataObject
                 (
                     ScenarioLoader.Instance.LoadedConfig,

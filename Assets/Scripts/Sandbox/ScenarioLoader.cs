@@ -7,47 +7,8 @@ using System;
 
 namespace Glitchers.EcoKnow.Sandbox
 {
-    public class ScenarioLoader : MonoBehaviour
+    public class ScenarioLoader : PersistentSingleton<ScenarioLoader>
     {
-        #region Singleton
-        protected static ScenarioLoader instance;
-        public static ScenarioLoader Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = GetInstance();
-
-                    if (instance == null)
-                    {
-                        Debug.LogError("An instance of " + typeof(ScenarioLoader) +
-                            " is needed in the scene, but there is none.");
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        public static bool Exists
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
-        private static ScenarioLoader GetInstance()
-        {
-            if (instance == null)
-            {
-                return FindFirstObjectByType<ScenarioLoader>();
-            }
-            return instance;
-        }
-        #endregion
-
         [Header("Scenario")]
         [SerializeField] private ScenarioConfigDataList _integratedScenarioList;
         [SerializeField] private ScenarioNodeGraph _activeScenarioGraph;
@@ -56,11 +17,6 @@ namespace Glitchers.EcoKnow.Sandbox
         public Scenario LastPlayedScenario => _loadedConfig == null ? null : _loadedConfig.Scenario;
 
         private const string LogChannel = "[ScenarioLoader]";
-
-        private void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
 
         #region Loading Scenario Config
         public static void ShowLoadDialog(Action<Scenario> onSuccess, Action onCancel)
