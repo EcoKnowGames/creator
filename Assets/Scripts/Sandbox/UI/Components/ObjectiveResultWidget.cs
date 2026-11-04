@@ -24,12 +24,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
         [SerializeField] private ResultsTracker _resultsTracker;
         public ResultsTracker ResultsTracker => _resultsTracker;
 
-        private WinCondition.TargetType _type;
-        public WinCondition.TargetType Type => _type;
-
-        private int _targetIndex; //Safety
-        public int TargetIndex => _targetIndex;
-
         private const string LogChannel = "[ObjectiveResultWidget]";
 
         public void Init(WinCondition winCondition)
@@ -40,12 +34,12 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 case (WinCondition.TargetType.Entity):
                 {
-                    SetEntity(winCondition.TargetIndex, winCondition.TargetEntity);
+                    SetEntity(winCondition.TargetEntity, winCondition);
                     break;
                 }
                 case (WinCondition.TargetType.Item):
                 {
-                    SetItem(winCondition.TargetIndex, winCondition.TargetItem);
+                    SetItem(winCondition.TargetItem, winCondition);
                     break;
                 }
                 case (WinCondition.TargetType.Currency):
@@ -70,16 +64,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             _resultsTracker?.Init(winCondition.Results, SandboxManager.Instance.MaxRounds, SandboxManager.Instance.MaxRounds);
         }
 
-        private void SetEntity(int index, Entity entity)
+        private void SetEntity(Entity entity, WinCondition condition)
         {
             if (entity == null)
             {
-                Debug.LogError($"{LogChannel} Failed setup, Entity is null!");
+                Debug.LogError($"{LogChannel} Failed setup of [{condition.title}], Entity [{condition.TargetId}] not found!");
                 return;
             }
-
-            _targetIndex = index;
-            _type = WinCondition.TargetType.Entity;
 
             if (_entityIcon != null)
             {
@@ -87,16 +78,13 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             }
         }
 
-        private void SetItem(int index, Item itemDef)
+        private void SetItem(Item itemDef, WinCondition condition)
         {
             if (itemDef == null)
             {
-                Debug.LogError($"{LogChannel} Failed setup, Item is null!");
+                Debug.LogError($"{LogChannel} Failed setup of [{condition.title}], Item [{condition.TargetId}] not found!");
                 return;
             }
-
-            _targetIndex = index;
-            _type = WinCondition.TargetType.Item;
 
             if (_entityIcon != null)
             {
@@ -109,9 +97,6 @@ namespace Glitchers.EcoKnow.Sandbox.UI
             {
                 _entityIcon.SetCurrency();
             }
-
-            _targetIndex = 0;
-            _type = WinCondition.TargetType.Currency;
         }
 
 

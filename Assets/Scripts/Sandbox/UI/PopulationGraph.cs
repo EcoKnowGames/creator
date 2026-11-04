@@ -382,7 +382,7 @@ namespace Glitchers.EcoKnow.Sandbox.UI
                                 Entity entityType = entityManager.GetEntityTypeList().FirstOrDefault(x => x.ID.Equals(activeSerie.serieName, System.StringComparison.OrdinalIgnoreCase));
                                 if (entityType != null)
                                 {
-                                    WinCondition winCondition = sandboxManager.WinConditions.FirstOrDefault(x => x.TargetIndex == activeSerie.index);
+                                    WinCondition winCondition = sandboxManager.WinConditions.FirstOrDefault(x => x.Targets(WinCondition.TargetType.Entity, entityType.ID));
                                     if (winCondition != null)
                                     {
                                         ShowMarkArea(activeSerie.index, entityType, winCondition.lowerLimit, winCondition.upperLimit);

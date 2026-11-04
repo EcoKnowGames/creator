@@ -303,6 +303,12 @@ public class ScenarioNodeGraph : NodeGraph
             }
             else
             {
+                if (!ScenarioLoader.NormaliseWinConditionTargets(config.Scenario))
+                {
+                    EditorUtility.DisplayDialog("ERROR", "Scenario export failed, one or more Win Conditions have no valid target. Check the Console for details and select a target on each Win Condition node.", "OK");
+                    return;
+                }
+
                 //Sort out filepath and export
                 string json = JsonConvert.SerializeObject(config, Formatting.Indented);
                 if (!string.IsNullOrEmpty(json))

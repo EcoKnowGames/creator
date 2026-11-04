@@ -35,28 +35,48 @@ namespace Glitchers.EcoKnow.Sandbox
         public int TypeIndex => typeIndex;
         public TargetType Type => (WinCondition.TargetType)typeIndex;
 
-        protected int targetIndex;
-        public int TargetIndex => targetIndex;
+        //Entity/Item ID, or PlayerInventory.CurrencyID. Resolved by ScenarioLoader.NormaliseWinConditionTargets.
+        //Runtime indices are derived from this at the point of use, never stored.
+        protected string targetId;
+        public string TargetId => targetId;
 
         public Entity TargetEntity
         {
             get
             {
-                if (Type == TargetType.Entity)
-                    return SandboxManager.Instance?.EntityManager?.GetEntityType(targetIndex);
-                else
+                if (Type != TargetType.Entity)
                     return null;
+
+                EntityManager entityManager = SandboxManager.Instance != null ? SandboxManager.Instance.EntityManager : null;
+                if (entityManager == null)
+                    return null;
+
+                int index = entityManager.GetEntityIndex(targetId);
+                return index < 0 ? null : entityManager.GetEntityType(index);
             }
         }
         public Item TargetItem
         {
             get
             {
-                if (Type == TargetType.Item)
-                    return SandboxManager.Instance?.PlayerInventory?.GetItemDef(targetIndex);
-                else
+                if (Type != TargetType.Item)
                     return null;
+
+                PlayerInventory inventory = SandboxManager.Instance != null ? SandboxManager.Instance.PlayerInventory : null;
+                return inventory != null ? inventory.GetItemDef(targetId) : null;
             }
+        }
+
+        //Single source of truth for matching this condition against a target
+        public bool Targets(TargetType type, string id)
+        {
+            if (Type != type)
+                return false;
+
+            if (type == TargetType.Currency)
+                return true;
+
+            return string.Equals(targetId, id, StringComparison.OrdinalIgnoreCase);
         }
 
         public float lowerLimit { get; protected set; }
@@ -78,7 +98,7 @@ namespace Glitchers.EcoKnow.Sandbox
             title = record.Title;
             description = record.Description;
             typeIndex = record.TypeIndex;
-            targetIndex = record.TargetIndex;
+            targetId = record.TargetId;
 
             lowerLimit = record.LowerLimit;
             upperLimit = record.UpperLimit;
@@ -138,10 +158,10 @@ namespace Glitchers.EcoKnow.Sandbox
             EntityManager entityManager = SandboxManager.Instance.EntityManager;
             if (entityManager != null)
             {
-                Entity entityType = entityManager.GetEntityType(targetIndex);
-                if (entityType != null)
+                int entityIndex = entityManager.GetEntityIndex(targetId);
+                if (entityIndex >= 0)
                 {
-                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(targetIndex);
+                    int totalPopulation = entityManager.GetTotalPopulationOfEntityType(entityIndex);
                     return IsWithinLimits(totalPopulation);
                 }
             }

@@ -124,7 +124,9 @@
       {
         "Title": "Rabbit Population",
         "Description": "Keep the Rabbit population below 1200",
-        "EntityIndex": 1,
+        "TypeIndex": 0,
+        "TargetIndex": 1,
+        "TargetId": "Rabbit",
         "LowerLimit": 0.0,
         "UpperLimit": 1200.0,
         "RequiredRounds": -1
@@ -132,7 +134,9 @@
       {
         "Title": "Hawk Conservation",
         "Description": "Conservationists want at least 40 Hawks to thrive on this landscape",
-        "EntityIndex": 3,
+        "TypeIndex": 0,
+        "TargetIndex": 3,
+        "TargetId": "Hawk",
         "LowerLimit": 40.0,
         "UpperLimit": 0.0,
         "RequiredRounds": 10

@@ -88,7 +88,9 @@
       {
         "Title": "Livestock",
         "Description": "Keep 40 or more livestock for at least 8 rounds",
-        "EntityIndex": 1,
+        "TypeIndex": 0,
+        "TargetIndex": 1,
+        "TargetId": "Livestock",
         "LowerLimit": 40.0,
         "UpperLimit": -1.0,
         "RequiredRounds": 8

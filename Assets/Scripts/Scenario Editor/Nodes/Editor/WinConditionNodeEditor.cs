@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glitchers.EcoKnow.Sandbox;
 using UnityEditor;
@@ -33,9 +34,18 @@ public class WinConditionNodeEditor : NodeEditor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Options", EditorStyles.centeredGreyMiniLabel);
 
-        int typeIndex = _winConditionNode.TypeIndex;
-        typeIndex = EditorGUILayout.Popup("Type", typeIndex, Enum.GetNames(typeof(WinCondition.TargetType)));
-        _winConditionNode.TypeIndex = typeIndex;
+        int typeIndex = EditorGUILayout.Popup("Type", _winConditionNode.TypeIndex, Enum.GetNames(typeof(WinCondition.TargetType)));
+        if (typeIndex != _winConditionNode.TypeIndex)
+        {
+            Undo.RecordObject(_winConditionNode, "Change Win Condition Type");
+            _winConditionNode.TypeIndex = typeIndex;
+
+            //Clear the target so the legacy index of the previous type can't be resurrected by the lazy migration
+            bool isCurrency = (WinCondition.TargetType)typeIndex == WinCondition.TargetType.Currency;
+            _winConditionNode.TargetId = isCurrency ? PlayerInventory.CurrencyID : null;
+            _winConditionNode.TargetIndex = isCurrency ? 0 : -1;
+            EditorUtility.SetDirty(_winConditionNode);
+        }
 
         switch((WinCondition.TargetType)_winConditionNode.TypeIndex)
         {
@@ -79,11 +89,10 @@ public class WinConditionNodeEditor : NodeEditor
 
     private void ShowEntityList()
     {
-        int entityIndex = _winConditionNode.TargetIndex;
-        if ((_winConditionNode.AvailableEntities != null) && (_winConditionNode.AvailableEntities.Count > 0))
+        List<Entity> entities = _winConditionNode.AvailableEntities;
+        if ((entities != null) && (entities.Count > 0))
         {
-            entityIndex = EditorGUILayout.Popup("Entity", entityIndex, _winConditionNode.AvailableEntities.Select(x => x.ID).ToArray());
-            _winConditionNode.TargetIndex = entityIndex;
+            ShowTargetPopup("Entity", entities.Select(x => x.ID).ToArray());
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Population Range", EditorStyles.miniBoldLabel);
@@ -96,11 +105,10 @@ public class WinConditionNodeEditor : NodeEditor
 
     private void ShowItemList()
     {
-        int itemIndex = _winConditionNode.TargetIndex;
-        if ((_winConditionNode.AvailableItems != null) && (_winConditionNode.AvailableItems.Count > 0))
+        List<Item> items = _winConditionNode.AvailableItems;
+        if ((items != null) && (items.Count > 0))
         {
-            itemIndex = EditorGUILayout.Popup("Item", itemIndex, _winConditionNode.AvailableItems.Select(x => x.ID).ToArray());
-            _winConditionNode.TargetIndex = itemIndex;
+            ShowTargetPopup("Item", items.Select(x => x.ID).ToArray());
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Quantity Range", EditorStyles.miniBoldLabel);
@@ -115,6 +123,25 @@ public class WinConditionNodeEditor : NodeEditor
     {
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Quantity Range", EditorStyles.miniBoldLabel);
-        _winConditionNode.TargetIndex = 0;
+    }
+
+    //Selects by ID (the authoritative target); the index is only the popup position
+    private void ShowTargetPopup(string label, string[] ids)
+    {
+        string targetId = _winConditionNode.TargetId;
+        int selectedIndex = string.IsNullOrEmpty(targetId) ? -1 : Array.FindIndex(ids, x => string.Equals(x, targetId, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrEmpty(targetId) && (selectedIndex < 0))
+        {
+            EditorGUILayout.HelpBox($"Target {label} [{targetId}] was not found. Please select a new target.", MessageType.Warning);
+        }
+
+        int newIndex = EditorGUILayout.Popup(label, selectedIndex, ids);
+        if ((newIndex != selectedIndex) && (newIndex >= 0) && (newIndex < ids.Length))
+        {
+            Undo.RecordObject(_winConditionNode, "Change Win Condition Target");
+            _winConditionNode.TargetId = ids[newIndex];
+            _winConditionNode.TargetIndex = newIndex;
+            EditorUtility.SetDirty(_winConditionNode);
+        }
     }
 }
